@@ -8,9 +8,9 @@ else
    echo -e "\nSSH keys are already in place!"
 fi
 
-export AWS_ACCESS_KEY_ID=...
-export AWS_SECRET_ACCESS_KEY=...
-export AWS_DEFAULT_REGION=...
+export AWS_ACCESS_KEY_ID=""
+export AWS_SECRET_ACCESS_KEY="..."
+export AWS_DEFAULT_REGION="eu-central-1"
 
 echo -e "\nCreating kubernetes cluster ...\n"
  
