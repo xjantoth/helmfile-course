@@ -1,6 +1,6 @@
 ### Welcome to course
 ### Materials: Delete/destroy all the AWS resources every time you do not use them
-### How to start kubernetes cluster on AWS
+### 3. How to start kubernetes cluster on AWS
 
 ```bash
 SSH_KEYS=~/.ssh/udemy_devopsinuse
