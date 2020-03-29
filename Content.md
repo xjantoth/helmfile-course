@@ -32,7 +32,7 @@ kops create cluster \
 --dns-zone=course.devopsinuse.com \
 --out=terraform_code \
 --target=terraform \
---ssh-public-key=~/.ssh/kops-aws.pub
+--ssh-public-key=~/.ssh/udemy_devopsinuse.pub
 
 cd devopsinuse_terraform
 terraform init
