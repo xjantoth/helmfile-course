@@ -1,5 +1,5 @@
-### Welcome to course
-### Materials: Delete/destroy all the AWS resources every time you do not use them
+### 1. Welcome to course
+### 2. Materials: Delete/destroy all the AWS resources every time you do not use them
 ### 3. How to start kubernetes cluster on AWS
 
 ```bash
@@ -44,14 +44,14 @@ sed -i 's/0-0-0-0--0/kops/g' kubernetes.tf
 terrafrom validate       # -> this time it passed with no errors
 terraform plan
 ```
-### How to create Hosted Zone on AWS
-### How to setup communication kops to AWS via aws
-### Materials: How to install KOPS binary
-### How to install kops
-### How to create S3 bucket in AWS
-### Materials: How to install TERRAFORM binary
-### How to install Terraform binary
-### Materials: How to install KUBECTL binary
+### 4. How to create Hosted Zone on AWS
+### 5. How to setup communication kops to AWS via aws
+### 6. Materials: How to install KOPS binary
+### 7. How to install kops
+### 8. How to create S3 bucket in AWS
+### 9. Materials: How to install TERRAFORM binary
+### 10. How to install Terraform binary
+### 11. Materials: How to install KUBECTL binary
 ### How to install Kubectl binary
 ### Materials: How to start Kubernetes cluster
 ### How to lunch kubernetes cluster on AWS by using kops and terraform
