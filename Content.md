@@ -96,6 +96,37 @@ course.devopsinuse.com.	172800	IN	NS	ns-627.awsdns-14.net.
 ```
 
 ### 5. How to setup communication kops to AWS via aws
+
+* Install `awscli` binary 
+   * https://docs.aws.amazon.com/cli/latest/userguide/install-linux-al2017.html
+* Please configure these two files
+   * ~/.aws/credentials.origin 
+   * ~/.aws/config
+
+Search for **IAM** expression in Free AWS account
+![](img/awscli-0.png)
+
+Add **User** if you do not have one
+![](img/awscli-2.png)
+
+Click at a newly created **User** and search for **Security credentials** and **Create access key** section
+![](img/awscli-1.png)
+
+```bash
+vim  ~/.aws/credentials
+[terraform]
+aws_access_key_id = ...
+aws_secret_access_key = ...
+```
+
+```bash         
+vim ~/.aws/config
+[profile terraform]
+region=eu-central-1
+```
+
+
+
 ### 6. Materials: How to install KOPS binary
 ### 7. How to install kops
 ### 8. How to create S3 bucket in AWS
