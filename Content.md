@@ -2,6 +2,14 @@
 ### 2. Materials: Delete/destroy all the AWS resources every time you do not use them
 ### 3. How to start kubernetes cluster on AWS
 
+* **install** binaries:
+   - kops
+   - terraform v12
+   - awscli
+* create **S3 bucket** (unique across entire AWS)
+* generate **SSH key** pair
+* make sure you got your **own domain name**
+
 ```bash
 SSH_KEYS=~/.ssh/udemy_devopsinuse
 
