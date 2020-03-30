@@ -54,18 +54,13 @@ terrafrom validate       # -> this time it passed with no errors
 terraform plan
 ```
 ### 4. How to create Hosted Zone on AWS
-Navigate to your AWS console and search for **Route 53** - then click at *Hosted Zones*
+
+* Navigate to your AWS console and search for **Route 53** - then click at *Hosted Zones*
+* My "**Hosted zone**" has already been created *course.devopsinuse.com*
+* Create your own **Hosted zone** with the **domain name** you own
+* Check on your **4 Name Servers**
 
 ![](img/hosted-zone-1.png)
-
-My "**Hosted zone**" has already been created *devopsinuse.com*
-
-![](img/hosted-zone-2.png)
-
-Create your own **Hosted zone** with the **domain name** you own
-![](img/hosted-zone-3.png)
-
-Check on your **4 Name Servers**
 
 ![](img/hosted-zone-4.png)
 
@@ -76,32 +71,28 @@ Save all your **nameservers** at the providers web page you either purchased the
 Use `dig` binary to **determine** that your domain and hosted zone is setup correctly
 
 ```bash
- dig NS devopsinuse.com
+dig NS course.devopsinuse.com    
 
-; <<>> DiG 9.16.1 <<>> NS devopsinuse.com
+; <<>> DiG 9.16.1 <<>> NS course.devopsinuse.com
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 59586
-;; flags: qr rd ra; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 2
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 31746
+;; flags: qr rd ra; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 0
 
-;; OPT PSEUDOSECTION:
-; EDNS: version: 0, flags:; udp: 4000
 ;; QUESTION SECTION:
-;devopsinuse.com.		IN	NS
+;course.devopsinuse.com.		IN	NS
 
 ;; ANSWER SECTION:
-devopsinuse.com.	86399	IN	NS	ns-627.awsdns-14.net.
-devopsinuse.com.	86399	IN	NS	ns-399.awsdns-49.com.
-devopsinuse.com.	86399	IN	NS	ns-1853.awsdns-39.co.uk.
-devopsinuse.com.	86399	IN	NS	ns-1380.awsdns-44.org.
+course.devopsinuse.com.	172800	IN	NS	ns-1380.awsdns-44.org.
+course.devopsinuse.com.	172800	IN	NS	ns-1853.awsdns-39.co.uk.
+course.devopsinuse.com.	172800	IN	NS	ns-399.awsdns-49.com.
+course.devopsinuse.com.	172800	IN	NS	ns-627.awsdns-14.net.
 
-;; ADDITIONAL SECTION:
-ns-399.awsdns-49.com.	86399	IN	A	205.251.193.143
-
-;; Query time: 570 msec
-;; SERVER: 11.11.10.10#53(11.11.10.10)
+;; Query time: 203 msec
+;; SERVER: 192.168.1.1#53(192.168.1.1)
 ...
-;; MSG SIZE  rcvd: 197
+;; MSG SIZE  rcvd: 177
+
 ```
 
 ### 5. How to setup communication kops to AWS via aws
