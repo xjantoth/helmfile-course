@@ -100,7 +100,7 @@ course.devopsinuse.com.	172800	IN	NS	ns-627.awsdns-14.net.
 * Install `awscli` binary 
    * https://docs.aws.amazon.com/cli/latest/userguide/install-linux-al2017.html
 * Please configure these two files
-   * ~/.aws/credentials.origin 
+   * ~/.aws/credentials
    * ~/.aws/config
 
 Search for **IAM** expression in Free AWS account
