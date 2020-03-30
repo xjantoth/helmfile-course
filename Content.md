@@ -125,9 +125,20 @@ vim ~/.aws/config
 region=eu-central-1
 ```
 
-
-
 ### 6. Materials: How to install KOPS binary
+
+Navigate to: https://github.com/kubernetes/kops/releases/tag/v1.16.0
+
+```bash
+sudo curl \
+-L --output /usr/bin/kops  \
+https://github.com/kubernetes/kops/releases/download/v1.16.0/kops-linux-amd64 && sudo chmod +x /usr/bin/kops
+```
+
+![](img/kops-1.png)
+![](img/kops-2.png)
+
+
 ### 7. How to install kops
 ### 8. How to create S3 bucket in AWS
 ### 9. Materials: How to install TERRAFORM binary
