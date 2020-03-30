@@ -42,7 +42,7 @@ kops create cluster \
 --target=terraform \
 --ssh-public-key=~/.ssh/udemy_devopsinuse.pub
 
-cd devopsinuse_terraform
+cd terraform_code
 terraform init
 terraform validate                  # -> thrown me some errors
 terraform 0.12upgrade         # <- this command fix some of the errors
