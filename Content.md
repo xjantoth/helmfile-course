@@ -9,6 +9,7 @@
 * create **S3 bucket** (unique across entire AWS)
 * generate **SSH key** pair
 * make sure you got your **own domain name**
+* create *hosted zone* in AWS (costs $50/month)
 
 ```bash
 SSH_KEYS=~/.ssh/udemy_devopsinuse
