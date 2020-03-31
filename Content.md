@@ -298,6 +298,9 @@ Hit button **Create bucket**
 ![](img/s3-4.png)
 
 ### 9. Materials: How to install TERRAFORM binary
+
+https://www.terraform.io/downloads.html
+
 ![](img/terrform-1.png)
 
 ```bash
@@ -312,6 +315,8 @@ Terraform v0.12.24
 ```
 
 ### 10. How to install Terraform binary
+https://www.terraform.io/downloads.html
+
 ![](img/terrform-1.png)
 
 ```bash
@@ -324,10 +329,11 @@ terraform -version
 Terraform v0.12.24
 ```
 
-
-<!-- ### 11. Materials: How to install KUBECTL binary
+### 11. Materials: How to install KUBECTL binary
 ### 12. How to install Kubectl binary
-### 13. Materials: How to start Kubernetes cluster
+
+
+<!-- ### 13. Materials: How to start Kubernetes cluster
 ### 14. How to lunch kubernetes cluster on AWS by using kops and terraform
 ### 15. Materials: How to run Jupyter Notebooks locally as Docker image
 ### 16. How to Jupyter Notebook in Docker on local
