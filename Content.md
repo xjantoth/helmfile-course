@@ -250,7 +250,8 @@ https://github.com/kubernetes/kops/releases/download/v1.16.0/kops-linux-amd64 &&
 ![](img/kops-2.png)
 
 
-### 7. How to install kops
+### 7. How to install kops 
+All `kops` releases: https://github.com/kubernetes/kops/releases/
 Navigate to: https://github.com/kubernetes/kops/releases/tag/v1.16.0
 
 ```bash
