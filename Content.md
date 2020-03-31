@@ -1,5 +1,114 @@
+- [1. Welcome to course](#1-welcome-to-course)
+- [2. Materials: Delete/destroy all the AWS resources every time you do not use them](#2-materials-deletedestroy-all-the-aws-resources-every-time-you-do-not-use-them)
+- [3. How to start kubernetes cluster on AWS](#3-how-to-start-kubernetes-cluster-on-aws)
+- [4. How to create Hosted Zone on AWS](#4-how-to-create-hosted-zone-on-aws)
+- [5. How to setup communication kops to AWS via aws](#5-how-to-setup-communication-kops-to-aws-via-aws)
+- [6. Materials: How to install KOPS binary](#6.-materials:-how-to-install-kops-binary)
+- [7. How to install kops](#7.-how-to-install-kops)
+- [8. How to create S3 bucket in AWS](#8.-how-to-create-s3-bucket-in-aws)
+- [9. Materials: How to install TERRAFORM binary](#9.-materials:-how-to-install-terraform-binary)
+- [10. How to install Terraform binary](#10.-how-to-install-terraform-binary)
+- [11. Materials: How to install KUBECTL binary](#11.-materials:-how-to-install-kubectl-binary)
+- [How to install Kubectl binary](#how-to-install-kubectl-binary)
+- [Materials: How to start Kubernetes cluster](#materials:-how-to-start-kubernetes-cluster)
+- [How to lunch kubernetes cluster on AWS by using kops and terraform](#how-to-lunch-kubernetes-cluster-on-aws-by-using-kops-and-terraform)
+- [Materials: How to run Jupyter Notebooks locally as Docker image](#materials:-how-to-run-jupyter-notebooks-locally-as-docker-image)
+- [How to Jupyter Notebook in Docker on local](#how-to-jupyter-notebook-in-docker-on-local)
+- [How to deploy Jupyter Notebooks to Kubernetes AWS (Part 1)](#how-to-deploy-jupyter-notebooks-to-kubernetes-aws-(part-1))
+- [Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file](#materials:-how-to-deploy-juypyter-notebooks-to-kubernetes-via-yaml-file)
+- [How to deploy Jupyter Notebooks to Kubernetes AWS (Part 2)](#how-to-deploy-jupyter-notebooks-to-kubernetes-aws-(part-2))
+- [How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)](#how-to-deploy-jupyter-notebooks-to-kubernetes-aws-(part-3))
+- [Materials: How to SSH to the physical servers in AWS](#materials:-how-to-ssh-to-the-physical-servers-in-aws)
+- [How to deploy Jupyter Notebooks to Kubernetes AWS (Part 4)](#how-to-deploy-jupyter-notebooks-to-kubernetes-aws-(part-4))
+- [How to deploy Jupyter Notebooks to Kubernetes AWS (Part 5)](#how-to-deploy-jupyter-notebooks-to-kubernetes-aws-(part-5))
+- [Comparison between Jupyter Notebooks running as Docker Conatainer with Kubernete](#comparison-between-jupyter-notebooks-running-as-docker-conatainer-with-kubernete)
+- [Materials: Install HELM binary and activate HELM user account in your cluster](#materials:-install-helm-binary-and-activate-helm-user-account-in-your-cluster)
+- [Introduction to Helm charts](#introduction-to-helm-charts)
+- [Materials: Run GOGS helm deployment for the first time](#materials:-run-gogs-helm-deployment-for-the-first-time)
+- [How to use Helm for the first time](#how-to-use-helm-for-the-first-time)
+- [How to understand helm Gogs deployment](#how-to-understand-helm-gogs-deployment)
+- [Materials: How to use HELM to deploy GOGS from locally downloaded HELM CHARTS](#materials:-how-to-use-helm-to-deploy-gogs-from-locally-downloaded-helm-charts)
+- [How to deploy Gogs from local repository](#how-to-deploy-gogs-from-local-repository)
+- [Materials: How to understand persistentVolumeClaim and persistentVolumes](#materials:-how-to-understand-persistentvolumeclaim-and-persistentvolumes)
+- [How to make you data persistent](#how-to-make-you-data-persistent)
+- [Lets summarize on Gogs helm chart deployment](#lets-summarize-on-gogs-helm-chart-deployment)
+- [Materials: How to install HELMFILE binary to your machine](#materials:-how-to-install-helmfile-binary-to-your-machine)
+- [Introduction to Helmfile](#introduction-to-helmfile)
+- [How to deploy Jenkins by using Helmfile (Part 1)](#how-to-deploy-jenkins-by-using-helmfile-(part-1))
+- [How to deploy Jenkins by using Helmfile (Part 2)](#how-to-deploy-jenkins-by-using-helmfile-(part-2))
+- [Materials: Create HELMFILE specification for Jenkins deployment](#materials:-create-helmfile-specification-for-jenkins-deployment)
+- [How to use helmfile to deploy Jenkins helm chart for the first time (Part 1)](#how-to-use-helmfile-to-deploy-jenkins-helm-chart-for-the-first-time-(part-1))
+- [Materials: Useful commands Jenkins deployment](#materials:-useful-commands-jenkins-deployment)
+- [How to use helmfile to deploy Jenkins helm chart for the first time (Part 2)](#how-to-use-helmfile-to-deploy-jenkins-helm-chart-for-the-first-time-(part-2))
+- [Introduction to Prometheus and Grafana deployment by using helmfile (Grafana)](#introduction-to-prometheus-and-grafana-deployment-by-using-helmfile-(grafana))
+- [Prometheus and Grafana deployment by using helmfile (Prometheus part)](#prometheus-and-grafana-deployment-by-using-helmfile-(prometheus-part))
+- [Prepare Helm charts for Grafana deployment by using helmfile](#prepare-helm-charts-for-grafana-deployment-by-using-helmfile)
+- [Prepare Helm charts for Prometheus deployment by using helmfile](#prepare-helm-charts-for-prometheus-deployment-by-using-helmfile)
+- [Prepare Helm charts for Prometheus Node Exporter deployment by using helmfile](#prepare-helm-charts-for-prometheus-node-exporter-deployment-by-using-helmfile)
+- [Copy Prometheus and Grafana Helm Charts specifications to server](#copy-prometheus-and-grafana-helm-charts-specifications-to-server)
+- [Materials: Helmfile specification for Grafana and Prometheus deployment](#materials:-helmfile-specification-for-grafana-and-prometheus-deployment)
+- [Process Grafana and Prometheus helmfile deployment](#process-grafana-and-prometheus-helmfile-deployment)
+- [Exploring Prometheus Node Exporter](#exploring-prometheus-node-exporter)
+- [Explore Promethus Web User Interface](#explore-promethus-web-user-interface)
+- [Explore Grafana Web User Interface](#explore-grafana-web-user-interface)
+- [LoadBalancer Grafana Service](#loadbalancer-grafana-service)
+- [Materials: Helmfile specification to add DokuWiki deployment](#materials:-helmfile-specification-to-add-dokuwiki-deployment)
+- [Single LoadBalancer service type for all instances in your K8s (DokuWiki)](#single-loadbalancer-service-type-for-all-instances-in-your-k8s-(dokuwiki))
+- [Materials: Helmfile specification to add nginx-ingress Helm Chart deployment](#materials:-helmfile-specification-to-add-nginx-ingress-helm-chart-deployment)
+- [Nginx Ingress Controller Pod](#nginx-ingress-controller-pod)
+- [Configure Ingress Kubernetes Objects for Grafana, Prometheus and DokuWiki](#configure-ingress-kubernetes-objects-for-grafana,-prometheus-and-dokuwiki)
+- [Important: Clean up Kubernetes cluster and all the AWS resources](#important:-clean-up-kubernetes-cluster-and-all-the-aws-resources)
+- [Congratulations](#congratulations)
+
 ### 1. Welcome to course
 ### 2. Materials: Delete/destroy all the AWS resources every time you do not use them
+
+Materials **available**:
+
+https://github.com/xjantoth/helmfile-course/blob/master/Content.md
+
+
+
+**Note**: I assume that if you are going through this course during several days - You always **destroy all resources in AWS**  It means that you stop you Kubernetes cluster every time you are not working on it. 
+
+The easiest way is to do it via 
+```bash
+terraform cd /.../.../.../terraform_code;
+terraform destroy # hit yes
+```
+
+
+**destroy/delete manually** if terraform can't do that:
+   - VOLUMES
+   - LoadBalancer/s (if exists)
+   - RecordSet/s (custom RecordSet/s)
+   - EC2 instances
+   - network resources
+   -  ...
+
+ except:
+   - **S3 bucket**      (delete once you do not want to use this free 1 YEAR account anymore, or you are done with this course.)
+   - **Hosted Zone**   (delete once you do not want to use this free 1 YEAR account anymore, or you are done with this course.)
+           
+
+
+
+Please do not forget redeploy tiller pod by using of this commands every time you are starting your Kubernetes cluster.
+
+Start your Kubernetes cluster
+```bash
+cd /.../.../.../terraform_code  
+terraform apply 
+```
+
+Crete service account && initiate tiller pod in your Kubernetes cluster
+```bash
+kubectl create serviceaccount --namespace kube-system tiller
+kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+# kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
+helm init --service-account tiller --upgrade
+```
+
 ### 3. How to start kubernetes cluster on AWS
 
 * **install** binaries:
