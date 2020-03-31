@@ -311,8 +311,21 @@ Terraform v0.12.24
 
 ```
 
-<!--  ### 10. How to install Terraform binary
-### 11. Materials: How to install KUBECTL binary
+### 10. How to install Terraform binary
+![](img/terrform-1.png)
+
+```bash
+curl -L --output /tmp/terraform.zip  \
+https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip
+
+sudo unzip -d /usr/bin/ /tmp/terraform.zip 
+
+terraform -version
+Terraform v0.12.24
+```
+
+
+<!-- ### 11. Materials: How to install KUBECTL binary
 ### 12. How to install Kubectl binary
 ### 13. Materials: How to start Kubernetes cluster
 ### 14. How to lunch kubernetes cluster on AWS by using kops and terraform
