@@ -354,9 +354,8 @@ kubectl version --client
 ### 13. Materials: How to start Kubernetes cluster
 
 **Generate** SSH key pair:
-
 ```bash
-SSH_KEYS=~/.ssh/kops-aws
+SSH_KEYS=~/.ssh/udemy_devopsinuse
 
 if [ ! -f "$SSH_KEYS" ]
 then
@@ -372,19 +371,18 @@ Export environmental variables for ***kops***, ***awscli*** and ***terraform*** 
 * **AWS_SECRET_ACCESS_KEY** 
 * **AWS_DEFAULT_REGION** 
 
-
-
 ```bash
 export AWS_ACCESS_KEY_ID="..."
 export AWS_SECRET_ACCESS_KEY="..."
 export AWS_DEFAULT_REGION="eu-central-1"
 ```
+
 **Generate** *terraform code* by executing following *kops command* to provision Kubernetes cluster in **AWS**:
 
 ```bash
 kops create cluster \
 --cloud=aws \
---name=my-cluster.course.devopsinuse.com \
+--name=course.devopsinuse.com \
 --state=s3://course.devopsinuse.com \
 --authorization RBAC \
 --zones=eu-central-1a \
@@ -393,19 +391,20 @@ kops create cluster \
 --master-size=t2.micro \
 --master-count=1 \
 --dns-zone=course.devopsinuse.com \
---out=devopsinuse_terraform \
+--out=terraform_code \
 --target=terraform \
---ssh-public-key=~/.ssh/kops-aws.pub
+--ssh-public-key=~/.ssh/udemy_devopsinuse.pub
 
-cd devopsinuse_terraform
+cd terraform_code
 terraform init
-terraform validate                  # -> thrown me some errors
+terraform validate            # -> thrown me some errors
 terraform 0.12upgrade         # <- this command fix some of the errors
 terraform validate      
 sed -i 's/0-0-0-0--0/kops/g' kubernetes.tf
 
-terrafrom validate       # -> this time it passed with no errors
+terrafrom validate            # -> this time it passed with no errors
 terraform plan
+
 ```
 
 Pleas run *terrafrom apply* command to provision Kubernetes cluster in **AWS**:
@@ -414,6 +413,27 @@ terraform apply
 ```
 Please wait like _~10 miutes_ not to get upset that **DNS records** are not being created very fast
 
+Install **helm v3**
+```bash
+curl --output /tmp/helm-v3.1.1-linux-amd64.tar.gz -L https://get.helm.sh/helm-v3.1.1-linux-amd64.tar.gz
+sudo tar -xvf /tmp/helm3.tgz --strip-components=1 -C /usr/bin/helm3 linux-amd64/helm
+sudo chmod +x /usr/bin/helm3
+
+# In case you have no helm chart repository added
+helm3 repo add stable https://kubernetes-charts.storage.googleapis.com/
+
+# Verify your helm chart repository repo helm v3
+helm3 repo list
+
+```
+
+!!! This section is only applicable if you want to use **helm v2** 
+Install **helm v2**
+```bash
+curl -L --output /tmp/helm-v2.16.5-linux-amd64.tar.gz  https://get.helm.sh/helm-v2.16.5-linux-amd64.tar.gz
+sudo tar -xvf /tmp/helm-v2.16.5-linux-amd64.tar.gz --strip-components=1 -C /usr/bin/ linux-amd64/helm
+sudo chmod +x /usr/bin/helm
+```
 
 !!! This section is only applicable if you want to use **helm v2** 
 ```bash
@@ -422,6 +442,12 @@ kubectl create serviceaccount --namespace kube-system tiller
 kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
 helm init --service-account tiller --upgrade
 helm ls
+```
+
+**Destroy** your Kubernetes cluster
+```bash
+cd terraform_code
+terraform destroy
 ```
 
 ### 14. How to lunch kubernetes cluster on AWS by using kops and terraform
