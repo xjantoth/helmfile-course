@@ -426,9 +426,8 @@ helm ls
 
 ### 14. How to lunch kubernetes cluster on AWS by using kops and terraform
 **Generate** SSH key pair:
-
 ```bash
-SSH_KEYS=~/.ssh/kops-aws
+SSH_KEYS=~/.ssh/udemy_devopsinuse
 
 if [ ! -f "$SSH_KEYS" ]
 then
@@ -444,19 +443,18 @@ Export environmental variables for ***kops***, ***awscli*** and ***terraform*** 
 * **AWS_SECRET_ACCESS_KEY** 
 * **AWS_DEFAULT_REGION** 
 
-
-
 ```bash
 export AWS_ACCESS_KEY_ID="..."
 export AWS_SECRET_ACCESS_KEY="..."
 export AWS_DEFAULT_REGION="eu-central-1"
 ```
+
 **Generate** *terraform code* by executing following *kops command* to provision Kubernetes cluster in **AWS**:
 
 ```bash
 kops create cluster \
 --cloud=aws \
---name=my-cluster.course.devopsinuse.com \
+--name=course.devopsinuse.com \
 --state=s3://course.devopsinuse.com \
 --authorization RBAC \
 --zones=eu-central-1a \
@@ -465,19 +463,20 @@ kops create cluster \
 --master-size=t2.micro \
 --master-count=1 \
 --dns-zone=course.devopsinuse.com \
---out=devopsinuse_terraform \
+--out=terraform_code \
 --target=terraform \
---ssh-public-key=~/.ssh/kops-aws.pub
+--ssh-public-key=~/.ssh/udemy_devopsinuse.pub
 
-cd devopsinuse_terraform
+cd terraform_code
 terraform init
-terraform validate                  # -> thrown me some errors
+terraform validate            # -> thrown me some errors
 terraform 0.12upgrade         # <- this command fix some of the errors
 terraform validate      
 sed -i 's/0-0-0-0--0/kops/g' kubernetes.tf
 
-terrafrom validate       # -> this time it passed with no errors
+terrafrom validate            # -> this time it passed with no errors
 terraform plan
+
 ```
 
 Pleas run *terrafrom apply* command to provision Kubernetes cluster in **AWS**:
@@ -519,7 +518,7 @@ helm ls
 
 **Destroy** your Kubernetes cluster
 ```bash
-cd devopsinuse_terraform
+cd terraform_code
 terraform destroy
 ```
 
