@@ -267,14 +267,30 @@ https://github.com/kubernetes/kops/releases/download/v1.16.0/kops-linux-amd64 &&
 ![](img/kops-2.png)
 
 ### 8. How to create S3 bucket in AWS
-Search for the expression **"S3"** in AWS console
+
+```bash
+# create a new bucket
+aws s3 mb s3://example.devopsinuse.com --profile terraform
+make_bucket: example.devopsinuse.com
+
+# list all buckets
+aws s3 ls --profile terraform                            
+2018-07-06 12:26:00 course.devopsinuse.com
+2020-03-31 15:23:14 example.devopsinuse.com
+
+# remove bucket
+aws s3 rb s3://example.devopsinuse.com --profile terraform
+remove_bucket: example.devopsinuse.com
+```
+
+**Search** for the expression **"S3"** in AWS console
 
 ![](img/s3-1.png)
 
-Create a new S3 bucket if you do not have one
+**Create** a new S3 bucket if you do not have one
 ![](img/s3-2.png)
 
-Fill up neceassary details
+**Fill up** neceassary details
 
 ![](img/s3-3.png)
 
