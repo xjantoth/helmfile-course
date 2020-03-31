@@ -475,6 +475,9 @@ Export environmental variables for ***kops***, ***awscli*** and ***terraform*** 
 export AWS_ACCESS_KEY_ID="..."
 export AWS_SECRET_ACCESS_KEY="..."
 export AWS_DEFAULT_REGION="eu-central-1"
+
+# I do not want to make my credential public and be visible in video
+env | grep AWS | sed -E  's/^(.*=)(.*)$/\1masked-output/'
 ```
 
 **Generate** *terraform code* by executing following *kops command* to provision Kubernetes cluster in **AWS**:
