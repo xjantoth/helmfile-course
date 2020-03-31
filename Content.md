@@ -266,8 +266,22 @@ https://github.com/kubernetes/kops/releases/download/v1.16.0/kops-linux-amd64 &&
 ![](img/kops-1.png)
 ![](img/kops-2.png)
 
-<!-- ### 8. How to create S3 bucket in AWS
-### 9. Materials: How to install TERRAFORM binary
+### 8. How to create S3 bucket in AWS
+Search for the expression **"S3"** in AWS console
+
+![](img/s3-1.png)
+
+Create a new S3 bucket if you do not have one
+![](img/s3-2.png)
+
+Fill up neceassary details
+
+![](img/s3-3.png)
+
+Hit button **Create bucket**
+![](img/s3-4.png)
+
+<!-- ### 9. Materials: How to install TERRAFORM binary
 ### 10. How to install Terraform binary
 ### 11. Materials: How to install KUBECTL binary
 ### 12. How to install Kubectl binary
