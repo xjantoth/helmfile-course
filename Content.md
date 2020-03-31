@@ -161,7 +161,7 @@ terraform 0.12upgrade         # <- this command fix some of the errors
 terraform validate      
 sed -i 's/0-0-0-0--0/kops/g' kubernetes.tf
 
-terrafrom validate       # -> this time it passed with no errors
+terraform validate       # -> this time it passed with no errors
 terraform plan
 ```
 ### 4. How to create Hosted Zone on AWS
@@ -404,7 +404,7 @@ terraform 0.12upgrade         # <- this command fix some of the errors
 terraform validate      
 sed -i 's/0-0-0-0--0/kops/g' kubernetes.tf
 
-terrafrom validate            # -> this time it passed with no errors
+terraform validate            # -> this time it passed with no errors
 terraform plan
 
 ```
@@ -505,7 +505,7 @@ terraform 0.12upgrade         # <- this command fix some of the errors
 terraform validate      
 sed -i 's/0-0-0-0--0/kops/g' kubernetes.tf
 
-terrafrom validate            # -> this time it passed with no errors
+terraform validate            # -> this time it passed with no errors
 terraform plan
 
 ```
