@@ -330,9 +330,26 @@ Terraform v0.12.24
 ```
 
 ### 11. Materials: How to install KUBECTL binary
+Link: https://kubernetes.io/docs/tasks/tools/install-kubectl/
+
+```bash
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin/kubectl
+kubectl version --client
+```         
+![](img/kubectl-1.png)
+
 ### 12. How to install Kubectl binary
+Link: https://kubernetes.io/docs/tasks/tools/install-kubectl/
 
-
+```bash
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin/kubectl
+kubectl version --client
+```         
+![](img/kubectl-1.png)
 <!-- ### 13. Materials: How to start Kubernetes cluster
 ### 14. How to lunch kubernetes cluster on AWS by using kops and terraform
 ### 15. Materials: How to run Jupyter Notebooks locally as Docker image
