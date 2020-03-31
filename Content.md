@@ -1,17 +1,19 @@
-- [1. Welcome to course](#1-welcome-to-course)
-- [2. Materials: Delete/destroy all the AWS resources every time you do not use them](#2-materials-deletedestroy-all-the-aws-resources-every-time-you-do-not-use-them)
-- [3. How to start kubernetes cluster on AWS](#3-how-to-start-kubernetes-cluster-on-aws)
-- [4. How to create Hosted Zone on AWS](#4-how-to-create-hosted-zone-on-aws)
-- [5. How to setup communication kops to AWS via aws](#5-how-to-setup-communication-kops-to-aws-via-aws)
-- [6. Materials: How to install KOPS binary](#6.-materials:-how-to-install-kops-binary)
-- [7. How to install kops](#7.-how-to-install-kops)
-- [8. How to create S3 bucket in AWS](#8.-how-to-create-s3-bucket-in-aws)
-- [9. Materials: How to install TERRAFORM binary](#9.-materials:-how-to-install-terraform-binary)
-- [10. How to install Terraform binary](#10.-how-to-install-terraform-binary)
-- [11. Materials: How to install KUBECTL binary](#11.-materials:-how-to-install-kubectl-binary)
-- [How to install Kubectl binary](#how-to-install-kubectl-binary)
-- [Materials: How to start Kubernetes cluster](#materials:-how-to-start-kubernetes-cluster)
-- [How to lunch kubernetes cluster on AWS by using kops and terraform](#how-to-lunch-kubernetes-cluster-on-aws-by-using-kops-and-terraform)
+* **Section 1: Introduction**
+   - [1. Welcome to course](#1-welcome-to-course)
+   - [2. Materials: Delete/destroy all the AWS resources every time you do not use them](#2-materials-deletedestroy-all-the-aws-resources-every-time-you-do-not-use-them)
+   - [3. How to start kubernetes cluster on AWS](#3-how-to-start-kubernetes-cluster-on-aws)
+   - [4. How to create Hosted Zone on AWS](#4-how-to-create-hosted-zone-on-aws)
+   - [5. How to setup communication kops to AWS via aws](#5-how-to-setup-communication-kops-to-aws-via-aws)
+   - [6. Materials: How to install KOPS binary](#6-materials-how-to-install-kops-binary)
+   - [7. How to install kops](#7-how-to-install-kops)
+   - [8. How to create S3 bucket in AWS](#8-how-to-create-s3-bucket-in-aws)
+   - [9. Materials: How to install TERRAFORM binary](#9-materials-how-to-install-terraform-binary)
+   - [10. How to install Terraform binary](#10-how-to-install-terraform-binary)
+   - [11. Materials: How to install KUBECTL binary](#11-materials-how-to-install-kubectl-binary)
+   - [12. How to install Kubectl binary](#12-how-to-install-kubectl-binary)
+   - [13. Materials: How to start Kubernetes cluster](#13-materials-how-to-start-kubernetes-cluster)
+   - [14. How to lunch kubernetes cluster on AWS by using kops and terraform](#14-how-to-lunch-kubernetes-cluster-on-aws-by-using-kops-and-terraform)
+<!-- * **Section 2: Jupyter Notebooks**
 - [Materials: How to run Jupyter Notebooks locally as Docker image](#materials:-how-to-run-jupyter-notebooks-locally-as-docker-image)
 - [How to Jupyter Notebook in Docker on local](#how-to-jupyter-notebook-in-docker-on-local)
 - [How to deploy Jupyter Notebooks to Kubernetes AWS (Part 1)](#how-to-deploy-jupyter-notebooks-to-kubernetes-aws-(part-1))
@@ -58,7 +60,7 @@
 - [Nginx Ingress Controller Pod](#nginx-ingress-controller-pod)
 - [Configure Ingress Kubernetes Objects for Grafana, Prometheus and DokuWiki](#configure-ingress-kubernetes-objects-for-grafana,-prometheus-and-dokuwiki)
 - [Important: Clean up Kubernetes cluster and all the AWS resources](#important:-clean-up-kubernetes-cluster-and-all-the-aws-resources)
-- [Congratulations](#congratulations)
+- [Congratulations](#congratulations)  -->
 
 ### 1. Welcome to course
 ### 2. Materials: Delete/destroy all the AWS resources every time you do not use them
@@ -248,20 +250,20 @@ https://github.com/kubernetes/kops/releases/download/v1.16.0/kops-linux-amd64 &&
 ![](img/kops-2.png)
 
 
-### 7. How to install kops
+<!-- ### 7. How to install kops
 ### 8. How to create S3 bucket in AWS
 ### 9. Materials: How to install TERRAFORM binary
 ### 10. How to install Terraform binary
 ### 11. Materials: How to install KUBECTL binary
-### How to install Kubectl binary
-### Materials: How to start Kubernetes cluster
-### How to lunch kubernetes cluster on AWS by using kops and terraform
-### Materials: How to run Jupyter Notebooks locally as Docker image
-### How to Jupyter Notebook in Docker on local
-### How to deploy Jupyter Notebooks to Kubernetes AWS (Part 1)
-### Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file
-### How to deploy Jupyter Notebooks to Kubernetes AWS (Part 2)
-### How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)
+### 12. How to install Kubectl binary
+### 13. Materials: How to start Kubernetes cluster
+### 14. How to lunch kubernetes cluster on AWS by using kops and terraform
+### 15. Materials: How to run Jupyter Notebooks locally as Docker image
+### 16. How to Jupyter Notebook in Docker on local
+### 17. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 1)
+### 18. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file
+### 19. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 2)
+### 20. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)
 ### Materials: How to SSH to the physical servers in AWS
 ### How to deploy Jupyter Notebooks to Kubernetes AWS (Part 4)
 ### How to deploy Jupyter Notebooks to Kubernetes AWS (Part 5)
@@ -302,4 +304,4 @@ https://github.com/kubernetes/kops/releases/download/v1.16.0/kops-linux-amd64 &&
 ### Nginx Ingress Controller Pod
 ### Configure Ingress Kubernetes Objects for Grafana, Prometheus and DokuWiki
 ### Important: Clean up Kubernetes cluster and all the AWS resources
-### Congratulations
+### Congratulations -->
