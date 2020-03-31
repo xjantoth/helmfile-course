@@ -297,8 +297,21 @@ remove_bucket: example.devopsinuse.com
 Hit button **Create bucket**
 ![](img/s3-4.png)
 
-<!-- ### 9. Materials: How to install TERRAFORM binary
-### 10. How to install Terraform binary
+### 9. Materials: How to install TERRAFORM binary
+![](img/terrform-1.png)
+
+```bash
+curl -L --output /tmp/terraform.zip  \
+https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip
+
+sudo unzip -d /usr/bin/ /tmp/terraform.zip 
+
+terraform -version
+Terraform v0.12.24
+
+```
+
+<!--  ### 10. How to install Terraform binary
 ### 11. Materials: How to install KUBECTL binary
 ### 12. How to install Kubectl binary
 ### 13. Materials: How to start Kubernetes cluster
