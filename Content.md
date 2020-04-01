@@ -19,52 +19,9 @@
    - [16. How to Jupyter Notebook in Docker on local](#16-how-to-jupyter-notebook-in-docker-on-local)
    - [17. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file](#17-materials-how-to-deploy-juypyter-notebooks-to-kubernetes-via-yaml-file)
    - [18. How to deploy Jupyter Notebooks to Kubernetes AWS](#18-how-to-deploy-jupyter-notebooks-to-kubernetes-aws)
+   - [19. Explore POD DEPLOYMENT and SERVICE for Jupyter Notebooks](#19-explore-pod-deployment-and-service-for-jupyter-notebooks)
    
-   <!-- - [20. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)](#20-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-3)
-   - [21. Materials: How to SSH to the physical servers in AWS](#21-materials-how-to-ssh-to-the-physical-servers-in-aws)
-   - [22. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 4)](#22-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-4)
-   - [23. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 5)](#23-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-5)
-   - [24. Comparison between Jupyter Notebooks running as Docker Conatainer with Kubernete](#24-comparison-between-jupyter-notebooks-running-as-docker-conatainer-with-kubernete) -->
-
-
-<!-- - [Materials: Install HELM binary and activate HELM user account in your cluster](#materials:-install-helm-binary-and-activate-helm-user-account-in-your-cluster)
-- [Introduction to Helm charts](#introduction-to-helm-charts)
-- [Materials: Run GOGS helm deployment for the first time](#materials:-run-gogs-helm-deployment-for-the-first-time)
-- [How to use Helm for the first time](#how-to-use-helm-for-the-first-time)
-- [How to understand helm Gogs deployment](#how-to-understand-helm-gogs-deployment)
-- [Materials: How to use HELM to deploy GOGS from locally downloaded HELM CHARTS](#materials:-how-to-use-helm-to-deploy-gogs-from-locally-downloaded-helm-charts)
-- [How to deploy Gogs from local repository](#how-to-deploy-gogs-from-local-repository)
-- [Materials: How to understand persistentVolumeClaim and persistentVolumes](#materials:-how-to-understand-persistentvolumeclaim-and-persistentvolumes)
-- [How to make you data persistent](#how-to-make-you-data-persistent)
-- [Lets summarize on Gogs helm chart deployment](#lets-summarize-on-gogs-helm-chart-deployment)
-- [Materials: How to install HELMFILE binary to your machine](#materials:-how-to-install-helmfile-binary-to-your-machine)
-- [Introduction to Helmfile](#introduction-to-helmfile)
-- [How to deploy Jenkins by using Helmfile (Part 1)](#how-to-deploy-jenkins-by-using-helmfile-(part-1))
-- [How to deploy Jenkins by using Helmfile (Part 2)](#how-to-deploy-jenkins-by-using-helmfile-(part-2))
-- [Materials: Create HELMFILE specification for Jenkins deployment](#materials:-create-helmfile-specification-for-jenkins-deployment)
-- [How to use helmfile to deploy Jenkins helm chart for the first time (Part 1)](#how-to-use-helmfile-to-deploy-jenkins-helm-chart-for-the-first-time-(part-1))
-- [Materials: Useful commands Jenkins deployment](#materials:-useful-commands-jenkins-deployment)
-- [How to use helmfile to deploy Jenkins helm chart for the first time (Part 2)](#how-to-use-helmfile-to-deploy-jenkins-helm-chart-for-the-first-time-(part-2))
-- [Introduction to Prometheus and Grafana deployment by using helmfile (Grafana)](#introduction-to-prometheus-and-grafana-deployment-by-using-helmfile-(grafana))
-- [Prometheus and Grafana deployment by using helmfile (Prometheus part)](#prometheus-and-grafana-deployment-by-using-helmfile-(prometheus-part))
-- [Prepare Helm charts for Grafana deployment by using helmfile](#prepare-helm-charts-for-grafana-deployment-by-using-helmfile)
-- [Prepare Helm charts for Prometheus deployment by using helmfile](#prepare-helm-charts-for-prometheus-deployment-by-using-helmfile)
-- [Prepare Helm charts for Prometheus Node Exporter deployment by using helmfile](#prepare-helm-charts-for-prometheus-node-exporter-deployment-by-using-helmfile)
-- [Copy Prometheus and Grafana Helm Charts specifications to server](#copy-prometheus-and-grafana-helm-charts-specifications-to-server)
-- [Materials: Helmfile specification for Grafana and Prometheus deployment](#materials:-helmfile-specification-for-grafana-and-prometheus-deployment)
-- [Process Grafana and Prometheus helmfile deployment](#process-grafana-and-prometheus-helmfile-deployment)
-- [Exploring Prometheus Node Exporter](#exploring-prometheus-node-exporter)
-- [Explore Promethus Web User Interface](#explore-promethus-web-user-interface)
-- [Explore Grafana Web User Interface](#explore-grafana-web-user-interface)
-- [LoadBalancer Grafana Service](#loadbalancer-grafana-service)
-- [Materials: Helmfile specification to add DokuWiki deployment](#materials:-helmfile-specification-to-add-dokuwiki-deployment)
-- [Single LoadBalancer service type for all instances in your K8s (DokuWiki)](#single-loadbalancer-service-type-for-all-instances-in-your-k8s-(dokuwiki))
-- [Materials: Helmfile specification to add nginx-ingress Helm Chart deployment](#materials:-helmfile-specification-to-add-nginx-ingress-helm-chart-deployment)
-- [Nginx Ingress Controller Pod](#nginx-ingress-controller-pod)
-- [Configure Ingress Kubernetes Objects for Grafana, Prometheus and DokuWiki](#configure-ingress-kubernetes-objects-for-grafana,-prometheus-and-dokuwiki)
-- [Important: Clean up Kubernetes cluster and all the AWS resources](#important:-clean-up-kubernetes-cluster-and-all-the-aws-resources)
-- [Congratulations](#congratulations)  -->
-
+   
 ### 1. Welcome to course
 ### 2. Materials: Delete/destroy all the AWS resources every time you do not use them
 
@@ -658,7 +615,7 @@ spec:
         - containerPort: 8888
         command: ["start-notebook.sh"]
         args: ["--NotebookApp.token=''"]
-
+```
 
 Execute _kubernetes service_ **file**: 
 ```bash
@@ -873,6 +830,86 @@ ssh -i ~/.ssh/udemy_devopsinuse admin@18.196.157.47   netstat -tunlp | grep 3004
 kubectl delete -f jupyter-notebook-deployment.yaml
 kubectl delete -f jupyter-notebook-service.yaml
 ```
+
+### 19. Explore POD DEPLOYMENT and SERVICE for Jupyter Notebooks
+
+Useful commands for **pods**
+
+```yaml
+---
+#Describe pod 
+kubectl describe pod $(kubectl get pods | cut -d' ' -f1 | grep -v "NAME")
+
+# Check for pods logs
+kubectl logs -f  $(kubectl get pods | cut -d' ' -f1 | grep -v "NAME") 
+
+Executing the command: jupyter notebook --NotebookApp.token=''
+[I 19:40:56.558 NotebookApp] Writing notebook server cookie secret to /home/jovyan/.local/share/jupyter/runtime/notebook_cookie_secret
+[W 19:40:56.966 Notebook
+...
+
+```
+
+Useful commands for **deployment**
+```bash
+kubectl describe deployment   $(kubectl get deployment | cut -d' ' -f1 | grep -v "NAME") 
+Name:                   jupyter-k8s-udemy
+Namespace:              default
+CreationTimestamp:      Wed, 01 Apr 2020 21:40:54 +0200
+Labels:                 app=jupyter-k8s-udemy
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=jupyter-k8s-udemy
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=jupyter-k8s-udemy
+  Containers:
+   minimal-notebook:
+    Image:      jupyter/scipy-notebook:2c80cf3537ca
+    Port:       8888/TCP
+    Host Port:  0/TCP
+    Command:
+      start-notebook.sh
+    Args:
+      --NotebookApp.token=''
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   jupyter-k8s-udemy-5686d7b74f (1/1 replicas created)
+Events:          <none>
+```
+
+Useful commands for **service**
+```bash
+kubectl get svc
+```
+
+Describe service
+```bash
+kubectl describe svc $(kubectl get svc | grep jupyt | cut -d' ' -f1 )
+Name:                     jupyter-k8s-udemy
+Namespace:                default
+Labels:                   <none>
+Annotations:              Selector:  app=jupyter-k8s-udemy
+Type:                     NodePort
+IP:                       100.65.51.245
+Port:                     <unset>  8888/TCP
+TargetPort:               8888/TCP
+NodePort:                 <unset>  30040/TCP
+Endpoints:                100.96.2.5:8888
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+```
+
 
 
 <!-- ### 20. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)
