@@ -633,7 +633,8 @@ plt.show()
 **Execute** deployment: `kubectl create -f jupyter_notebook.yaml` 
 
 **_Deployment_** Kubernetes object
-```bash
+```yaml
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -660,7 +661,7 @@ spec:
 ```
 
 **_Service_** Kubernetes object
-```bash
+```yaml
 ---
 kind: Service
 apiVersion: v1
