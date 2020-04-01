@@ -17,7 +17,6 @@
 * **Section 2: Jupyter Notebooks**
    - [15. Materials: How to run Jupyter Notebooks locally as Docker image](#15-materials-how-to-run-jupyter-notebooks-locally-as-docker-image)
    - [16. How to Jupyter Notebook in Docker on local](#16-how-to-jupyter-notebook-in-docker-on-local)
-   - [17. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 1)](#17-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-1)
    - [18. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file](#18-materials-how-to-deploy-juypyter-notebooks-to-kubernetes-via-yaml-file)
    - [19. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 2)](#19-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-2)
    - [20. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)](#20-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-3)
@@ -625,8 +624,6 @@ plt.title('3D Scatter Plot')
 plt.show()
 ```         
 
-
-### 17. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 1)
 ### 18. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file
 
 
@@ -687,6 +684,31 @@ spec:
     targetPort: 8888
 ```          
 
+```bash
+kubectl get nodes -o wide | awk -F" " '{print $1"\t"$7}'
+
+NAME	EXTERNAL-IP
+ip-172-20-34-241.eu-central-1.compute.internal	18.184.212.193
+ip-172-20-50-50.eu-central-1.compute.internal	3.120.179.150
+ip-172-20-52-232.eu-central-1.compute.internal	18.196.157.47
+```
+
+**SSH to your** AWS EC2 instances if neceassary
+```bash
+ssh -i ~/.ssh/udemy_devopsinuse admin@18.184.212.193
+ssh -i ~/.ssh/udemy_devopsinuse admin@3.120.179.150
+ssh -i ~/.ssh/udemy_devopsinuse admin@18.196.157.47
+```
+
+**Run command** `netstat -tunlp | grep 30040` at each of the EC2 instances
+to see that **NodePort** type of ***kubernetes service*** results in exposing this port at each 
+physical EC2 within your Kubernetes cluster in AWS
+
+```bash
+ssh -i ~/.ssh/udemy_devopsinuse admin@18.184.212.193  netstat -tunlp | grep 30040
+ssh -i ~/.ssh/udemy_devopsinuse admin@3.120.179.150   netstat -tunlp | grep 30040
+ssh -i ~/.ssh/udemy_devopsinuse admin@18.196.157.47   netstat -tunlp | grep 30040
+```
 ### 19. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 2)
 ### 20. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)
 ### 21. Materials: How to SSH to the physical servers in AWS
