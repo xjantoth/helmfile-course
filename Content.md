@@ -629,10 +629,13 @@ plt.show()
 ### 17. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 1)
 ### 18. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file
 
-**Save** these line to a file: `jupyter_notebook.yaml` 
-**Execute** deployment: `kubectl create -f jupyter_notebook.yaml` 
 
-**_Deployment_** Kubernetes object
+Execute _kubernetes deployment_ **file**: 
+```bash
+kubectl create -f jupyter-notebook-deployment.yaml
+```
+File: https://github.com/xjantoth/helmfile-course/blob/master/jupyter-notebook-deployment.yaml
+
 ```yaml
 ---
 apiVersion: apps/v1
@@ -660,7 +663,13 @@ spec:
         args: ["--NotebookApp.token=''"]
 ```
 
-**_Service_** Kubernetes object
+
+Execute _kubernetes service_ **file**: 
+```bash
+kubectl create -f jupyter-notebook-service.yaml
+```
+File: https://github.com/xjantoth/helmfile-course/blob/master/jupyter-notebook-service.yaml
+
 ```yaml
 ---
 kind: Service
