@@ -653,12 +653,11 @@ spec:
     spec:
       containers:
       - name: minimal-notebook
-        image: jupyter/minimal-notebook:latest
+        image: jupyter/scipy-notebook:2c80cf3537ca
         ports:
         - containerPort: 8888
         command: ["start-notebook.sh"]
         args: ["--NotebookApp.token=''"]
-```
 
 
 Execute _kubernetes service_ **file**: 
