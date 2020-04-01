@@ -13,18 +13,21 @@
    - [12. How to install Kubectl binary](#12-how-to-install-kubectl-binary)
    - [13. Materials: How to start Kubernetes cluster](#13-materials-how-to-start-kubernetes-cluster)
    - [14. How to lunch kubernetes cluster on AWS by using kops and terraform](#14-how-to-lunch-kubernetes-cluster-on-aws-by-using-kops-and-terraform)
-<!-- * **Section 2: Jupyter Notebooks**
-- [Materials: How to run Jupyter Notebooks locally as Docker image](#materials:-how-to-run-jupyter-notebooks-locally-as-docker-image)
-- [How to Jupyter Notebook in Docker on local](#how-to-jupyter-notebook-in-docker-on-local)
-- [How to deploy Jupyter Notebooks to Kubernetes AWS (Part 1)](#how-to-deploy-jupyter-notebooks-to-kubernetes-aws-(part-1))
-- [Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file](#materials:-how-to-deploy-juypyter-notebooks-to-kubernetes-via-yaml-file)
-- [How to deploy Jupyter Notebooks to Kubernetes AWS (Part 2)](#how-to-deploy-jupyter-notebooks-to-kubernetes-aws-(part-2))
-- [How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)](#how-to-deploy-jupyter-notebooks-to-kubernetes-aws-(part-3))
-- [Materials: How to SSH to the physical servers in AWS](#materials:-how-to-ssh-to-the-physical-servers-in-aws)
-- [How to deploy Jupyter Notebooks to Kubernetes AWS (Part 4)](#how-to-deploy-jupyter-notebooks-to-kubernetes-aws-(part-4))
-- [How to deploy Jupyter Notebooks to Kubernetes AWS (Part 5)](#how-to-deploy-jupyter-notebooks-to-kubernetes-aws-(part-5))
-- [Comparison between Jupyter Notebooks running as Docker Conatainer with Kubernete](#comparison-between-jupyter-notebooks-running-as-docker-conatainer-with-kubernete)
-- [Materials: Install HELM binary and activate HELM user account in your cluster](#materials:-install-helm-binary-and-activate-helm-user-account-in-your-cluster)
+
+* **Section 2: Jupyter Notebooks**
+   - [15. Materials: How to run Jupyter Notebooks locally as Docker image](#15-materials-how-to-run-jupyter-notebooks-locally-as-docker-image)
+   - [16. How to Jupyter Notebook in Docker on local](#16-how-to-jupyter-notebook-in-docker-on-local)
+   - [17. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 1)](#17-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-1)
+   - [18. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file](#18-materials-how-to-deploy-juypyter-notebooks-to-kubernetes-via-yaml-file)
+   - [19. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 2)](#19-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-2)
+   - [20. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)](#20-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-3)
+   - [21. Materials: How to SSH to the physical servers in AWS](#21-materials-how-to-ssh-to-the-physical-servers-in-aws)
+   - [22. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 4)](#22-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-4)
+   - [23. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 5)](#23-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-5)
+   - [24. Comparison between Jupyter Notebooks running as Docker Conatainer with Kubernete](#24-comparison-between-jupyter-notebooks-running-as-docker-conatainer-with-kubernete)
+
+
+<!-- - [Materials: Install HELM binary and activate HELM user account in your cluster](#materials:-install-helm-binary-and-activate-helm-user-account-in-your-cluster)
 - [Introduction to Helm charts](#introduction-to-helm-charts)
 - [Materials: Run GOGS helm deployment for the first time](#materials:-run-gogs-helm-deployment-for-the-first-time)
 - [How to use Helm for the first time](#how-to-use-helm-for-the-first-time)
@@ -553,18 +556,94 @@ cd terraform_code
 terraform destroy
 ```
 
-<!--
+
 ### 15. Materials: How to run Jupyter Notebooks locally as Docker image
+```bash
+docker ps
+docker run --name djupyter -d  -p 8888:8888 jupyter/scipy-notebook:2c80cf3537ca
+6f1d5c03efced84f7e9502649c1618e8304f304a69ce3f6100d2ef11111 
+ 
+docker logs 6f1d5c03efced84f7e9502649c1618e8304f304a69ce3f6100d2ef11111 -f
+...
+...
+    Copy/paste this URL into your browser when you connect for the first time,
+    to login with a token:
+        http://localhost:8888/?token=<some_long_token>
+...
+...
+docker stop djupyter
+```      
 ### 16. How to Jupyter Notebook in Docker on local
 ### 17. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 1)
 ### 18. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file
+
+**Save** these line to a file: `jupyter_notebook.yaml` 
+**Execute** deployment: `kubectl create -f jupyter_notebook.yaml` 
+
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter-k8s-udemy
+  labels:
+    app: jupyter-k8s-udemy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jupyter-k8s-udemy
+  template:
+    metadata:
+      labels:
+        app: jupyter-k8s-udemy
+    spec:
+      containers:
+      - name: minimal-notebook
+        image: jupyter/minimal-notebook:latest
+        ports:
+        - containerPort: 8888
+        command: ["start-notebook.sh"]
+        args: ["--NotebookApp.token=''"]
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: jupyter-k8s-udemy
+spec:
+  type: NodePort
+  selector:
+    app: jupyter-k8s-udemy
+  ports:
+  - protocol: TCP
+    nodePort: 30040
+    port: 8888
+    targetPort: 8888
+```          
+
 ### 19. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 2)
 ### 20. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)
-### Materials: How to SSH to the physical servers in AWS
-### How to deploy Jupyter Notebooks to Kubernetes AWS (Part 4)
-### How to deploy Jupyter Notebooks to Kubernetes AWS (Part 5)
-### Comparison between Jupyter Notebooks running as Docker Conatainer with Kubernete
-### Materials: Install HELM binary and activate HELM user account in your cluster
+### 21. Materials: How to SSH to the physical servers in AWS
+How to SSH to physical EC2 instances in AWS
+```bash
+ssh -i ~/.ssh/<your_public_key>.pub admin@<public_ip_address_of_node_1>
+ssh -i ~/.ssh/<your_public_key>.pub admin@<public_ip_address_of_node_2>
+ssh -i ~/.ssh/<your_public_key>.pub admin@<public_ip_address_of_master>
+
+```
+These publicly accessible IP addresses can be retrieved even from your command line
+
+```bash
+aws ec2 describe-instances \
+  --query "Reservations[*].Instances[*].PublicIpAddress" \
+  --output=text
+```
+
+### 22. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 4)
+### 23. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 5)
+### 24. Comparison between Jupyter Notebooks running as Docker Conatainer with Kubernete
+
+
+<!-- ### Materials: Install HELM binary and activate HELM user account in your cluster
 ### Introduction to Helm charts
 ### Materials: Run GOGS helm deployment for the first time
 ### How to use Helm for the first time
