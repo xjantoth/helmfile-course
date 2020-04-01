@@ -560,7 +560,27 @@ terraform destroy
 ### 15. Materials: How to run Jupyter Notebooks locally as Docker image
 ```bash
 docker ps
-docker run --name djupyter -d  -p 8888:8888 jupyter/scipy-notebook:2c80cf3537ca
+docker run \
+--name djupyter  \
+-p 8888:8888 \
+-d jupyter/scipy-notebook:2c80cf3537ca
+
+6f1d5c03efced84f7e9502649c1618e8304f304a69ce3f6100d2ef11111 
+ 
+docker logs 6f1d5c03efced84f7e9502649c1618e8304f304a69ce3f6100d2ef11111 -f
+```
+
+### 16. How to Jupyter Notebook in Docker on local
+
+**Start** Jupyter Notebook locally as **docker image**:
+```bash
+docker ps
+
+docker run \
+--name djupyter  \
+-p 8888:8888 \
+-d jupyter/scipy-notebook:2c80cf3537ca
+
 6f1d5c03efced84f7e9502649c1618e8304f304a69ce3f6100d2ef11111 
  
 docker logs 6f1d5c03efced84f7e9502649c1618e8304f304a69ce3f6100d2ef11111 -f
@@ -572,14 +592,47 @@ docker logs 6f1d5c03efced84f7e9502649c1618e8304f304a69ce3f6100d2ef11111 -f
 ...
 ...
 docker stop djupyter
-```      
-### 16. How to Jupyter Notebook in Docker on local
+```
+![](img/jupyter-1.png)
+
+**Copy and paste** this code snippet to your **Jupyter Notebook** in the web browser:
+
+```python
+from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
+from matplotlib import pyplot as plt
+%matplotlib inline
+mu_vec1 = np.array([0,0,0]) # mean vector
+cov_mat1 = np.array([[1,0,0],[0,1,0],[0,0,1]]) # covariance matrix
+
+class1_sample = np.random.multivariate_normal(mu_vec1, cov_mat1, 20)
+class2_sample = np.random.multivariate_normal(mu_vec1 + 1, cov_mat1, 20)
+class3_sample = np.random.multivariate_normal(mu_vec1 + 2, cov_mat1, 20)
+fig = plt.figure(figsize=(8,8))
+ax = fig.add_subplot(111, projection='3d')
+   
+ax.scatter(class1_sample[:,0], class1_sample[:,1], class1_sample[:,2], 
+           marker='x', color='blue', s=40, label='class 1')
+ax.scatter(class2_sample[:,0], class2_sample[:,1], class2_sample[:,2], 
+           marker='o', color='green', s=40, label='class 2')
+ax.scatter(class3_sample[:,0], class3_sample[:,1], class3_sample[:,2], 
+           marker='^', color='red', s=40, label='class 3')
+ax.set_xlabel('variable X')
+ax.set_ylabel('variable Y')
+ax.set_zlabel('variable Z')
+
+plt.title('3D Scatter Plot')
+plt.show()
+```         
+
+
 ### 17. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 1)
 ### 18. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file
 
 **Save** these line to a file: `jupyter_notebook.yaml` 
 **Execute** deployment: `kubectl create -f jupyter_notebook.yaml` 
 
+**_Deployment_** Kubernetes object
 ```bash
 apiVersion: apps/v1
 kind: Deployment
@@ -604,6 +657,10 @@ spec:
         - containerPort: 8888
         command: ["start-notebook.sh"]
         args: ["--NotebookApp.token=''"]
+```
+
+**_Service_** Kubernetes object
+```bash
 ---
 kind: Service
 apiVersion: v1

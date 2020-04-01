@@ -1,4 +1,4 @@
-SSH_KEYS=~/.ssh/kops-aws
+SSH_KEYS=~/.ssh/udemy_devopsinuse
 
 if [ ! -f "$SSH_KEYS" ]
 then
@@ -16,7 +16,7 @@ echo -e "\nCreating kubernetes cluster ...\n"
  
 kops create cluster \
 --cloud=aws \
---name=my-cluster.course.devopsinuse.com \
+--name=course.devopsinuse.com \
 --state=s3://course.devopsinuse.com \
 --authorization RBAC \
 --zones=eu-central-1a \
@@ -25,17 +25,19 @@ kops create cluster \
 --master-size=t2.micro \
 --master-count=1 \
 --dns-zone=course.devopsinuse.com \
---out=devopsinuse_terraform \
+--out=terraform_code \
 --target=terraform \
---ssh-public-key=~/.ssh/kops-aws.pub
+--ssh-public-key=~/.ssh/udemy_devopsinuse.pub
 
-cd devopsinuse_terraform
+cd terraform_code
 terraform init
-terraform validate                  # -> thrown me some errors
+terraform validate            # -> thrown me some errors
 terraform 0.12upgrade         # <- this command fix some of the errors
 terraform validate      
 sed -i 's/0-0-0-0--0/kops/g' kubernetes.tf
 
+terraform validate            # -> this time it passed with no errors
+terraform plan
 terrafrom validate       # -> this time it passed with no errors
 terraform plan
 
