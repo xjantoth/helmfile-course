@@ -17,13 +17,14 @@
 * **Section 2: Jupyter Notebooks**
    - [15. Materials: How to run Jupyter Notebooks locally as Docker image](#15-materials-how-to-run-jupyter-notebooks-locally-as-docker-image)
    - [16. How to Jupyter Notebook in Docker on local](#16-how-to-jupyter-notebook-in-docker-on-local)
-   - [18. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file](#18-materials-how-to-deploy-juypyter-notebooks-to-kubernetes-via-yaml-file)
-   - [19. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 2)](#19-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-2)
-   - [20. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)](#20-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-3)
+   - [17. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file](#17-materials-how-to-deploy-juypyter-notebooks-to-kubernetes-via-yaml-file)
+   - [18. How to deploy Jupyter Notebooks to Kubernetes AWS](#18-how-to-deploy-jupyter-notebooks-to-kubernetes-aws)
+   
+   <!-- - [20. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)](#20-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-3)
    - [21. Materials: How to SSH to the physical servers in AWS](#21-materials-how-to-ssh-to-the-physical-servers-in-aws)
    - [22. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 4)](#22-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-4)
    - [23. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 5)](#23-how-to-deploy-jupyter-notebooks-to-kubernetes-aws-part-5)
-   - [24. Comparison between Jupyter Notebooks running as Docker Conatainer with Kubernete](#24-comparison-between-jupyter-notebooks-running-as-docker-conatainer-with-kubernete)
+   - [24. Comparison between Jupyter Notebooks running as Docker Conatainer with Kubernete](#24-comparison-between-jupyter-notebooks-running-as-docker-conatainer-with-kubernete) -->
 
 
 <!-- - [Materials: Install HELM binary and activate HELM user account in your cluster](#materials:-install-helm-binary-and-activate-helm-user-account-in-your-cluster)
@@ -624,8 +625,7 @@ plt.title('3D Scatter Plot')
 plt.show()
 ```         
 
-### 18. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file
-
+### 17. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file
 
 Execute _kubernetes deployment_ **file**: 
 ```bash
@@ -709,27 +709,178 @@ ssh -i ~/.ssh/udemy_devopsinuse admin@18.184.212.193  netstat -tunlp | grep 3004
 ssh -i ~/.ssh/udemy_devopsinuse admin@3.120.179.150   netstat -tunlp | grep 30040
 ssh -i ~/.ssh/udemy_devopsinuse admin@18.196.157.47   netstat -tunlp | grep 30040
 ```
-### 19. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 2)
-### 20. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)
+### 18. How to deploy Jupyter Notebooks to Kubernetes AWS
+
+Execute _kubernetes deployment_ **file**: 
+```bash
+kubectl create -f jupyter-notebook-deployment.yaml
+```
+File: https://github.com/xjantoth/helmfile-course/blob/master/jupyter-notebook-deployment.yaml
+
+```yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter-k8s-udemy
+  labels:
+    app: jupyter-k8s-udemy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jupyter-k8s-udemy
+  template:
+    metadata:
+      labels:
+        app: jupyter-k8s-udemy
+    spec:
+      containers:
+      - name: minimal-notebook
+        image: jupyter/scipy-notebook:2c80cf3537ca
+        ports:
+        - containerPort: 8888
+        command: ["start-notebook.sh"]
+        args: ["--NotebookApp.token=''"]
+```
+
+
+Execute _kubernetes service_ **file**: 
+```bash
+kubectl create -f jupyter-notebook-service.yaml
+```
+File: https://github.com/xjantoth/helmfile-course/blob/master/jupyter-notebook-service.yaml
+
+```yaml
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: jupyter-k8s-udemy
+spec:
+  type: NodePort
+  selector:
+    app: jupyter-k8s-udemy
+  ports:
+  - protocol: TCP
+    nodePort: 30040
+    port: 8888
+    targetPort: 8888
+```          
+
+
+**Reminder:** how to run Jupyter Notebooks at your local laptop as a single dokcer container
+```bash
+docker run \
+--name djupyter  \
+-p 8888:8888 \
+-d jupyter/scipy-notebook:2c80cf3537ca
+```
+**Execute** deployment for Jupyter Notebooks in your Kubernetes cluster in AWS
+```bash
+kubectl apply -f jupyter-notebook-deployment.yaml
+kubectl apply -f jupyter-notebook-service.yaml
+```
+
+Check for the status of **pods** and **services**
+```bash
+kubectl get pods,svc
+NAME                                     READY   STATUS    RESTARTS   AGE
+pod/jupyter-k8s-udemy-5686d7b74f-qgj5x   1/1     Running   0          62s
+
+NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+service/jupyter-k8s-udemy   NodePort    100.67.171.238   <none>        8888:30040/TCP   57s
+service/kubernetes          ClusterIP   100.64.0.1       <none>        443/TCP          8h
+```
+
+Make sure to allow **Security group** for Kubernetes Node
+
+![](img/sg-1.png)
+
+**Retrive** the IP addresses of your physical EC2 instances (servers) in AWS
+```bash
+kubectl get nodes -o wide | awk -F" " '{print $3"\t"$1"\t"$7}'
+ROLES	NAME	EXTERNAL-IP
+master	ip-172-20-34-241.eu-central-1.compute.internal	18.184.212.193
+node	ip-172-20-50-50.eu-central-1.compute.internal	3.120.179.150
+node	ip-172-20-52-232.eu-central-1.compute.internal	18.196.157.47
+```
+
+**Navigate** to you favourite web browser and hit either
+```bash
+http://3.120.179.150:30040      # for node #1
+http://18.196.157.47:30040      # for node #2
+```
+
+**Copy and paste** this code snippet to your Jupyter Notebook **in the web browser**:
+
+```python
+from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
+from matplotlib import pyplot as plt
+%matplotlib inline
+mu_vec1 = np.array([0,0,0]) # mean vector
+cov_mat1 = np.array([[1,0,0],[0,1,0],[0,0,1]]) # covariance matrix
+
+class1_sample = np.random.multivariate_normal(mu_vec1, cov_mat1, 20)
+class2_sample = np.random.multivariate_normal(mu_vec1 + 1, cov_mat1, 20)
+class3_sample = np.random.multivariate_normal(mu_vec1 + 2, cov_mat1, 20)
+fig = plt.figure(figsize=(8,8))
+ax = fig.add_subplot(111, projection='3d')
+   
+ax.scatter(class1_sample[:,0], class1_sample[:,1], class1_sample[:,2], 
+           marker='x', color='blue', s=40, label='class 1')
+ax.scatter(class2_sample[:,0], class2_sample[:,1], class2_sample[:,2], 
+           marker='o', color='green', s=40, label='class 2')
+ax.scatter(class3_sample[:,0], class3_sample[:,1], class3_sample[:,2], 
+           marker='^', color='red', s=40, label='class 3')
+ax.set_xlabel('variable X')
+ax.set_ylabel('variable Y')
+ax.set_zlabel('variable Z')
+
+plt.title('3D Scatter Plot')
+plt.show()
+```
+![](img/jupyter-2.png)
+
+**Determine** the IP addresses/names/roles of your physical EC2 instances (servers) in AWS
+```bash
+kubectl get nodes -o wide | awk -F" " '{print $3"\t"$1"\t"$7}'
+ROLES	NAME	EXTERNAL-IP
+master	ip-172-20-34-241.eu-central-1.compute.internal	18.184.212.193
+node	ip-172-20-50-50.eu-central-1.compute.internal	3.120.179.150
+node	ip-172-20-52-232.eu-central-1.compute.internal	18.196.157.47
+```
+
+**SSH to your** AWS EC2 instances if neceassary
+```bash
+ssh -i ~/.ssh/udemy_devopsinuse admin@18.184.212.193
+ssh -i ~/.ssh/udemy_devopsinuse admin@3.120.179.150
+ssh -i ~/.ssh/udemy_devopsinuse admin@18.196.157.47
+```
+
+**Run command** `netstat -tunlp | grep 30040` at each of the EC2 instances
+to see that **NodePort** type of ***kubernetes service*** results in exposing this port at each 
+physical EC2 within your Kubernetes cluster in AWS
+
+```bash
+ssh -i ~/.ssh/udemy_devopsinuse admin@18.184.212.193  netstat -tunlp | grep 30040
+ssh -i ~/.ssh/udemy_devopsinuse admin@3.120.179.150   netstat -tunlp | grep 30040
+ssh -i ~/.ssh/udemy_devopsinuse admin@18.196.157.47   netstat -tunlp | grep 30040
+```
+
+**Destroy** deployment, service for Jupyter Notebooks for your Kubernetes cluster in AWS
+```bash
+kubectl delete -f jupyter-notebook-deployment.yaml
+kubectl delete -f jupyter-notebook-service.yaml
+```
+
+
+<!-- ### 20. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)
 ### 21. Materials: How to SSH to the physical servers in AWS
-How to SSH to physical EC2 instances in AWS
-```bash
-ssh -i ~/.ssh/<your_public_key>.pub admin@<public_ip_address_of_node_1>
-ssh -i ~/.ssh/<your_public_key>.pub admin@<public_ip_address_of_node_2>
-ssh -i ~/.ssh/<your_public_key>.pub admin@<public_ip_address_of_master>
-
-```
-These publicly accessible IP addresses can be retrieved even from your command line
-
-```bash
-aws ec2 describe-instances \
-  --query "Reservations[*].Instances[*].PublicIpAddress" \
-  --output=text
-```
-
 ### 22. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 4)
 ### 23. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 5)
-### 24. Comparison between Jupyter Notebooks running as Docker Conatainer with Kubernete
+### 24. Comparison between Jupyter Notebooks running as Docker Conatainer with Kubernete -->
 
 
 <!-- ### Materials: Install HELM binary and activate HELM user account in your cluster
