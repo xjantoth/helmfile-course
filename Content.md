@@ -866,6 +866,36 @@ Pod Template:
    minimal-notebo...
 ```
 
+File: https://github.com/xjantoth/helmfile-course/blob/master/jupyter-notebook-deployment.yaml
+
+```yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter-k8s-udemy
+  labels:
+    app: jupyter-k8s-udemy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jupyter-k8s-udemy
+  template:
+    metadata:
+      labels:
+        app: jupyter-k8s-udemy
+    spec:
+      containers:
+      - name: minimal-notebook
+        image: jupyter/scipy-notebook:2c80cf3537ca
+        ports:
+        - containerPort: 8888
+        command: ["start-notebook.sh"]
+        args: ["--NotebookApp.token=''"]
+```
+
+
 Useful commands for **service kubernetes** object
 ```bash
 kubectl get svc
@@ -891,6 +921,27 @@ Session Affinity:         None
 External Traffic Policy:  Cluster
 Events:                   <none>
 ```
+
+File: https://github.com/xjantoth/helmfile-course/blob/master/jupyter-notebook-service.yaml
+
+```yaml
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: jupyter-k8s-udemy
+spec:
+  type: NodePort
+  selector:
+    app: jupyter-k8s-udemy
+  ports:
+  - protocol: TCP
+    nodePort: 30040
+    port: 8888
+    targetPort: 8888
+```          
+
+
 <!-- section helm charts -->
 
 ### 20. Materials: Install helm and helmfile binaries 
