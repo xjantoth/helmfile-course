@@ -1003,6 +1003,14 @@ Create your first helm chart:
 helm create <name-of-helmchart>
 ```
 
+![](img/chart-1.png)
+
+Explore Chart.yaml file
+![](img/chart-2.png)
+
+Explore **values.yaml** file
+![](img/chart-3.png)
+
 ### 22. Materials: Run GOGS helm deployment for the first time
 
 It will work the same way even with **Helm version 2** 
