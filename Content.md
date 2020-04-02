@@ -21,8 +21,27 @@
    - [18. How to deploy Jupyter Notebooks to Kubernetes AWS](#18-how-to-deploy-jupyter-notebooks-to-kubernetes-aws)
    - [19. Explore POD DEPLOYMENT and SERVICE for Jupyter Notebooks](#19-explore-pod-deployment-and-service-for-jupyter-notebooks)
    
-   
+* **Section 3: Introduction to Helm Charts**
+
 ### 1. Welcome to course
+
+Please setup **budget** within your Free AWS account to be notified if from some reason AWS is going to charge some fees.
+
+* You can setup Budget in AWS console e.g. `if costs > $2` AWS will send you an email
+
+![](img/budget-2.png)
+
+Hit the button **"Create budget"**
+
+![](img/budget-3.png)
+
+This is an **email I have received** because I keep my **Kubernetes cluster running for 2 days**
+and **I am not eligible** for a free AWS account anymore.
+
+![](img/budget-1.png)
+
+
+
 ### 2. Materials: Delete/destroy all the AWS resources every time you do not use them
 
 Materials **available**:
@@ -375,20 +394,6 @@ terraform apply
 ```
 Please wait like _~10 miutes_ not to get upset that **DNS records** are not being created very fast
 
-Install **helm v3**
-```bash
-curl --output /tmp/helm-v3.1.1-linux-amd64.tar.gz -L https://get.helm.sh/helm-v3.1.1-linux-amd64.tar.gz
-sudo tar -xvf /tmp/helm3.tgz --strip-components=1 -C /usr/bin/helm3 linux-amd64/helm
-sudo chmod +x /usr/bin/helm3
-
-# In case you have no helm chart repository added
-helm3 repo add stable https://kubernetes-charts.storage.googleapis.com/
-
-# Verify your helm chart repository repo helm v3
-helm3 repo list
-
-```
-
 !!! This section is only applicable if you want to use **helm v2** 
 Install **helm v2**
 ```bash
@@ -476,19 +481,6 @@ terraform apply
 ```
 Please wait like _~10 miutes_ not to get upset that **DNS records** are not being created very fast
 
-Install **helm v3**
-```bash
-curl --output /tmp/helm-v3.1.1-linux-amd64.tar.gz -L https://get.helm.sh/helm-v3.1.1-linux-amd64.tar.gz
-sudo tar -xvf /tmp/helm3.tgz --strip-components=1 -C /usr/bin/helm3 linux-amd64/helm
-sudo chmod +x /usr/bin/helm3
-
-# In case you have no helm chart repository added
-helm3 repo add stable https://kubernetes-charts.storage.googleapis.com/
-
-# Verify your helm chart repository repo helm v3
-helm3 repo list
-
-```
 
 !!! This section is only applicable if you want to use **helm v2** 
 Install **helm v2**
@@ -833,12 +825,15 @@ kubectl delete -f jupyter-notebook-service.yaml
 
 ### 19. Explore POD DEPLOYMENT and SERVICE for Jupyter Notebooks
 
-Useful commands for **pods**
+Useful commands for **pods kubernetes** object
 
 ```yaml
 ---
-#Describe pod 
+# Describe pod 
 kubectl describe pod $(kubectl get pods | cut -d' ' -f1 | grep -v "NAME")
+
+# Edit pod 
+kubectl edit pod $(kubectl get pods | cut -d' ' -f1 | grep -v "NAME")
 
 # Check for pods logs
 kubectl logs -f  $(kubectl get pods | cut -d' ' -f1 | grep -v "NAME") 
@@ -850,8 +845,10 @@ Executing the command: jupyter notebook --NotebookApp.token=''
 
 ```
 
-Useful commands for **deployment**
+Useful commands for **deployment kubernetes** object
 ```bash
+kubectl get deployment -A 
+
 kubectl describe deployment   $(kubectl get deployment | cut -d' ' -f1 | grep -v "NAME") 
 Name:                   jupyter-k8s-udemy
 Namespace:              default
@@ -866,33 +863,18 @@ RollingUpdateStrategy:  25% max unavailable, 25% max surge
 Pod Template:
   Labels:  app=jupyter-k8s-udemy
   Containers:
-   minimal-notebook:
-    Image:      jupyter/scipy-notebook:2c80cf3537ca
-    Port:       8888/TCP
-    Host Port:  0/TCP
-    Command:
-      start-notebook.sh
-    Args:
-      --NotebookApp.token=''
-    Environment:  <none>
-    Mounts:       <none>
-  Volumes:        <none>
-Conditions:
-  Type           Status  Reason
-  ----           ------  ------
-  Available      True    MinimumReplicasAvailable
-  Progressing    True    NewReplicaSetAvailable
-OldReplicaSets:  <none>
-NewReplicaSet:   jupyter-k8s-udemy-5686d7b74f (1/1 replicas created)
-Events:          <none>
+   minimal-notebo...
 ```
 
-Useful commands for **service**
+Useful commands for **service kubernetes** object
 ```bash
 kubectl get svc
+kubectl get svc -A
+kubectl edit svc <service-name>
+EDITOR=vim kubectl edit svc <service-name>
 ```
 
-Describe service
+Describe **service kubernetes** object
 ```bash
 kubectl describe svc $(kubectl get svc | grep jupyt | cut -d' ' -f1 )
 Name:                     jupyter-k8s-udemy
@@ -909,20 +891,136 @@ Session Affinity:         None
 External Traffic Policy:  Cluster
 Events:                   <none>
 ```
+<!-- section helm charts -->
+
+### 20. Materials: Install helm and helmfile binaries 
+**Install** helm v3
+```bash
+curl --output /tmp/helm-v3.1.1-linux-amd64.tar.gz -L https://get.helm.sh/helm-v3.1.1-linux-amd64.tar.gz
+sudo tar -xvf /tmp/helm-v3.1.1-linux-amd64.tar.gz --strip-components=1 -C /usr/local/bin/ linux-amd64/helm
+sudo mv /usr/local/bin/helm /usr/local/bin/helm3
+sudo chmod +x /usr/local/bin/helm3
+
+# In case you have no helm chart repository added
+helm3 repo add stable https://kubernetes-charts.storage.googleapis.com/
+```
+
+**Verify** your helm chart repository repo helm v3
+```bash
+helm3 repo update
+helm3 repo list
+```
+
+Install **helmfile**
+```bash
+sudo curl -L --output /usr/bin/helmfile https://github.com/roboll/helmfile/releases/download/v0.104.0/helmfile_linux_amd64
+sudo chmod +x /usr/bin/helmfile
+
+# Create symbolic link from helm3 to helm
+ln -s /usr/local/bin/helm3 /usr/bin/helm
+```
+
+**!!!** This section is only applicable if you want to use **helm v2**
+Install helm v2
+```bash
+curl -L --output /tmp/helm-v2.16.5-linux-amd64.tar.gz  https://get.helm.sh/helm-v2.16.5-linux-amd64.tar.gz
+sudo tar -xvf /tmp/helm-v2.16.5-linux-amd64.tar.gz --strip-components=1 -C /usr/bin/ linux-amd64/helm
+sudo chmod +x /usr/bin/helm
+```
+
+**!!!** This section is only applicable if you want to use **helm v2**
+
+```bash
+helm version 
+kubectl create serviceaccount --namespace kube-system tiller
+kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+helm init --service-account tiller --upgrade
+helm ls
+```
+### 21. Introduction to Helm charts
+
+Create your first helm chart:
+```bash
+helm create <name-of-helmchart>
+```
+
+### 22. Materials: Run GOGS helm deployment for the first time
+
+It will work the same way even with **Helm version 2** 
+
+```bash
+helm3 list -A
+
+helm3 repo add incubator \
+https://kubernetes-charts-incubator.storage.googleapis.com/
+
+helm3 repo update
+helm3 search repo incubator/gogs
+helm3 fetch  incubator/gogs --untar
+cd gogs/
+helm3 dependency update
+ 
+sed -i.bak 's@apiVersion: extensions/v1beta1@apiVersion: apps/v1@' templates/deployment.yaml charts/postgresql/templates/deployment.yaml
+sed -i.bak '/^\s*kind:\s*Deployment/,/^\s*template/s/^\(\s*spec:\s*\)/\1 \n  selector:\n    matchLabels:\n      app: {‌{ template "fullname" . }}/' charts/postgresql/templates/deployment.yaml 
+
+# Optional - if you do not want to enable peristent volume
+sed -i.bak 's/^\(\s*enabled:\s\)\(.*\)/\1false/' values.yaml
+```
+
+I tried to set persistance to false "on the fly" like this but this will not take an effect
+
+```bash
+helm3 install  test \
+--set persistance.enabled=false \
+--set postgresql.persistance.enabled=false  .
+```
+
+I have special requirement when it comes to **NodePort values** for:
+* HTTP 30222
+* SSH  30111
+
+and the reason is being that I do not want Kubernetes to generate them automatically - rather - I want to specify them Cause I can open firewall up front. That's why I passed two extra flags as you can see down below.
 
 
+```bash
+helm3 install test \
+--set service.httpNodePort=30222 \
+--set service.sshNodePort=30111 .
+```      
 
-<!-- ### 20. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 3)
-### 21. Materials: How to SSH to the physical servers in AWS
-### 22. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 4)
-### 23. How to deploy Jupyter Notebooks to Kubernetes AWS (Part 5)
-### 24. Comparison between Jupyter Notebooks running as Docker Conatainer with Kubernete -->
+```bash
+[root@server gogs]# kubectl get pods,svc
+NAME                                   READY   STATUS    RESTARTS   AGE
+pod/test-gogs-799879c5cd-7r2jt         1/1     Running   0          5m29s
+pod/test-postgresql-58f7dc7fdb-4dg9s   1/1     Running   0          5m29s
+ 
+NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                     AGE
+service/kubernetes        ClusterIP   192.168.1.1     <none>        443/TCP                     2d
+service/test-gogs         NodePort    192.168.1.208   <none>        80:30222/TCP,22:30111/TCP   5m29s
+service/test-postgresql   ClusterIP   192.168.1.85    <none>        5432/TCP                    5m29s
+```
+
+Clone the project you have just created in your web browser
+I have created an empty repo called "udemy"
+
+```bash
+git clone http://1.2.3.4:30222/devops/udemy.git
+cd udemy/
+git status
+git remote -v
+touch file{1..4}.txt
+git status
+git add .
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+git commit -m "Creating four files"
+git push 
+git push origin master
+
+```
 
 
-<!-- ### Materials: Install HELM binary and activate HELM user account in your cluster
-### Introduction to Helm charts
-### Materials: Run GOGS helm deployment for the first time
-### How to use Helm for the first time
+<!-- ### How to use Helm for the first time
 ### How to understand helm Gogs deployment
 ### Materials: How to use HELM to deploy GOGS from locally downloaded HELM CHARTS
 ### How to deploy Gogs from local repository
