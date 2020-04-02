@@ -20,8 +20,9 @@
    - [17. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file](#17-materials-how-to-deploy-juypyter-notebooks-to-kubernetes-via-yaml-file)
    - [18. How to deploy Jupyter Notebooks to Kubernetes AWS](#18-how-to-deploy-jupyter-notebooks-to-kubernetes-aws)
    - [19. Explore POD DEPLOYMENT and SERVICE for Jupyter Notebooks](#19-explore-pod-deployment-and-service-for-jupyter-notebooks)
-   
+
 * **Section 3: Introduction to Helm Charts**
+  - [20. Install helm v3 and helmfile binaries](#20-install-helm-v3-and-helmfile-binaries)
 
 ### 1. Welcome to course
 
@@ -951,7 +952,7 @@ spec:
 
 <!-- section helm charts -->
 
-### 20. Materials: Install helm and helmfile binaries 
+### 20. Install helm v3 and helmfile binaries
 **Install** helm v3
 ```bash
 curl --output /tmp/helm-v3.1.1-linux-amd64.tar.gz -L https://get.helm.sh/helm-v3.1.1-linux-amd64.tar.gz
