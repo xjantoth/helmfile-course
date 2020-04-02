@@ -825,6 +825,7 @@ kubectl delete -f jupyter-notebook-service.yaml
 
 ### 19. Explore POD DEPLOYMENT and SERVICE for Jupyter Notebooks
 
+![](img/jupyter-2.png)
 Useful commands for **pods kubernetes** object
 
 ```yaml
