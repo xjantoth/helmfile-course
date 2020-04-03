@@ -1148,9 +1148,18 @@ helm3 repo add incubator \
 https://kubernetes-charts-incubator.storage.googleapis.com/
 
 helm3 repo update
+helm3 repo list
 helm3 search repo incubator/gogs
 helm3 fetch  incubator/gogs --untar
 cd gogs/
+```      
+![](img/gogs-1.png)
+
+![](img/gogs-2.png)
+
+
+```bash
+# optional
 helm3 dependency update
  
 sed -i.bak 's@apiVersion: extensions/v1beta1@apiVersion: apps/v1@' templates/deployment.yaml charts/postgresql/templates/deployment.yaml
@@ -1158,40 +1167,34 @@ sed -i.bak '/^\s*kind:\s*Deployment/,/^\s*template/s/^\(\s*spec:\s*\)/\1 \n  sel
 
 # Optional - if you do not want to enable peristent volume
 sed -i.bak 's/^\(\s*enabled:\s\)\(.*\)/\1false/' values.yaml
-```
 
-I tried to set persistance to false "on the fly" like this but this will not take an effect
-
-```bash
-helm3 install  test \
---set persistance.enabled=false \
---set postgresql.persistance.enabled=false  .
+# you can see that three files have been updated
+find . -type f -iname "*.bak"
+./templates/deployment.yaml.bak
+./values.yaml.bak
+./charts/postgresql/templates/deployment.yaml.bak
 ```
+![](img/gogs-3.png)
 
 I have special requirement when it comes to **NodePort values** for:
 * HTTP 30222
 * SSH  30111
 
-and the reason is being that I do not want Kubernetes to generate them automatically - rather - I want to specify them Cause I can open firewall up front. That's why I passed two extra flags as you can see down below.
+**Reason** is being that I do not want Kubernetes to generate them automatically - rather - I want to specify them Cause I can open firewall up front. That's why I passed two extra flags as you can see down below.
 
 
 ```bash
 helm3 install test \
 --set service.httpNodePort=30222 \
 --set service.sshNodePort=30111 .
+
+ssh -L30222:127.0.0.1:30222 \
+-i ~/.ssh/udemy_devopsinuse admin@18.184.212.193
 ```      
 
-```bash
-[root@server gogs]# kubectl get pods,svc
-NAME                                   READY   STATUS    RESTARTS   AGE
-pod/test-gogs-799879c5cd-7r2jt         1/1     Running   0          5m29s
-pod/test-postgresql-58f7dc7fdb-4dg9s   1/1     Running   0          5m29s
- 
-NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                     AGE
-service/kubernetes        ClusterIP   192.168.1.1     <none>        443/TCP                     2d
-service/test-gogs         NodePort    192.168.1.208   <none>        80:30222/TCP,22:30111/TCP   5m29s
-service/test-postgresql   ClusterIP   192.168.1.85    <none>        5432/TCP                    5m29s
-```
+![](img/gogs-3.png)
+
+
 
 Clone the project you have just created in your web browser
 I have created an empty repo called "udemy"
