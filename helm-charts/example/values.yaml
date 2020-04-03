@@ -1,0 +1,240 @@
+# Default values for example.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+  nodePortValue: 
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+
+# configmapIndexHTML: |-
+#   # /usr/share/nginx/html/index.html
+#   <!DOCTYPE html>
+#   <html>
+#   <head>
+#   <title>Welcome to nginx - from my custom helm chart</title>
+#   <style>
+#       body {
+#           width: 35em;
+#           margin: 0 auto;
+#           font-family: Tahoma, Verdana, Arial, sans-serif;
+#       }
+#   </style>
+#   </head>
+#   <body>
+#   <h1>Welcome to nginx - from my custom helm chart</h1>
+#   <p>If you see this page, the nginx web server is successfully installed and
+#   working. Further configuration is required.</p>
+  
+#   <p>For online documentation and support please refer to
+#   <a href="http://nginx.org/">nginx.org</a>.<br/>
+#   Commercial support is available at
+#   <a href="http://nginx.com/">nginx.com</a>.</p>
+  
+#   <p><em>Thank you for using nginx.</em></p>
+#   </body>
+#   </html>
+
+configmapIndexHTML: |-
+  <!DOCTYPE html>
+  
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      
+      <!-- Latest compiled and minified JavaScript -->
+      <link rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+              integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+              crossorigin="anonymous"></script>
+      <script
+              src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+              integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+              crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+              integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+              crossorigin="anonymous"></script>
+      
+      
+      <!-- Fonts -->
+      <link href="https://fonts.googleapis.com/css?family=Montserrat|Russo+One" rel="stylesheet">
+      <!--
+  font-family: 'Russo One', sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  -->
+  <title></title>
+  </head>
+  <body>
+  
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      
+                  <button class="navbar-toggler" type="button"
+                          data-toggle="collapse"
+                          data-target="#bs-example-navbar-collapse-1">
+                      <span class="navbar-toggler-icon"></span>
+                  </button> <a class="navbar-brand" href="#">Brand</a>
+                  <div class="collapse navbar-collapse"
+                      id="bs-example-navbar-collapse-1">
+                      <ul class="navbar-nav">
+                          <li class="nav-item active">
+                              <a class="nav-link"
+                                href="#">Link <span class="sr-only">(current)</span></a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link"
+                                href="#">Link</a>
+                          </li>
+                          <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">Dropdo wn link</a>
+                              <div class="dropdown-menu"
+                                  aria-labelledby="navbarDropdownMenuLink">
+                                  <a
+                                          class="dropdown-item"
+                                          href="#">Action</a>
+                                  <a
+                                          class="dropdown-item"
+                                          href="#">Another
+                                      action</a> <a
+                                      class="dropdown-item"
+                                      href="#">Something
+                                  else here</a>
+                                  <div
+                                          class="dropdown-divide
+  r">
+                                  </div> <a
+                                      class="dropdown-item"
+                                      href="#">Separated
+                                  link</a>
+                              </div>
+                          </li>
+                      </ul>
+                      <form class="form-inline">
+                          <input class="form-control mr-sm-2"
+                                type="text" />
+                          <button class="btn btn-primary my-2 my-sm-0" type="submit">
+                              Search
+                          </button>
+                      </form>
+                      <ul class="navbar-nav ml-md-auto">
+                          <li class="nav-item active">
+                              <a class="nav-link"
+                                href="#">Link <span class="sr-only">(current)</span></a>
+                          </li>
+                          <li class="nav-item dropdown">
+                              <a class="nav-linkdropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">Dropdown link</a>
+                              <div class="dropdown-menudropdown-menu-right"
+                                  aria-labelledby="navbarDropdownMenuLink">
+                                  <a
+                                          class="dropdown-item"
+                                          href="#">Action</a>
+                                  <a
+                                          class="dropdown-item"
+                                          href="#">Another
+                                      action</a> <a
+                                      class="dropdown-item"
+                                      href="#">Something
+                                  else here</a>
+                                  <div
+                                          class="dropdown-divider">
+                                  </div> <a
+                                      class="dropdown-item"
+                                      href="#">Separated
+                                  link</a>
+                              </div>
+                          </li>
+                      </ul>
+                  </div>
+              </nav>
+              <div class="jumbotron">
+                  <h2>
+                      Hello, world!
+                  </h2>
+                  <p>
+                      This is a template for a simple marketing or
+                      informational website. It includes a large
+                      callout called the hero unit and three
+                      supporting pieces of content. Use it as a
+                      starting point to create something more
+                      unique.
+                  </p>
+                  <p>
+                      <a class="btn btn-primary btn-large"
+                        href="#">Learn more</a>
+                  </p>
+              </div>
+          </div>
+      </div>
+  </div>
+  </body>
+  </html>
+                
+
+

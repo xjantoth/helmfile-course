@@ -1,0 +1,10 @@
+{{- if .Values.configmapIndexHTML -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "example.fullname" . }}
+  labels: {{- include "example.labels" . | nindent 4 }}
+data:
+  index.html: |-
+{{ .Values.configmapIndexHTML | indent 4 }}
+{{- end -}}

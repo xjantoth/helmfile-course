@@ -1000,7 +1000,9 @@ helm ls
 
 Create your first helm chart:
 ```bash
-helm create <name-of-helmchart>
+cd helm-charts
+helm3 create <name-of-helmchart>
+helm3 create example
 ```
 
 ![](img/chart-1.png)
@@ -1008,8 +1010,30 @@ helm create <name-of-helmchart>
 Explore Chart.yaml file
 ![](img/chart-2.png)
 
-Explore **values.yaml** file
-![](img/chart-3.png)
+Determine the **docker image** by using `jq` binary
+```bash
+kubectl get  pod example-5664d55c58-6kdd2 -o json | jq .spec.containers  | jq '.[].image'
+```
+
+![](img/chart-6.png)
+
+![](img/chart-4.png)
+
+![](img/chart-5.png)
+
+![](img/chart-7.png)
+
+![](img/chart-8.png)
+
+
+Do some **modification** to helm chart
+```bash
+helm3 install example helm-charts/example \
+--set service.type=NodePort \
+--set service.nodePortValue=31412
+```
+
+
 
 ### 22. Materials: Run GOGS helm deployment for the first time
 
