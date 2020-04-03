@@ -1033,11 +1033,51 @@ Do some **modification** to helm chart
 helm3 install example helm-charts/example \
 --set service.type=NodePort \
 --set service.nodePortValue=31412
+
+ssh -L31412:127.0.0.1:31412 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@18.184.212.193
+```
+
+### 22 Explore example helm chart
+
+Try to **close SSH tunnel**
+```
+ssh -L31412:127.0.0.1:31412 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@18.184.212.193
+```
+
+**Determine** the IP addresses/names/roles of your physical EC2 instances (servers) in AWS
+```bash
+kubectl get nodes -o wide | awk -F" " '{print $3"\t"$1"\t"$7}'
+ROLES	NAME	EXTERNAL-IP
+master	ip-172-20-34-241.eu-central-1.compute.internal	18.184.212.193
+node	ip-172-20-50-50.eu-central-1.compute.internal	3.120.179.150
+node	ip-172-20-52-232.eu-central-1.compute.internal	18.196.157.47
 ```
 
 
+List all deployments
+```bash
+helm3 ls -A
+```
+Do some changes in `example/values.yaml` file in **HTML section**
 
-### 22. Materials: Run GOGS helm deployment for the first time
+**Upgrade** deployment
+```bash
+helm3 upgrade example helm-charts/example \
+--set service.type=NodePort \
+--set service.nodePortValue=31412
+```
+
+Delete** helm** example deployment
+```bash
+helm3 delete example
+```
+
+
+### 23. Materials: Run GOGS helm deployment for the first time
 
 It will work the same way even with **Helm version 2** 
 
