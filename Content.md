@@ -23,6 +23,12 @@
 
 * **Section 3: Introduction to Helm Charts**
   - [20. Install helm v3 and helmfile binaries](#20-install-helm-v3-and-helmfile-binaries)
+  - [21. Introduction to Helm charts](#21-introduction-to-helm-charts)
+  - [22. Explore example helm chart](#22-explore-example-helm-chart)
+
+
+
+
 
 ### 1. Welcome to course
 
@@ -1039,7 +1045,7 @@ ssh -L31412:127.0.0.1:31412 \
 admin@18.184.212.193
 ```
 
-### 22 Explore example helm chart
+### 22. Explore example helm chart
 
 Try to **close SSH tunnel**
 ```
@@ -1062,6 +1068,10 @@ List all deployments
 ```bash
 helm3 ls -A
 ```
+
+Before **upgrade**
+![](img/chart-9.png)
+
 Do some changes in `example/values.yaml` file in **HTML section**
 
 **Upgrade** deployment
@@ -1071,10 +1081,40 @@ helm3 upgrade example helm-charts/example \
 --set service.nodePortValue=31412
 ```
 
-Delete** helm** example deployment
+Explore **configmap** example
+```bash
+kubectl get cm example -o yaml
+apiVersion: v1
+data:
+  index.html: "<!DOCTYPE html>\n\n<html lang=\"en\">\n<head>\n   ...             </p>\n            </div>\n        </div>\n    </div>\n</div>\n</body>\n</html>"
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2020-04-03T19:21:26Z"
+  labels:
+    app.kubernetes.io/instance: example
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: example
+    app.kubernetes.io/version: 1.16.0
+    helm.sh/chart: example-0.1.0
+  name: example
+  namespace: default
+  resourceVersion: "398879"
+  selfLink: /api/v1/namespaces/default/configmaps/example
+  uid: b2e95666-8e4b-4ca5-a8ea-60fe3cc3e6fb
+```
+
+**Delete Nginx pod** to load new content from **updated configmap**
+```bash
+kubectl delete pod example-7cb6767455-f84p6
+```
+
+![](img/chart-10.png)
+
+Delete **helm chart** `example` deployment
 ```bash
 helm3 delete example
 ```
+
 
 
 ### 23. Materials: Run GOGS helm deployment for the first time
