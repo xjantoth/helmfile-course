@@ -1004,7 +1004,16 @@ helm ls
 ```
 ### 21. Introduction to Helm charts
 
-Create your first helm chart:
+**Create** your first **helm chart** named `example`
+Keep in mind that by default when running `helm3 create <chart-name>`
+the helm chart will use **Nginx docker container** and I will use it in this `example` helm chart.
+
+
+We will then **add** an extra template called:
+`example/templates/configmapIndexHTML.yaml` 
+and replace the content of a default **index.html** file in web root for **Nginx** (`/usr/share/nginx/html/index.html`).
+
+
 ```bash
 cd helm-charts
 helm3 create <name-of-helmchart>
@@ -1034,12 +1043,22 @@ kubectl get  pod example-5664d55c58-6kdd2 -o json | jq .spec.containers  | jq '.
 ![](img/chart-9.png)
 
 
-Do some **modification** to helm chart
+Do some **modification** to `example` helm chart
+* example/values.yaml
+* example/templates/service.yaml
+* example/templates/deployment.yaml
+
+Create this **new file**
+* example/templates/configmapIndexHTML.yaml
+
+**Execute** helm deployment
 ```bash
 helm3 install example helm-charts/example \
 --set service.type=NodePort \
 --set service.nodePortValue=31412
 
+# Create SSH tunnel to avoid opening
+# of an extra nodePort: 31412
 ssh -L31412:127.0.0.1:31412 \
 -i ~/.ssh/udemy_devopsinuse \
 admin@18.184.212.193
@@ -1073,6 +1092,7 @@ Before **upgrade**
 ![](img/chart-9.png)
 
 Do some changes in `example/values.yaml` file in **HTML section**
+![](img/chart-11.png)
 
 **Upgrade** deployment
 ```bash
@@ -1081,7 +1101,7 @@ helm3 upgrade example helm-charts/example \
 --set service.nodePortValue=31412
 ```
 
-Explore **configmap** example
+Explore **configmap** for `example` helm chart
 ```bash
 kubectl get cm example -o yaml
 apiVersion: v1
