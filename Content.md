@@ -1025,6 +1025,8 @@ kubectl get  pod example-5664d55c58-6kdd2 -o json | jq .spec.containers  | jq '.
 
 ![](img/chart-8.png)
 
+![](img/chart-9.png)
+
 
 Do some **modification** to helm chart
 ```bash
