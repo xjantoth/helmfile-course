@@ -25,7 +25,7 @@
   - [20. Install helm v3 and helmfile binaries](#20-install-helm-v3-and-helmfile-binaries)
   - [21. Introduction to Helm charts](#21-introduction-to-helm-charts)
   - [22. Explore example helm chart](#22-explore-example-helm-chart)
-
+  - [23. Run GOGS helm chart deployment in Kubernetes AWS](#23-run-gogs-helm-chart-deployment-in-kubernetes-aws)
 
 
 
@@ -1137,7 +1137,7 @@ helm3 delete example
 
 
 
-### 23. Materials: Run GOGS helm deployment for the first time
+### 23. Run GOGS helm chart deployment in Kubernetes AWS
 
 It will work the same way even with **Helm version 2** 
 
@@ -1192,7 +1192,7 @@ ssh -L30222:127.0.0.1:30222 \
 -i ~/.ssh/udemy_devopsinuse admin@18.184.212.193
 ```      
 
-![](img/gogs-3.png)
+![](img/gogs-4.png)
 
 
 
