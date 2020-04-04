@@ -30,6 +30,9 @@
   - [25. Clone your git repository devopsinuse from self-hosted Gogs in your Kubernetes cluster](#25-clone-your-git-repository-devopsinuse-repo-from-self-hosted-gogs-in-your-kubernetes-cluster)
   - [26. Add some content to devopsinuse-repo and git push to your self-hosted Gogs running in Kubernetes](#26-add-some-content-to-devopsinuse-repo-and-git-push-to-your-self-hosted-gogs-running-in-kubernetes)
   - [27. Allow NodePort in AWS Security Group section manually in case you like it more](#27-allow-nodeport-in-aws-security-group-section-manually-in-case-you-like-it-more)
+  - [28. MySQL helm chart deployment with Persistent Volume](#28-mysql-helm-chart-deployment-with-persistent-volume)
+  - [29. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via an extra ubuntu pod](#29-connect-to-your-mysql-deployment-running-in-your-kubernetes-cluster-in-aws-via-an-extra-ubuntu-pod)
+
 
 
 
@@ -1309,6 +1312,109 @@ node	ip-172-20-52-232.eu-central-1.compute.internal	18.196.157.47
 
 ```
 
-
 ![](img/sg-2.png)
 
+### 28. MySQL helm chart deployment with Persistent Volume
+
+<!-- - [28. MySQL helm chart deployment with Persistent Volume](#28-mysql-helm-chart-deployment-with-persistent-volume) -->
+
+Search for MySQL helm chart (helm v3):
+```bash
+helm3 repo list                          
+NAME     	URL                                                        
+stable   	https://kubernetes-charts.storage.googleapis.com/          
+incubator	https://kubernetes-charts-incubator.storage.googleapis.com/
+
+helm3 search repo stable/mysql -l | head 
+NAME            	CHART VERSION	APP VERSION	DESCRIPTION                                       
+stable/mysql    	1.6.2        	5.7.28     	Fast, reliable, scalable, and easy to use open-..
+```
+
+Try to use `helm3 template` command to see what you are about to be deploying to your Kubernetes cluster in AWS
+
+```bash
+# deployment.yaml file
+helm3 template \
+mysql \
+--set persistence.enabled=true \
+--set persistence.size=1Gi \
+stable/mysql | less
+```
+
+```bash
+helm3 install \
+mysql \
+--set persistence.enabled=true \
+--set persistence.size=1Gi \
+stable/mysql 
+
+...
+
+To get your root password run:
+
+    MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode; echo)
+
+To connect to your database:
+
+1. Run an Ubuntu pod that you can use as a client:
+
+    kubectl run -i --tty ubuntu --image=ubuntu:16.04 --restart=Never -- bash -il
+
+2. Install the mysql client:
+
+    $ apt-get update && apt-get install mysql-client -y
+
+3. Connect using the mysql cli, then provide your password:
+    $ mysql -h mysql -p
+
+To connect to your database directly from outside the K8s cluster:
+    MYSQL_HOST=127.0.0.1
+    MYSQL_PORT=3306
+
+    # Execute the following command to route the connection:
+    kubectl port-forward svc/mysql 3306
+
+    mysql -h ${MYSQL_HOST} -P${MYSQL_PORT} -u root -p${MYSQL_ROOT_PASSWORD}
+
+```
+
+![](img/mysql-1.png)
+
+Please check that one **persistent volume has been crerated in your Kubenretes cluster** as well as in **your AWS console**.
+
+![](img/mysql-2.png)
+
+
+### 29. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via an extra ubuntu pod
+<!-- - [29. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via an extra ubuntu pod](#29-connect-to-your-mysql-deployment-running-in-your-kubernetes-cluster-in-aws-via-an-extra-ubuntu-pod) -->
+
+
+To get your **root password run**:
+
+    MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode; echo)
+
+To **connect to your database**:
+
+1. Run an **Ubuntu pod** that you can use as a client:
+
+    kubectl run -i --tty ubuntu --image=ubuntu:16.04 --restart=Never -- bash -il
+
+2. Install the **mysql client**:
+
+    $ apt-get update && apt-get install mysql-client -y
+
+3. **Connect using the mysql cli**, then provide your password:
+    $ mysql -h mysql -p
+
+To **connect to your database directly from outside the K8s cluster**:
+    MYSQL_HOST=127.0.0.1
+    MYSQL_PORT=3306
+
+    # Execute the following command to route the connection:
+    kubectl port-forward svc/mysql 3306
+
+    mysql -h ${MYSQL_HOST} -P${MYSQL_PORT} -u root -p${MYSQL_ROOT_PASSWORD}
+
+
+
+<!-- echo "..." | sed -E  's/^[#]{2,} (.*)/- [\1](#\L\1)/; :a s/(\(#[^ ]+) /\1-/g; ta' | grep -e  "-\s\[.*" -->
