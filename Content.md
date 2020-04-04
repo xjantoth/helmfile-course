@@ -1273,7 +1273,7 @@ git commit -m "Creating four files"
 git push 
 git push origin master
 ```
-
+![](img/gogs-web-10.png)
 
 
 
