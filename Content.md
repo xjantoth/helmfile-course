@@ -25,7 +25,7 @@
   - [20. Install helm v3 and helmfile binaries](#20-install-helm-v3-and-helmfile-binaries)
   - [21. Introduction to Helm charts](#21-introduction-to-helm-charts)
   - [22. Explore example helm chart](#22-explore-example-helm-chart)
-  - [23. Run GOGS helm chart deployment in Kubernetes AWS](#23-run-gogs-helm-chart-deployment-in-kubernetes-aws)
+  - [23. Deploy Gogs helm chart to a Kubernetes cluster running in AWS](#23-deploy-gogs-helm-chart-to-a-kubernetes-cluster-running-in-aws)
 
 
 
@@ -1137,7 +1137,7 @@ helm3 delete example
 
 
 
-### 23. Run GOGS helm chart deployment in Kubernetes AWS
+### 23. Deploy Gogs helm chart to a Kubernetes cluster running in AWS
 
 It will work the same way even with **Helm version 2** 
 
