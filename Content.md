@@ -26,6 +26,7 @@
   - [21. Introduction to Helm charts](#21-introduction-to-helm-charts)
   - [22. Explore example helm chart](#22-explore-example-helm-chart)
   - [23. Deploy Gogs helm chart to a Kubernetes cluster running in AWS](#23-deploy-gogs-helm-chart-to-a-kubernetes-cluster-running-in-aws)
+  - [24. Create your own git repository at self-hosted Gogs in your Kubernetes cluster](#24-create-your-own-git-repository-at-self-hosted-gogs-in-your-kubernetes-cluster)
 
 
 
@@ -1215,38 +1216,20 @@ git push origin master
 
 ```
 
+### 24. Create your own git repository at self-hosted Gogs in your Kubernetes cluster
 
-<!-- ### How to use Helm for the first time
-### How to understand helm Gogs deployment
-### Materials: How to use HELM to deploy GOGS from locally downloaded HELM CHARTS
-### How to deploy Gogs from local repository
-### Materials: How to understand persistentVolumeClaim and persistentVolumes
-### How to make you data persistent
-### Lets summarize on Gogs helm chart deployment
-### Materials: How to install HELMFILE binary to your machine
-### Introduction to Helmfile
-### How to deploy Jenkins by using Helmfile (Part 1)
-### How to deploy Jenkins by using Helmfile (Part 2)
-### Materials: Create HELMFILE specification for Jenkins deployment
-### How to use helmfile to deploy Jenkins helm chart for the first time (Part 1)
-### Materials: Useful commands Jenkins deployment
-### How to use helmfile to deploy Jenkins helm chart for the first time (Part 2)
-### Introduction to Prometheus and Grafana deployment by using helmfile (Grafana)
-### Prometheus and Grafana deployment by using helmfile (Prometheus part)
-### Prepare Helm charts for Grafana deployment by using helmfile
-### Prepare Helm charts for Prometheus deployment by using helmfile
-### Prepare Helm charts for Prometheus Node Exporter deployment by using helmfile
-### Copy Prometheus and Grafana Helm Charts specifications to server
-### Materials: Helmfile specification for Grafana and Prometheus deployment
-### Process Grafana and Prometheus helmfile deployment
-### Exploring Prometheus Node Exporter
-### Explore Promethus Web User Interface
-### Explore Grafana Web User Interface
-### LoadBalancer Grafana Service
-### Materials: Helmfile specification to add DokuWiki deployment
-### Single LoadBalancer service type for all instances in your K8s (DokuWiki)
-### Materials: Helmfile specification to add nginx-ingress Helm Chart deployment
-### Nginx Ingress Controller Pod
-### Configure Ingress Kubernetes Objects for Grafana, Prometheus and DokuWiki
-### Important: Clean up Kubernetes cluster and all the AWS resources
-### Congratulations -->
+At first you need to **register yourself** to Gogs running in Kubernetes in AWS
+![](img/gogs-web-1.png)
+
+**Login with** a newly created `username/password` running in Kubernetes in AWS
+![](img/gogs-web-2.png)
+
+
+**Create** a git repository withing **your gogs account** running in Kubernetes in AWS
+![](img/gogs-web-3.png)
+
+**Fill up some details** about your git repository at **self hosted gogs** running in Kubernetes in AWS
+![](img/gogs-web-4.png)
+
+![](img/gogs-web-5.png)
+
