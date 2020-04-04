@@ -1233,3 +1233,36 @@ At first you need to **register yourself** to Gogs running in Kubernetes in AWS
 
 ![](img/gogs-web-5.png)
 
+
+### 25. Clone your git repository devopsinuse from self-hosted Gogs in your Kubernetes cluster
+
+
+![](img/gogs-web-6.png)
+**Original SSH link** copied from web browser
+```bash
+git@localhost:devopsinuse/devopsinuse-repo.git
+```
+
+**Adjust** your SSH URL accordingly
+```bash
+clone ssh://git@127.0.0.1:30111/devopsinuse/devopsinuse-repo.git
+
+# open up a new SSH tunnel for port 30111
+ssh -L30111:127.0.0.1:30111 \
+-i ~/.ssh/udemy_devopsinuse admin@18.184.212.193
+```
+![](img/gogs-web-9.png)
+
+
+![](img/gogs-web-7.png)
+
+![](img/gogs-web-8.png)
+**Clone your git via SSH** project/repository from self-hosted Gogs in your Kubernetes cluster
+```bash
+git clone ssh://git@127.0.0.1:30111/devopsinuse/devopsinuse-repo.git
+```
+
+**Clone your git via HTTP** project/repository from self-hosted Gogs in your Kubernetes cluster
+```bash
+git clone http://127.0.0.1:30222/devopsinuse/devopsinuse-repo.git
+```
