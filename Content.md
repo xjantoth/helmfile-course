@@ -1251,7 +1251,16 @@ git clone http://127.0.0.1:30222/devopsinuse/devopsinuse-repo.git
 
 ### 26. Add some content and git push to your self-hosted Gogs running in Kubenretes
 <!-- 26-Add-some-content-and-git-push-to-your-self-hosted-Gogs-running-in-Kubenretes.mp4 -->
+**Clone** your project first if you did not do so yet
+
 ```bash
+
+# via SSH
+git clone ssh://git@127.0.0.1:30111/devopsinuse/devopsinuse-repo.git
+
+# via HTTP
+git clone http://127.0.0.1:30222/devopsinuse/devopsinuse-repo.git
+
 cd devopsinuse-repo
 git status
 git remote -v
