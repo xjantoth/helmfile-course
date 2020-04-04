@@ -28,7 +28,7 @@
   - [23. Deploy Gogs helm chart to a Kubernetes cluster running in AWS](#23-deploy-gogs-helm-chart-to-a-kubernetes-cluster-running-in-aws)
   - [24. Create your own git repository at self-hosted Gogs in your Kubernetes cluster](#24-create-your-own-git-repository-at-self-hosted-gogs-in-your-kubernetes-cluster)
   - [25. Clone your git repository devopsinuse from self-hosted Gogs in your Kubernetes cluster](#25-clone-your-git-repository-devopsinuse-repo-from-self-hosted-gogs-in-your-kubernetes-cluster)
-  - [26. Add some content to devopsinuse-repo and git push to your self-hosted Gogs running in Kubenretes](#26-add-some-content-to-devopsinuse-repo-and-git-push-to-your-self-hosted-gogs-running-in-kubenretes)
+  - [26. Add some content to devopsinuse-repo and git push to your self-hosted Gogs running in Kubernetes](#26-add-some-content-to-devopsinuse-repo-and-git-push-to-your-self-hosted-gogs-running-in-kubernetes)
 
 
 
@@ -1249,8 +1249,8 @@ git clone ssh://git@127.0.0.1:30111/devopsinuse/devopsinuse-repo.git
 git clone http://127.0.0.1:30222/devopsinuse/devopsinuse-repo.git
 ```
 
-### 26. Add some content to devopsinuse-repo and git push to your self-hosted Gogs running in Kubenretes
-<!-- 26-Add-some-content-to-devopsinuse-repo-and-git-push-to-your-self-hosted-Gogs-running-in-Kubenretes.mp4 -->
+### 26. Add some content to devopsinuse-repo and git push to your self-hosted Gogs running in Kubernetes
+<!-- 26-Add-some-content-to-devopsinuse-repo-and-git-push-to-your-self-hosted-Gogs-running-in-Kubernetes.mp4 -->
 **Clone** your project first if you did not do so yet
 
 ```bash
