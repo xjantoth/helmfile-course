@@ -27,7 +27,9 @@
   - [22. Explore example helm chart](#22-explore-example-helm-chart)
   - [23. Deploy Gogs helm chart to a Kubernetes cluster running in AWS](#23-deploy-gogs-helm-chart-to-a-kubernetes-cluster-running-in-aws)
   - [24. Create your own git repository at self-hosted Gogs in your Kubernetes cluster](#24-create-your-own-git-repository-at-self-hosted-gogs-in-your-kubernetes-cluster)
-  - [25. Clone your git repository devopsinuse from self-hosted Gogs in your Kubernetes cluster](#25-clone-your-git-repository-devopsinuse-from-self-hosted-gogs-in-your-kubernetes-cluster)
+  - [25. Clone your git repository devopsinuse from self-hosted Gogs in your Kubernetes cluster](#25-clone-your-git-repository-devopsinuse-repo-from-self-hosted-gogs-in-your-kubernetes-cluster)
+  - [26. Add some content and git push to your self-hosted Gogs running in Kubenretes](#26-add-some-content-and-git-push-to-your-self-hosted-gogs-running-in-kubenretes)
+
 
 
 
@@ -1193,29 +1195,8 @@ helm3 install test \
 ssh -L30222:127.0.0.1:30222 \
 -i ~/.ssh/udemy_devopsinuse admin@18.184.212.193
 ```      
-
 ![](img/gogs-4.png)
 
-
-
-Clone the project you have just created in your web browser
-I have created an empty repo called "udemy"
-
-```bash
-git clone http://1.2.3.4:30222/devops/udemy.git
-cd udemy/
-git status
-git remote -v
-touch file{1..4}.txt
-git status
-git add .
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
-git commit -m "Creating four files"
-git push 
-git push origin master
-
-```
 
 ### 24. Create your own git repository at self-hosted Gogs in your Kubernetes cluster
 
@@ -1235,7 +1216,7 @@ At first you need to **register yourself** to Gogs running in Kubernetes in AWS
 ![](img/gogs-web-5.png)
 
 
-### 25. Clone your git repository devopsinuse from self-hosted Gogs in your Kubernetes cluster
+### 25. Clone your git repository devopsinuse-repo from self-hosted Gogs in your Kubernetes cluster
 
 
 ![](img/gogs-web-6.png)
@@ -1267,3 +1248,23 @@ git clone ssh://git@127.0.0.1:30111/devopsinuse/devopsinuse-repo.git
 ```bash
 git clone http://127.0.0.1:30222/devopsinuse/devopsinuse-repo.git
 ```
+
+### 26. Add some content and git push to your self-hosted Gogs running in Kubenretes
+<!-- 26-Add-some-content-and-git-push-to-your-self-hosted-Gogs-running-in-Kubenretes.mp4 -->
+```bash
+cd devopsinuse-repo
+git status
+git remote -v
+touch file{1..4}.txt
+git status
+git add .
+git config --global user.email "devopsinuse@devopsinuse.com"
+git config --global user.name "Devopsinuse"
+git commit -m "Creating four files"
+git push 
+git push origin master
+```
+
+
+
+
