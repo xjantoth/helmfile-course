@@ -1415,6 +1415,34 @@ To **connect to your database directly from outside the K8s cluster**:
 
     mysql -h ${MYSQL_HOST} -P${MYSQL_PORT} -u root -p${MYSQL_ROOT_PASSWORD}
 
+### 30. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via dbeaver or your favourite GUI program
+
+**Upgrade your MySQL** deployment and add NodePort type of Kubernetes service and set `nodePort` value to 30333
+
+```bash
+helm3 upgrade \
+mysql \
+--set persistence.enabled=true \
+--set persistence.size=1Gi \
+--set service.type=NodePort\
+--set service.nodePort=30333 \
+stable/mysql 
+```
+
+**Setup SSH tunnel** to MySQL NodePort 20333
+
+```bash
+ssh -L30333:127.0.0.1:30333 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@18.184.212.193
+```
+
+**Determine** root password
+```bash
+MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode; echo)
+
+echo $MYSQL_ROOT_PASSWORD
+```
 
 
 <!-- echo "..." | sed -E  's/^[#]{2,} (.*)/- [\1](#\L\1)/; :a s/(\(#[^ ]+) /\1-/g; ta' | grep -e  "-\s\[.*" -->
