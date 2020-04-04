@@ -29,6 +29,7 @@
   - [24. Create your own git repository at self-hosted Gogs in your Kubernetes cluster](#24-create-your-own-git-repository-at-self-hosted-gogs-in-your-kubernetes-cluster)
   - [25. Clone your git repository devopsinuse from self-hosted Gogs in your Kubernetes cluster](#25-clone-your-git-repository-devopsinuse-repo-from-self-hosted-gogs-in-your-kubernetes-cluster)
   - [26. Add some content to devopsinuse-repo and git push to your self-hosted Gogs running in Kubernetes](#26-add-some-content-to-devopsinuse-repo-and-git-push-to-your-self-hosted-gogs-running-in-kubernetes)
+  - [27. Allow NodePort in AWS Security Group section manually in case you like it more](#27-allow-nodeport-in-aws-security-group-section-manually-in-case-you-like-it-more)
 
 
 
@@ -1275,5 +1276,39 @@ git push origin master
 ```
 ![](img/gogs-web-10.png)
 
+### 27. Allow NodePort in AWS Security Group section manually in case you like it more
 
+  
+
+```bash
+# open up a new HTTP tunnel for port 30222
+ssh -L30222:127.0.0.1:30222 \
+-i ~/.ssh/udemy_devopsinuse admin@18.184.212.193
+
+# open up a new SSH tunnel for port 30111
+ssh -L30111:127.0.0.1:30111 \
+-i ~/.ssh/udemy_devopsinuse admin@18.184.212.193
+
+# Create SSH tunnel to avoid opening
+# of an extra nodePort: 31412 for "example" helm chart
+ssh -L31412:127.0.0.1:31412 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@18.184.212.193
+```
+
+**In case** you like to set up `NodePorts` for your Kubernetes deploymnt better in AWS web console in the section of **Security group** feel free to do so. In such a case you can skip pretty much **all SSH tunnels** and instead please us one of the **IP Addresses** of your `Kubenretes nodes`.
+
+To **retrieve IP Addresses** of your physical EC2 instances within your Kubenretes cluster - run this command:
+
+```bash
+kubectl get nodes -o wide | awk -F" " '{print $3"\t"$1"\t"$7}'
+ROLES	NAME	EXTERNAL-IP
+master	ip-172-20-34-241.eu-central-1.compute.internal	18.184.212.193
+node	ip-172-20-50-50.eu-central-1.compute.internal	3.120.179.150
+node	ip-172-20-52-232.eu-central-1.compute.internal	18.196.157.47
+
+```
+
+
+![](img/sg-2.png)
 
