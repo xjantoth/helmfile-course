@@ -27,6 +27,7 @@
   - [22. Explore example helm chart](#22-explore-example-helm-chart)
   - [23. Deploy Gogs helm chart to a Kubernetes cluster running in AWS](#23-deploy-gogs-helm-chart-to-a-kubernetes-cluster-running-in-aws)
   - [24. Create your own git repository at self-hosted Gogs in your Kubernetes cluster](#24-create-your-own-git-repository-at-self-hosted-gogs-in-your-kubernetes-cluster)
+  - [25. Clone your git repository devopsinuse from self-hosted Gogs in your Kubernetes cluster](#25-clone-your-git-repository-devopsinuse-from-self-hosted-gogs-in-your-kubernetes-cluster)
 
 
 
@@ -1245,7 +1246,7 @@ git@localhost:devopsinuse/devopsinuse-repo.git
 
 **Adjust** your SSH URL accordingly
 ```bash
-clone ssh://git@127.0.0.1:30111/devopsinuse/devopsinuse-repo.git
+ssh://git@127.0.0.1:30111/devopsinuse/devopsinuse-repo.git
 
 # open up a new SSH tunnel for port 30111
 ssh -L30111:127.0.0.1:30111 \
