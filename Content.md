@@ -1501,10 +1501,127 @@ helm3 delete mysql
 ```
 
 
+<!-- Section Helmfile -->
+
+### 31. Deploy example helm chart via helmfile binary from a local filesystem to your Kubernetes cluste in AWS
+
+<!--
+- [31. Deploy example helm chart via helmfile binary to your Kubernetes cluste in AWS](#31-deploy-example-helm-chart-via-helmfile-binary-to-your-kubernetes-cluste-in-aws)
+ -->
 
 
+**Install helmfile** if you have not done so
+
+```bash
+sudo curl -L --output /usr/bin/helmfile https://github.com/roboll/helmfile/releases/download/v0.104.0/helmfile_linux_amd64
+sudo chmod +x /usr/bin/helmfile
+
+# Create symbolic link from helm3 to helm
+ln -s /usr/local/bin/helm3 /usr/bin/helm
+```
+
+**Define your helmfile** specification for **"example"** helm chart deployment to your Kubernetes cluster
+
+![](img/hf-1.png)
+
+
+**Compare** it with an original `helm3` command used to deploy "example"  helm chart to your Kubernetes cluster in AWS
+
+```bash
+helm3 install example helm-charts/example \
+--set service.type=NodePort \
+--set service.nodePortValue=31412
+```
+
+**Do not forget** to create SSH tunnel to open up **NodePort value 31412**
+
+```bash
+# Create SSH tunnel to avoid opening
+# of an extra nodePort: 31412
+ssh -L31412:127.0.0.1:31412 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@18.184.212.193
+```
+
+**Alternatively** you can allow this port 31412 in **"Security group"** section in your AWS console
+
+![](img/sg-2.png)
+
+**Explore helmfile** `template command` for **"example"** helm chart deployment
+
+```bash
+# template "example" helm chart via helmfile
+
+export HELMFILE_ENVIRONMENT="learning"
+# template without usig --selector flag
+helmfile \
+--environment learning \
+--file helmfiles/helmfile-example-helm-chart.yaml template | less
+
+# template "example" helm chart via helmfile using  --selector flag
+helmfile \
+--environment learning \
+--selector key=example \
+--file helmfiles/helmfile-example-helm-chart.yaml template | less
+
+# template "example" helm chart via helmfile using  --selector flag 
+helmfile \
+--environment learning \
+--selector app=nginx \
+--file helmfiles/helmfile-example-helm-chart.yaml template | less
+```
+
+
+**Please check current releases** deployed in your Kubernetes cluster in AWS
+
+```bash
+helm3 ls -A
+```
+
+**Deploy "example"** helm chart via `helmfile` to your Kubernetes cluster in AWS
+
+```bash
+export HELMFILE_ENVIRONMENT="learning"
+# deploy without usig --selector flag
+helmfile \
+--environment learning \
+--file helmfiles/helmfile-example-helm-chart.yaml sync
+
+# deploy "example" helm chart via helmfile using  --selector flag
+helmfile \
+--environment learning \
+--selector key=example \
+--file helmfiles/helmfile-example-helm-chart.yaml sync
+
+# deploy "example" helm chart via helmfile using  --selector flag
+helmfile \
+--environment learning \
+--selector app=nginx \
+--file helmfiles/helmfile-example-helm-chart.yaml sync
+```
+
+**Destroy "example"** helm chart via `helmfile` from your Kubernetes cluster in AWS
+
+```bash
+export HELMFILE_ENVIRONMENT="learning"
+# destroy without usig --selector flag 
+helmfile \
+--environment learning \
+--file helmfiles/helmfile-example-helm-chart.yaml destroy
+
+# destroy "example" helm chart via helmfile using  --selector flag 
+helmfile \
+--environment learning \
+--selector key=example \
+--file helmfiles/helmfile-example-helm-chart.yaml destroy
+
+# destroy "example" helm chart via helmfile using  --selector flag 
+helmfile \
+--environment learning \
+--selector app=nginx \
+--file helmfiles/helmfile-example-helm-chart.yaml destroy
+```
 
 
 <!-- echo "..." | sed -E  's/^[#]{2,} (.*)/- [\1](#\L\1)/; :a s/(\(#[^ ]+) /\1-/g; ta' | grep -e  "-\s\[.*" -->
-
 

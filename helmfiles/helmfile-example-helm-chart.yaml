@@ -1,0 +1,27 @@
+repositories:
+# To use official "stable" charts 
+# a.k.a https://github.com/helm/charts/tree/master/stable
+- name: stable
+  url: https://kubernetes-charts.storage.googleapis.com
+
+# Export your environment e.g "learning", "dev", ..., "prod"
+# export HELMFILE_ENVIRONMENT="learning"
+environments:
+  {{ requiredEnv "HELMFILE_ENVIRONMENT" }}:
+    values:
+      - values.yaml
+
+releases:
+  # "example" helm chart release specification  
+  - name: example
+    labels:
+      key: example
+      app: nginx
+
+    chart: ../helm-charts/example
+    version: 0.1.0
+    set:
+    - name: service.type
+      value: NodePort
+    - name: service.nodePortValue
+      value: "31412" 
