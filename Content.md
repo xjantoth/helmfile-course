@@ -1480,7 +1480,7 @@ helm3 upgrade mysql stable/mysql \
 --set service.type=NodePort \
 --set service.nodePort=30333 
 ```
-
+![](img/mysql-6.png)
 **Setup SSH tunnel** to MySQL NodePort 20333
 
 ```bash
@@ -1490,8 +1490,6 @@ admin@18.184.212.193
 ```
 **If this** is more convinient way to setup **Security Group** for your Kubenretes nodes - please see image below:
 ![](img/sg-3.png)
-
-![](img/mysql-6.png)
 
 ![](img/mysql-7.png)
 
