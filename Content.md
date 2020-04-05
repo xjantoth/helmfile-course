@@ -1465,12 +1465,14 @@ To **connect to your database**:
 
 ```bash
 helm3 template mysql stable/mysql \
+--set mysqlRootPassword=Start123 \
 --set persistence.enabled=true \
 --set persistence.size=1Gi \
 --set service.type=NodePort \
 --set service.nodePort=30333 | less
 
 helm3 upgrade mysql stable/mysql \
+--set mysqlRootPassword=Start123 \
 --set persistence.enabled=true \
 --set persistence.size=1Gi \
 --set service.type=NodePort \
@@ -1484,6 +1486,8 @@ ssh -L30333:127.0.0.1:30333 \
 -i ~/.ssh/udemy_devopsinuse \
 admin@18.184.212.193
 ```
+**If this** is more convinient way to setup **Security Group** for your Kubenretes nodes - please see image below:
+![](img/sg-3.png)
 
 ![](img/mysql-6.png)
 
