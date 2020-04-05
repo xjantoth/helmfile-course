@@ -32,6 +32,7 @@
   - [27. Allow NodePort in AWS Security Group section manually in case you like it more](#27-allow-nodeport-in-aws-security-group-section-manually-in-case-you-like-it-more)
   - [28. MySQL helm chart deployment with Persistent Volume](#28-mysql-helm-chart-deployment-with-persistent-volume)
   - [29. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via an extra ubuntu pod](#29-connect-to-your-mysql-deployment-running-in-your-kubernetes-cluster-in-aws-via-an-extra-ubuntu-pod)
+  - [30. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via dbeaver or your favourite GUI program](#30-connect-to-your-mysql-deployment-running-in-your-kubernetes-cluster-in-aws-via-dbeaver-or-your-favourite-gui-program)
 
 
 
@@ -1318,6 +1319,10 @@ node	ip-172-20-52-232.eu-central-1.compute.internal	18.196.157.47
 
 <!-- - [28. MySQL helm chart deployment with Persistent Volume](#28-mysql-helm-chart-deployment-with-persistent-volume) -->
 
+![](img/mysql-9.png)
+
+![](img/mysql-10.png)
+
 Search for MySQL helm chart (helm v3):
 ```bash
 helm3 repo list                          
@@ -1333,19 +1338,24 @@ stable/mysql    	1.6.2        	5.7.28     	Fast, reliable, scalable, and easy to
 Try to use `helm3 template` command to see what you are about to be deploying to your Kubernetes cluster in AWS
 
 ```bash
-# deployment.yaml file
+# template your mysql helm chart 
+# before you going to deploy it to Kubenretes cluster
 helm3 template \
 mysql \
 --set persistence.enabled=true \
 --set persistence.size=1Gi \
+--set mysqlRootPassword=Start123 \
 stable/mysql | less
 ```
+
+Deploy **MySQL helm chart** from a **"stable"** helm chart repository
 
 ```bash
 helm3 install \
 mysql \
 --set persistence.enabled=true \
 --set persistence.size=1Gi \
+--set mysqlRootPassword=Start123 \
 stable/mysql 
 
 ...
@@ -1378,12 +1388,48 @@ To connect to your database directly from outside the K8s cluster:
 
 ```
 
+
+```bash
+aws ec2 describe-volumes --profile terraform | jq .Volumes | jq '.[].Tags'
+
+...
+[
+  {
+    "Key": "kubernetes.io/created-for/pv/name",
+    "Value": "pvc-1b0192ec-8504-4742-9e78-fbae63a7a1e3"
+  },
+  {
+    "Key": "kubernetes.io/created-for/pvc/name",
+    "Value": "mysql"
+  },
+  {
+    "Key": "kubernetes.io/cluster/course.devopsinuse.com",
+    "Value": "owned"
+  },
+  {
+    "Key": "KubernetesCluster",
+    "Value": "course.devopsinuse.com"
+  },
+  {
+    "Key": "Name",
+    "Value": "course.devopsinuse.com-dynamic-pvc-1b0192ec-8504-4742-9e78-fbae63a7a1e3"
+  },
+  {
+    "Key": "kubernetes.io/created-for/pvc/namespace",
+    "Value": "default"
+  }
+]
+
+```
+
+
 ![](img/mysql-1.png)
 
 Please check that one **persistent volume has been crerated in your Kubenretes cluster** as well as in **your AWS console**.
 
 ![](img/mysql-2.png)
 
+![](img/mysql-3.png)
 
 ### 29. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via an extra ubuntu pod
 <!-- - [29. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via an extra ubuntu pod](#29-connect-to-your-mysql-deployment-running-in-your-kubernetes-cluster-in-aws-via-an-extra-ubuntu-pod) -->
@@ -1404,29 +1450,31 @@ To **connect to your database**:
     $ apt-get update && apt-get install mysql-client -y
 
 3. **Connect using the mysql cli**, then provide your password:
+```bash
     $ mysql -h mysql -p
+    $ create database devopsinuse;
+```
 
-To **connect to your database directly from outside the K8s cluster**:
-    MYSQL_HOST=127.0.0.1
-    MYSQL_PORT=3306
+![](img/mysql-4.png)
 
-    # Execute the following command to route the connection:
-    kubectl port-forward svc/mysql 3306
-
-    mysql -h ${MYSQL_HOST} -P${MYSQL_PORT} -u root -p${MYSQL_ROOT_PASSWORD}
+![](img/mysql-5.png)
 
 ### 30. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via dbeaver or your favourite GUI program
 
 **Upgrade your MySQL** deployment and add NodePort type of Kubernetes service and set `nodePort` value to 30333
 
 ```bash
-helm3 upgrade \
-mysql \
+helm3 template mysql stable/mysql \
 --set persistence.enabled=true \
 --set persistence.size=1Gi \
---set service.type=NodePort\
---set service.nodePort=30333 \
-stable/mysql 
+--set service.type=NodePort \
+--set service.nodePort=30333 | less
+
+helm3 upgrade mysql stable/mysql \
+--set persistence.enabled=true \
+--set persistence.size=1Gi \
+--set service.type=NodePort \
+--set service.nodePort=30333 
 ```
 
 **Setup SSH tunnel** to MySQL NodePort 20333
@@ -1437,12 +1485,22 @@ ssh -L30333:127.0.0.1:30333 \
 admin@18.184.212.193
 ```
 
-**Determine** root password
-```bash
-MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode; echo)
+![](img/mysql-6.png)
 
-echo $MYSQL_ROOT_PASSWORD
+![](img/mysql-7.png)
+
+![](img/mysql-8.png)
+
+To **delete mysql helm chart** deployment from a Kubernetes cluster in AW
+```bash
+helm3 delete mysql
 ```
 
 
+
+
+
+
 <!-- echo "..." | sed -E  's/^[#]{2,} (.*)/- [\1](#\L\1)/; :a s/(\(#[^ ]+) /\1-/g; ta' | grep -e  "-\s\[.*" -->
+
+
