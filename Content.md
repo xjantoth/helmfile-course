@@ -1461,6 +1461,8 @@ To **connect to your database**:
 
 ### 30. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via dbeaver or your favourite GUI program
 
+![](img/mysql-11.png)
+
 **Upgrade your MySQL** deployment and add NodePort type of Kubernetes service and set `nodePort` value to 30333
 
 ```bash
