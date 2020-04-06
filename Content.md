@@ -1792,18 +1792,23 @@ NAME          	CHART VERSION	APP VERSION	DESCRIPTION
 stable/jenkins	1.11.3       	lts        	Open source continuous integration server. It s...
 
 helm3 fetch stable/jenkins --destination docs/hc-v3-repo/
+helm3 repo index docs/hc-v3-repo
 
 git add docs/hc-v3-repo
 git commit -m "Creating helm v3 chart repository docs/hc-v3-repo"
 git push 
 ```
-![](img/hc-repo-1.png)
+
+Add `hc-v3-repo` to your local helm chart repositories
 
 ```bash
-helm3 repo add hc-v3-repo https://xjantoth.github.io/microservice/hc-v3-repo
+helm3 repo add hc-v3-repo https://xjantoth.github.io/hemfile-course/hc-v3-repo
 helm3 repo update
 helm3 repo list
 helm3 search repo hc-v3-repo/ 
 ```
+![](img/hc-repo-1.png)
+
+![](img/hc-repo-2.png)
 
 
