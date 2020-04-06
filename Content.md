@@ -1317,7 +1317,6 @@ node	ip-172-20-52-232.eu-central-1.compute.internal	18.196.157.47
 
 ### 28. MySQL helm chart deployment with Persistent Volume
 
-<!-- - [28. MySQL helm chart deployment with Persistent Volume](#28-mysql-helm-chart-deployment-with-persistent-volume) -->
 
 ![](img/mysql-9.png)
 
@@ -1432,8 +1431,6 @@ Please check that one **persistent volume has been crerated in your Kubenretes c
 ![](img/mysql-3.png)
 
 ### 29. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via an extra ubuntu pod
-<!-- - [29. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via an extra ubuntu pod](#29-connect-to-your-mysql-deployment-running-in-your-kubernetes-cluster-in-aws-via-an-extra-ubuntu-pod) -->
-
 
 To get your **root password run**:
 
@@ -1502,13 +1499,9 @@ helm3 delete mysql
 
 
 <!-- Section Helmfile -->
+<!-- - [31. Deploy example helm chart via helmfile binary from a local filesystem to your Kubernetes cluste in AWS](#31.-deploy-example-helm-chart-via-helmfile-binary-from-a-local-filesystem-to-your-kubernetes-cluste-in-aws)-->
 
 ### 31. Deploy example helm chart via helmfile binary from a local filesystem to your Kubernetes cluste in AWS
-
-<!--
-- [31. Deploy example helm chart via helmfile binary to your Kubernetes cluste in AWS](#31-deploy-example-helm-chart-via-helmfile-binary-to-your-kubernetes-cluste-in-aws)
- -->
-
 
 **Install helmfile** if you have not done so
 
@@ -1620,8 +1613,5 @@ helmfile \
 --environment learning \
 --selector app=nginx \
 --file helmfiles/helmfile-example-helm-chart.yaml destroy
+
 ```
-
-
-<!-- echo "..." | sed -E  's/^[#]{2,} (.*)/- [\1](#\L\1)/; :a s/(\(#[^ ]+) /\1-/g; ta' | grep -e  "-\s\[.*" -->
-
