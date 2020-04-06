@@ -1802,13 +1802,37 @@ git push
 Add `hc-v3-repo` to your local helm chart repositories
 
 ```bash
-helm3 repo add hc-v3-repo https://xjantoth.github.io/hemfile-course/hc-v3-repo
+helm3 repo add hc-v3-repo https://xjantoth.github.io/helmfile-course/hc-v3-repo
 helm3 repo update
 helm3 repo list
 helm3 search repo hc-v3-repo/ 
 ```
-![](img/hc-repo-1.png)
-
 ![](img/hc-repo-2.png)
+
+**Check** your list of available helm chart repositories at your local machine
+
+```bash
+helm3 repo ls
+NAME      	URL                                                        
+stable    	https://kubernetes-charts.storage.googleapis.com           
+incubator 	https://kubernetes-charts-incubator.storage.googleapis.com/
+hc-v3-repo	https://xjantoth.github.io/helmfile-course/hc-v3-repo   
+
+helm3 repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "hc-v3-repo" chart repository
+...Successfully got an update from the "incubator" chart repository
+...Successfully got an update from the "stable" chart repository
+Update Complete. ⎈ Happy Helming!⎈ 
+```
+
+Try to search **through your own helm chart repository at your Github** account
+```bash
+helm3 search repo hc-v3-repo/
+NAME              	CHART VERSION	APP VERSION	DESCRIPTION                                       
+hc-v3-repo/jenkins	1.11.3       	lts        	Open source continuous integration server. It s...
+```
+
+
 
 
