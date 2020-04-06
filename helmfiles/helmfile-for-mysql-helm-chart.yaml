@@ -1,0 +1,33 @@
+repositories:
+# To use official "stable" charts 
+- name: stable
+  url: https://kubernetes-charts.storage.googleapis.com
+
+# Export your environment e.g "learning", "dev", ..., "prod"
+# export HELMFILE_ENVIRONMENT="learning"
+
+environments:
+  {{ requiredEnv "HELMFILE_ENVIRONMENT" }}:
+    values:
+      - values.yaml
+
+releases:
+  # "example" helm chart release specification  
+  - name: mysql
+    labels:
+      key: database
+      app: mysql
+
+    chart: stable/mysql
+    version: 1.6.2
+    set:
+    - name: service.type
+      value: NodePort
+    - name: service.nodePortValue
+      value: 30333
+    - name: mysqlRootPassword
+      value: Start123
+    - name: persistence.enabled
+      value: true
+    - name: persistence.size
+      value: 1Gi

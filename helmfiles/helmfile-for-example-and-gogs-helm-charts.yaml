@@ -1,11 +1,11 @@
 repositories:
 # To use official "stable" charts 
-# a.k.a https://github.com/helm/charts/tree/master/stable
 - name: stable
   url: https://kubernetes-charts.storage.googleapis.com
 
 # Export your environment e.g "learning", "dev", ..., "prod"
 # export HELMFILE_ENVIRONMENT="learning"
+
 environments:
   {{ requiredEnv "HELMFILE_ENVIRONMENT" }}:
     values:
@@ -24,4 +24,19 @@ releases:
     - name: service.type
       value: NodePort
     - name: service.nodePortValue
-      value: "31412" 
+      value: 31412
+  
+  # "Gogs" helm chart release specification  
+  - name: test
+    labels:
+      key: gogs
+      app: gogs
+
+    chart: ../helm-charts/gogs
+    version: 0.7.11
+    set:
+    - name: service.httpNodePort
+      value: 30222
+    - name: service.sshNodePort
+      value: 30111
+

@@ -1280,6 +1280,7 @@ git push origin master
 ```
 ![](img/gogs-web-10.png)
 
+<!-- - [27. Allow NodePort in AWS Security Group section manually in case you like it more](#27-allow-nodeport-in-aws-security-group-section-manually-in-case-you-like-it-more)-->
 ### 27. Allow NodePort in AWS Security Group section manually in case you like it more
 
   
@@ -1499,9 +1500,9 @@ helm3 delete mysql
 
 
 <!-- Section Helmfile -->
-<!-- - [31. Deploy example helm chart via helmfile binary from a local filesystem to your Kubernetes cluste in AWS](#31.-deploy-example-helm-chart-via-helmfile-binary-from-a-local-filesystem-to-your-kubernetes-cluste-in-aws)-->
 
-### 31. Deploy example helm chart via helmfile binary from a local filesystem to your Kubernetes cluste in AWS
+<!-- - [31. Deploy example and gogs helm charts via helmfile binary from a local filesystem to your Kubernetes cluster in AWS](#31-deploy-example-and-gogs-helm-charts-via-helmfile-binary-from-a-local-filesystem-to-your-kubernetes-cluster-in-aws)-->
+### 31. Deploy example and gogs helm charts via helmfile binary from a local filesystem to your Kubernetes cluster in AWS
 
 **Install helmfile** if you have not done so
 
@@ -1513,25 +1514,79 @@ sudo chmod +x /usr/bin/helmfile
 ln -s /usr/local/bin/helm3 /usr/bin/helm
 ```
 
-**Define your helmfile** specification for **"example"** helm chart deployment to your Kubernetes cluster
+**Define your helmfile** specification for **"example"** helm chart deployment to your Kubernetes cluster file: `helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml`
 
-![](img/hf-1.png)
+```yaml
+repositories:
+# To use official "stable" charts 
+- name: stable
+  url: https://kubernetes-charts.storage.googleapis.com
 
+# Export your environment e.g "learning", "dev", ..., "prod"
+# export HELMFILE_ENVIRONMENT="learning"
+
+environments:
+  {{ requiredEnv "HELMFILE_ENVIRONMENT" }}:
+    values:
+      - values.yaml
+
+releases:
+  # "example" helm chart release specification  
+  - name: example
+    labels:
+      key: example
+      app: nginx
+
+    chart: ../helm-charts/example
+    version: 0.1.0
+    set:
+    - name: service.type
+      value: NodePort
+    - name: service.nodePortValue
+      value: 31412
+  
+  # "Gogs" helm chart release specification  
+  - name: test
+    labels:
+      key: gogs
+      app: gogs
+
+    chart: ../helm-charts/gogs
+    version: 0.7.11
+    set:
+    - name: service.httpNodePort
+      value: 30222
+    - name: service.sshNodePort
+      value: 30111
+```
 
 **Compare** it with an original `helm3` command used to deploy "example"  helm chart to your Kubernetes cluster in AWS
 
 ```bash
+# Example helm chart (Nginx Web Server)
 helm3 install example helm-charts/example \
 --set service.type=NodePort \
 --set service.nodePortValue=31412
+
+# Gogs helm chart
+helm3 install test \
+--set service.httpNodePort=30222 \
+--set service.sshNodePort=30111 .
 ```
 
-**Do not forget** to create SSH tunnel to open up **NodePort value 31412**
+**Do not forget** to create SSH tunnel to open up **NodePort values**
 
 ```bash
 # Create SSH tunnel to avoid opening
-# of an extra nodePort: 31412
-ssh -L31412:127.0.0.1:31412 \
+# of an extra nodePorts: 
+#     - 31412 (Nginx Web server)
+#     - 30111 (SSH)
+#     - 30222 (HTTP)
+
+ssh \
+-L31412:127.0.0.1:31412 \
+-L30111:127.0.0.1:30111 \
+-L30222:127.0.0.1:30222 \
 -i ~/.ssh/udemy_devopsinuse \
 admin@18.184.212.193
 ```
@@ -1549,21 +1604,34 @@ export HELMFILE_ENVIRONMENT="learning"
 # template without usig --selector flag
 helmfile \
 --environment learning \
---file helmfiles/helmfile-example-helm-chart.yaml template | less
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
 
 # template "example" helm chart via helmfile using  --selector flag
 helmfile \
 --environment learning \
 --selector key=example \
---file helmfiles/helmfile-example-helm-chart.yaml template | less
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
 
 # template "example" helm chart via helmfile using  --selector flag 
 helmfile \
 --environment learning \
 --selector app=nginx \
---file helmfiles/helmfile-example-helm-chart.yaml template | less
-```
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
 
+# template "Gogs" helm chart via helmfile using  --selector flag
+helmfile \
+--environment learning \
+--selector key=gogs \
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
+
+# template "Gogs" helm chart via helmfile using  --selector flag
+helmfile \
+--environment learning \
+--selector app=gogs \
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
+
+
+```
 
 **Please check current releases** deployed in your Kubernetes cluster in AWS
 
@@ -1571,47 +1639,142 @@ helmfile \
 helm3 ls -A
 ```
 
-**Deploy "example"** helm chart via `helmfile` to your Kubernetes cluster in AWS
+Deploy **"example"**  and **"gogs"** helm charts via `helmfile` to your Kubernetes cluster in AWS
 
 ```bash
 export HELMFILE_ENVIRONMENT="learning"
 # deploy without usig --selector flag
 helmfile \
 --environment learning \
---file helmfiles/helmfile-example-helm-chart.yaml sync
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml sync
 
 # deploy "example" helm chart via helmfile using  --selector flag
 helmfile \
 --environment learning \
 --selector key=example \
---file helmfiles/helmfile-example-helm-chart.yaml sync
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml sync
 
 # deploy "example" helm chart via helmfile using  --selector flag
 helmfile \
 --environment learning \
 --selector app=nginx \
---file helmfiles/helmfile-example-helm-chart.yaml sync
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml sync
+
+# deploy "Gogs" helm chart via helmfile using  --selector flag
+helmfile \
+--environment learning \
+--selector key=gogs \
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml sync
+
+# deploy "Gogs" helm chart via helmfile using  --selector flag
+helmfile \
+--environment learning \
+--selector app=gogs \
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml sync
 ```
 
-**Destroy "example"** helm chart via `helmfile` from your Kubernetes cluster in AWS
+Destroy **"example"** and **"gogs"** helm charts via `helmfile` from your Kubernetes cluster in AWS
 
 ```bash
 export HELMFILE_ENVIRONMENT="learning"
-# destroy without usig --selector flag 
+# destroy all without usig --selector flag 
 helmfile \
 --environment learning \
---file helmfiles/helmfile-example-helm-chart.yaml destroy
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml destroy
 
 # destroy "example" helm chart via helmfile using  --selector flag 
 helmfile \
 --environment learning \
 --selector key=example \
---file helmfiles/helmfile-example-helm-chart.yaml destroy
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml destroy
 
 # destroy "example" helm chart via helmfile using  --selector flag 
 helmfile \
 --environment learning \
 --selector app=nginx \
---file helmfiles/helmfile-example-helm-chart.yaml destroy
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml destroy
+
+# destroy "Gogs" helm chart via helmfile using  --selector flag
+helmfile \
+--environment learning \
+--selector key=gogs \
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml destroy
+
+# destroy "Gogs" helm chart via helmfile using  --selector flag
+helmfile \
+--environment learning \
+--selector app=gogs \
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml destroy
+
 
 ```
+
+
+<!-- - [32. Deploy MySQL helm chart from stable helm chart repository to your Kubernetes cluster running in AWS](#32-deploy-mysql-helm-chart-from-stable-helm-chart-repository-to-your-kubernetes-cluster-running-in-aws)-->
+### 32. Deploy MySQL helm chart from stable helm chart repository to your Kubernetes cluster running in AWS
+
+Explore `helmfiles/helmfile-for-mysql-helm-chart.yaml` helmfile for MySQL deployment to Kubernetes
+
+```yaml
+repositories:
+# To use official "stable" charts 
+- name: stable
+  url: https://kubernetes-charts.storage.googleapis.com
+
+# Export your environment e.g "learning", "dev", ..., "prod"
+# export HELMFILE_ENVIRONMENT="learning"
+
+environments:
+  {{ requiredEnv "HELMFILE_ENVIRONMENT" }}:
+    values:
+      - values.yaml
+
+releases:
+  # "example" helm chart release specification  
+  - name: mysql
+    labels:
+      key: database
+      app: mysql
+
+    chart: stable/mysql
+    version: 1.6.2
+    set:
+    - name: service.type
+      value: NodePort
+    - name: service.nodePortValue
+      value: 30333
+    - name: mysqlRootPassword
+      value: Start123
+    - name: persistence.enabled
+      value: true
+    - name: persistence.size
+      value: 1Gi
+
+```
+
+**Compare** it with an original `helm3` command used to deploy **“mysql”** helm chart to your Kubernetes cluster in AWS
+
+```bash
+helm3 install mysql stable/mysql \
+--set mysqlRootPassword=Start123 \
+--set persistence.enabled=true \
+--set persistence.size=1Gi \
+--set service.type=NodePort \
+--set service.nodePort=30333 
+```
+**Establish** SSH tunnel to open up NodePort value for MySQL
+
+```bash
+# Create SSH tunnel to avoid opening
+# of an extra nodePorts: 
+#     - 30333 (MySQL)
+
+ssh \
+-L31412:127.0.0.1:30333 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@1o8.184.212.193
+```
+**You can allow** this port 30333 in **“Security group”** section in your AWS console
+![](img/sg-3.png)
+
+
