@@ -1772,7 +1772,7 @@ helm3 install mysql stable/mysql \
 ssh \
 -L31412:127.0.0.1:30333 \
 -i ~/.ssh/udemy_devopsinuse \
-admin@1o8.184.212.193
+admin@18.184.212.193
 ```
 **You can allow** this port 30333 in **“Security group”** section in your AWS console
 ![](img/sg-3.png)
