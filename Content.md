@@ -1778,3 +1778,26 @@ admin@18.184.212.193
 ![](img/sg-3.png)
 
 
+### 33. Create helm chart repository at your Github account 
+
+**Create** `helm v3` helm chart repository at your Github repository
+```bash
+git clone https://github.com/xjantoth/helmfile-course.git
+
+cd helmfile-course
+mkdir -p docs/hc-v3-repo
+
+git add docs/hc-v3-repo
+git commit -m "Creating helm v3 chart repository docs/hc-v3-repo"
+git push 
+```
+![](img/hc-repo-1.png)
+
+```bash
+helm3 repo add hc-v3-repo https://xjantoth.github.io/microservice/hc-v3-repo
+helm3 repo update
+helm3 repo list
+helm3 search repo hc-v3-repo/ 
+```
+
+
