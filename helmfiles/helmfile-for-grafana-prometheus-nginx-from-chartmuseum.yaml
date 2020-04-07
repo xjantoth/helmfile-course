@@ -42,7 +42,7 @@ releases:
     - name: ingress.enabled
       value: true
     - name: ingress.hosts[0]
-      value: "1.2.3.4"
+      value: "grafana"
     - name: "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target"
       value: "\\/$1"
     - name: ingress.path
@@ -67,7 +67,7 @@ releases:
     - name: server.ingress.enabled
       value: true     
     - name: server.ingress.hosts[0]
-      value: "1.2.3.4"
+      value: "prometheus"
     - name: server.ingress.extraPaths[0]
       value: "/prometheus"
 
