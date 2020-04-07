@@ -1770,7 +1770,7 @@ helm3 install mysql stable/mysql \
 #     - 30333 (MySQL)
 
 ssh \
--L31412:127.0.0.1:30333 \
+-L30333:127.0.0.1:30333 \
 -i ~/.ssh/udemy_devopsinuse \
 admin@18.184.212.193
 ```
@@ -1778,7 +1778,8 @@ admin@18.184.212.193
 ![](img/sg-3.png)
 
 
-### 33. Create helm chart repository at your Github account 
+<!-- - [33. Create helm chart repository at your Github account](#33-create-helm-chart-repository-at-your-github-account)-->
+### 33. Create helm chart repository at your Github account
 
 **Create** `helm v3` helm chart repository at your Github repository
 ```bash
@@ -1791,9 +1792,13 @@ helm3 search repo stable/jenkins -l | head -n 2
 NAME          	CHART VERSION	APP VERSION	DESCRIPTION                                       
 stable/jenkins	1.11.3       	lts        	Open source continuous integration server. It s...
 
+# Fetch Jenkins helm chart from a "stable" helm chart repo
 helm3 fetch stable/jenkins --destination docs/hc-v3-repo/
+ls -l docs/hc-v3-repo/
 helm3 repo index docs/hc-v3-repo
 
+
+# git add .; git commit -m "..." and git push your changes to remote
 git add docs/hc-v3-repo
 git commit -m "Creating helm v3 chart repository docs/hc-v3-repo"
 git push 
@@ -1833,6 +1838,221 @@ NAME              	CHART VERSION	APP VERSION	DESCRIPTION
 hc-v3-repo/jenkins	1.11.3       	lts        	Open source continuous integration server. It s...
 ```
 
+<!-- - [34. Deploy Jenkins via helmfile from your own Github helm chart repository](#34-deploy-jenkins-via-helmfile-from-your-own-github-helm-chart-repository)-->
+### 34. Deploy Jenkins via helmfile from your own Github helm chart repository
 
+![](img/jenkins-1.png)
+
+![](img/jenkins-2.png)
+
+file: `helmfiles/helmfile-for-jenkins.yaml`
+
+Run: `export HELMFILE_ENVIRONMENT="learning"`
+
+```yaml
+repositories:
+# To use Github helm chart repo 
+- name: hc-v3-repo
+  url: https://xjantoth.github.io/helmfile-course/hc-v3-repo
+
+# Export your environment e.g "learning", "dev", ..., "prod"
+# export HELMFILE_ENVIRONMENT="learning"
+
+environments:
+  {{ requiredEnv "HELMFILE_ENVIRONMENT" }}:
+    values:
+      - values.yaml
+
+releases:
+  # "jenkins" helm chart release specification  
+  - name: jenkins
+    labels:
+      key: ci
+      app: jenkins
+
+    chart: hc-v3-repo/jenkins
+    version: 1.11.3
+    set:
+    - name: master.serviceType
+      value: NodePort
+    - name: master.nodePort
+      value: 30555
+    - name: master.adminUser
+      value: "devopsinuse"
+    - name: master.adminPassword
+      value: "Start123"
+    - name: persistence.enabled
+      value: true
+    - name: persistence.size
+      value: 1Gi
+    - name: agent.enabled
+      value: false
+```
+
+**Template** jenkins deployment via `helmfile` to your Kubernetes cluster in AWS
+
+```bash
+export HELMFILE_ENVIRONMENT="learning"
+
+helmfile  \
+--environment "learning" \
+-f helmfiles/helmfile-for-jenkins.yaml \
+template
+```
+**Establish** SSH tunnel to open up NodePort value for Jenkins
+```bash
+# Create SSH tunnel to avoid opening
+# of an extra nodePorts: 
+#     - 30555 (Jenkins)
+
+ssh \
+-L30555:127.0.0.1:30555 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@18.184.212.193
+```
+**Execute** jenkins deployment via `helmfile` to your Kubernetes cluster in AWS
+```bash
+export HELMFILE_ENVIRONMENT="learning"
+
+helmfile  \
+--environment "learning" \
+-f helmfiles/helmfile-for-jenkins.yaml \
+sync
+```
+
+**Destroy** jenkins deployment via `helmfile` from your Kubernetes cluster in AWS
+```bash
+export HELMFILE_ENVIRONMENT="learning"
+
+helmfile  \
+--environment "learning" \
+-f helmfiles/helmfile-for-jenkins.yaml \
+destroy
+```
+
+<!-- - [35. Deploy Chartmuseum as a helm chart repository running as another deployment within your Kubernetes cluster in AWS](#35-deploy-chartmuseum-as-a-helm-chart-repository-running-as-another-deployment-within-your-kubernetes-cluster-in-aws)-->
+### 35. Deploy Chartmuseum as a helm chart repository running as another deployment within your Kubernetes cluster in AWS
+
+file: `helmfiles/helmfile-for-chartmuseum.yaml`
+```yaml
+repositories:
+# To use official "stable" charts 
+# a.k.a https://github.com/helm/charts/tree/master/stable
+- name: stable
+  url: https://kubernetes-charts.storage.googleapis.com
+
+# This is helm chart repository made of Chartmuseum 
+# which is running as regular deployment within our cluster
+#- name: k8s
+#  url: http://1.2.3.4:30444/chartmuseum
+#  username: devopsinuse
+#  password: Start123
+
+# Export your environment e.g "learning", "dev", ..., "prod"
+# export HELMFILE_ENVIRONMENT="learning"
+environments:
+  {{ requiredEnv "HELMFILE_ENVIRONMENT" }}:
+    values:
+      - values.yaml
+
+releases:
+  # (Helm v3) Upgrade your deployment with basic auth
+  - name: chartmuseum
+    labels:
+      key: chartmuseum
+      app: chartmuseum
+    
+    chart: stable/chartmuseum
+    version: 2.10.0
+    set:
+    - name: persistence.pv.enabled
+      value: false 
+    - name: env.open.DISABLE_API
+      value: false
+    - name: env.open.CONTEXT_PATH
+      value: "/chartmuseum"
+    - name: ingress.enabled
+      value: true
+    - name: ingress.hosts[0].name
+      value: "*"
+    - name: ingress.hosts[0].path
+      value: "/chartmuseum"
+    - name: env.secret.BASIC_AUTH_USER
+      value: "devopsinuse"
+    - name: env.secret.BASIC_AUTH_PASS
+      value: "Start123"
+```
+
+**Compare helm deployment for Chartmuseum** via helm3 binary
+
+```bash
+# (Helm v3) Upgrade your deployment with basic auth
+helm3 install \
+chartmuseum \
+--set persistence.pv.enabled=false \
+--set env.open.DISABLE_API=false \
+--set env.open.CONTEXT_PATH="/chartmuseum" \
+--set ingress.enabled=true \
+--set ingress.hosts[0].name="*" \
+--set ingress.hosts[0].path="/chartmuseum" \
+--set env.secret.BASIC_AUTH_USER="devopsinuse" \
+--set env.secret.BASIC_AUTH_PASS="Start123" \
+stable/chartmuseum 
+```
+
+
+```bash
+# template only chartmuseum via helmfile using  --selector flag
+helmfile \
+--selector key=chartmuseum  \
+--environment learning \
+--file helmfiles/helmfile-for-chartmuseum.yaml \
+ template
+
+# deploy Chartmuseum via helmfile
+helmfile  \
+--selector key=chartmuseum  \
+--environment "learning" \
+-f helmfiles/helmfile-for-chartmuseum.yaml \
+sync
+
+# destroy Chartmuseum via helmfile if neceassary
+helmfile  \
+--selector key=chartmuseum  \
+--environment "learning" \
+-f helmfiles/helmfile-for-chartmuseum.yaml \
+destroy
+```
+
+**Add Chartmuseum** to the list of available helm chart repsitories
+```bash
+helm3 repo add k8s http://1.2.3.4:30444/chartmuseum --username devopsinuse --password Start123
+```
+
+**Fetch two helm charts** Grafana, Prometheus to your local
+```bash
+helm3 fetch stable/grafana --destination docs/hc-v3-repo/
+helm3 fetch stable/prometheus --destination docs/hc-v3-repo/
+
+ls docs/hc-v3-repo/
+total 108
+-rw-r--r-- 1  1183 Apr index.yaml
+-rw-r--r-- 1 46226 Apr jenkins-1.11.3.tgz
+-rw-r--r-- 1 32899 Apr prometheus-11.0.4.tgz
+-rw-r--r-- 1 19523 Apr grafana-5.0.11.tgz
+```
+
+**Push** helm chart to Chartmuseum with authentication
+```bash
+curl -u devopsinuse --data-binary "@docs/hc-v3-repo/grafana-5.0.11.tgz" http://1.2.3.4:30444/chartmuseum/api/charts
+{"saved":true}
+curl -u devopsinuse --data-binary "@docs/hc-v3-repo/prometheus-11.0.4.tgz" http://1.2.3.4:30444/chartmuseum/api/charts
+{"saved":true}
+```
+
+**Delete** (Helm v3) Chartmuseum deployment 
+```bash
+helm3 delete chartmuseum 
+```
 
 

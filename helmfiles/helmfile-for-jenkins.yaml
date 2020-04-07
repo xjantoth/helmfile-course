@@ -1,0 +1,39 @@
+repositories:
+# To use Github helm chart repo 
+- name: hc-v3-repo
+  url: https://xjantoth.github.io/helmfile-course/hc-v3-repo
+
+# Export your environment e.g "learning", "dev", ..., "prod"
+# export HELMFILE_ENVIRONMENT="learning"
+
+environments:
+  {{ requiredEnv "HELMFILE_ENVIRONMENT" }}:
+    values:
+      - values.yaml
+
+releases:
+  # "jenkins" helm chart release specification  
+  - name: jenkins
+    labels:
+      key: ci
+      app: jenkins
+
+    chart: hc-v3-repo/jenkins
+    version: 1.11.3
+    set:
+    - name: master.serviceType
+      value: NodePort
+    - name: master.nodePort
+      value: 30555
+    - name: master.adminUser
+      value: "devopsinuse"
+    - name: master.adminPassword
+      value: "Start123"
+    - name: persistence.enabled
+      value: true
+    - name: persistence.size
+      value: 1Gi
+    - name: agent.enabled
+      value: false
+ 
+

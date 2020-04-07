@@ -1,0 +1,46 @@
+repositories:
+# To use official "stable" charts 
+# a.k.a https://github.com/helm/charts/tree/master/stable
+- name: stable
+  url: https://kubernetes-charts.storage.googleapis.com
+
+# This is helm chart repository made of Chartmuseum 
+# which is running as regular deployment within our cluster
+#- name: k8s
+#  url: http://1.2.3.4:30444/chartmuseum
+#  username: devopsinuse
+#  password: Start123
+
+# Export your environment e.g "learning", "dev", ..., "prod"
+# export HELMFILE_ENVIRONMENT="learning"
+environments:
+  {{ requiredEnv "HELMFILE_ENVIRONMENT" }}:
+    values:
+      - values.yaml
+
+releases:
+  # (Helm v3) Upgrade your deployment with basic auth
+  - name: chartmuseum
+    labels:
+      key: chartmuseum
+      app: chartmuseum
+    
+    chart: stable/chartmuseum
+    version: 2.10.0
+    set:
+    - name: persistence.pv.enabled
+      value: false 
+    - name: env.open.DISABLE_API
+      value: false
+    - name: env.open.CONTEXT_PATH
+      value: "/chartmuseum"
+    - name: ingress.enabled
+      value: true
+    - name: ingress.hosts[0].name
+      value: \*
+    - name: ingress.hosts[0].path
+      value: "/chartmuseum"
+    - name: env.secret.BASIC_AUTH_USER
+      value: "devopsinuse"
+    - name: env.secret.BASIC_AUTH_PASS
+      value: "Start123"
