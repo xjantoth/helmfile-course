@@ -33,7 +33,13 @@
   - [28. MySQL helm chart deployment with Persistent Volume](#28-mysql-helm-chart-deployment-with-persistent-volume)
   - [29. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via an extra ubuntu pod](#29-connect-to-your-mysql-deployment-running-in-your-kubernetes-cluster-in-aws-via-an-extra-ubuntu-pod)
   - [30. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via dbeaver or your favourite GUI program](#30-connect-to-your-mysql-deployment-running-in-your-kubernetes-cluster-in-aws-via-dbeaver-or-your-favourite-gui-program)
-
+  - [31. Deploy example and gogs helm charts via helmfile binary from a local filesystem to your Kubernetes cluster in AWS](#31-deploy-example-and-gogs-helm-charts-via-helmfile-binary-from-a-local-filesystem-to-your-kubernetes-cluster-in-aws)
+  - [32. Deploy MySQL helm chart from stable helm chart repository to your Kubernetes cluster running in AWS](#32-deploy-mysql-helm-chart-from-stable-helm-chart-repository-to-your-kubernetes-cluster-running-in-aws)
+  - [33. Create helm chart repository at your Github account](#33-create-helm-chart-repository-at-your-github-account)
+  - [34. Deploy Jenkins via helmfile from your own Github helm chart repository](#34-deploy-jenkins-via-helmfile-from-your-own-github-helm-chart-repository)
+  - [35. Deploy Chartmuseum as a helm chart repository running as another deployment within your Kubernetes cluster in AWS](#35-deploy-chartmuseum-as-a-helm-chart-repository-running-as-another-deployment-within-your-kubernetes-cluster-in-aws)
+  - [36. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS](#36-deploy-grafana-and-prometheus-from-chartmuseum-helm-chart-repository-via-helmfile-to-your-kubernetes-cluster-in-aws)
+  - [37. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#37-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)
 
 
 
@@ -1910,6 +1916,10 @@ ssh \
 -i ~/.ssh/udemy_devopsinuse \
 admin@18.184.212.193
 ```
+
+**Alternatively** allow NodePort in **"Security group"** section in AWS console
+![](img/sg-4.png)
+
 **Execute** jenkins deployment via `helmfile` to your Kubernetes cluster in AWS
 ```bash
 export HELMFILE_ENVIRONMENT="learning"
@@ -2006,6 +2016,20 @@ chartmuseum \
 --set service.nodePort=30444 \
 stable/chartmuseum 
 ```
+
+**Establish SSH** tunnel to open up NodePort value for Chartmuseum
+```bash
+# Create SSH tunnel to avoid opening
+# of an extra nodePorts: 
+#     - 30444 (Chartmuseum)
+
+ssh \
+-L30444:127.0.0.1:30444 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@18.184.212.193
+```
+**Alternatively** allow NodePort in **"Security group"** section in AWS console
+![](img/sg-4.png)
 
 
 ```bash
@@ -2277,6 +2301,7 @@ helmfile  \
 destroy
 ```
 
+<!-- - [37. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#37-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)-->
 ### 37. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS
 
 **Template** nginx-ingress deployment
