@@ -2024,11 +2024,6 @@ helmfile  \
 destroy
 ```
 
-**Add Chartmuseum** to the list of available helm chart repsitories
-```bash
-helm3 repo add k8s http://1.2.3.4:30444/chartmuseum --username devopsinuse --password Start123
-```
-
 **Fetch two helm charts** Grafana, Prometheus to your local
 ```bash
 helm3 fetch stable/grafana --destination docs/hc-v3-repo/
@@ -2044,15 +2039,234 @@ total 108
 
 **Push** helm chart to Chartmuseum with authentication
 ```bash
-curl -u devopsinuse --data-binary "@docs/hc-v3-repo/grafana-5.0.11.tgz" http://1.2.3.4:30444/chartmuseum/api/charts
+curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/grafana-5.0.11.tgz" http://1.2.3.4:30444/chartmuseum/api/charts
 {"saved":true}
-curl -u devopsinuse --data-binary "@docs/hc-v3-repo/prometheus-11.0.4.tgz" http://1.2.3.4:30444/chartmuseum/api/charts
+curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/prometheus-11.0.4.tgz" http://1.2.3.4:30444/chartmuseum/api/charts
 {"saved":true}
 ```
+**Add Chartmuseum** to the list of available helm chart repsitories
+```bash                                                                                     
+helm3 repo add k8s http://1.2.3.4:30444/chartmuseum --username devopsinuse --password Start123
+helm3 repo update
+helm3 search repo k8s/
 
-**Delete** (Helm v3) Chartmuseum deployment 
+# List all the helm chart present in Chartmuseum via API
+curl -u devopsinuse -XGET http://1.2.3.4:30444/chartmuseum/api/charts
+```
+
+**Delete** (Helm v3) Chartmuseum deployment
 ```bash
 helm3 delete chartmuseum 
 ```
 
+<!-- - [36. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS](#36-deploy-grafana-and-prometheus-from-chartmuseum-helm-chart-repository-via-helmfile-to-your-kubernetes-cluster-in-aws)-->
+### 36. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS
+
+file: `helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml`
+
+```yaml
+repositories:
+# To use official "stable" charts 
+# a.k.a https://github.com/helm/charts/tree/master/stable
+- name: stable
+  url: https://kubernetes-charts.storage.googleapis.com
+
+# This is helm chart repository made of Chartmuseum 
+# which is running as regular deployment within our cluster
+#- name: k8s
+#  url: http://1.2.3.4:30444/chartmuseum
+#  username: devopsinuse
+#  password: Start123
+
+# Export your environment e.g "learning", "dev", ..., "prod"
+# export HELMFILE_ENVIRONMENT="learning"
+environments:
+  {{ requiredEnv "HELMFILE_ENVIRONMENT" }}:
+    values:
+      - values.yaml
+
+releases:
+  # (Helm v3) Upgrade your deployment with basic auth
+  - name: grafana
+    labels:
+      key: monitoring
+      app: grafana
+    
+    #chart: k8s/grafana
+    chart: stable/grafana
+    version: 5.0.11
+    set:
+    - name: service.type
+      value: NodePort
+    - name: service.nodePort
+      value: 30888
+   
+    # Change context path for grafana to  /grafana
+    - name: "grafana\\.ini.server.root_url"
+      value: "%(protocol)s://%(domain)s/grafana"
+
+    # Ingress related settings  
+    - name: ingress.enabled
+      value: true
+    - name: ingress.hosts[0]
+      value: "1.2.3.4"
+    - name: "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target"
+      value: "\\/$1"
+    - name: ingress.path
+      value: "/grafana/?(.*)"
+
+  - name: prometheus
+    labels:
+      key: monitoring
+      app: prometheus
+    
+    # chart: k8s/prometheus
+    chart: stable/prometheus
+    version: 11.0.4
+    set:
+    # Modify service type to NodePort
+    - name: server.service.type
+      value: NodePort
+    - name: server.service.nodePort
+      value: 30999
+    
+    # Ingress settings
+    - name: server.ingress.enabled
+      value: true     
+    - name: server.ingress.hosts[0]
+      value: "1.2.3.4"
+    - name: server.ingress.extraPaths[0]
+      value: "/prometheus"
+
+    # Change default / to /prometheus in runtime
+    - name: server.prefixURL
+      value: "/prometheus"
+    - name: server.baseURL
+      value: "http://localhost:9090/prometheus"
+    - name: server.extraArgs.web.route-prefix 
+      value: "/prometheus"      
+ 
+    # Disable extra Prometheus components
+    - name: pushgateway.enabled
+      value: false      
+    - name: kubeStateMetrics.enabled
+      value: false     
+    - name: alertmanager.enabled
+      value: false   
+
+    # Disable Persistent data
+    - name: server.persistentVolume.enabled
+      value: false
+```
+
+**Do not forget** to create **SSH tunnel** to open up NodePort values
+
+```bash
+# Create SSH tunnel to avoid opening
+# of an extra nodePorts: 
+#     - 30888 (Grafana)
+#     - 30999 (Prometheus)
+
+ssh \
+-L30888:127.0.0.1:30888 \
+-L30999:127.0.0.1:30999 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@18.184.212.193
+```
+
+**Alternatively** you can allow this ports 30888, 30999 in **"Security group"** section in your AWS console
+
+**Template** helm chart deployments with/without using `--selectors`
+
+```bash
+# template grafana, prometheus via helmfile 
+helmfile \
+--environment learning \
+--file helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml \
+ template
+
+# template grafana, prometheus via helmfile 
+helmfile \
+--selector key=monitoring  \
+--environment learning \
+--file helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml \
+ template
+
+# template grafana via helmfile
+helmfile \
+--selector app=grafana  \
+--environment learning \
+--file helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml \
+ template
+
+# template prometheus via helmfile
+helmfile \
+--selector app=prometheus  \
+--environment learning \
+--file helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml \
+ template
+```
+
+**Deploy** helm chart deployments with/without using `--selectors`
+```bash
+# deploy grafana, prometheus via helmfile
+helmfile  \
+--environment "learning" \
+-f helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml \
+sync
+
+
+# deploy grafana, prometheus via helmfile
+helmfile  \
+--selector key=monitoring  \
+--environment "learning" \
+-f helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml \
+sync
+
+
+# deploy grafana via helmfile selectively via --selector app=grafana
+helmfile  \
+--selector app=grafana  \
+--environment "learning" \
+-f helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml \
+sync
+
+# deploy prometheus via helmfile selectively via --selector app=prometheus
+helmfile  \
+--selector app=prometheus  \
+--environment "learning" \
+-f helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml \
+sync
+```
+
+**Destroy** helm chart deployments with/without using `--selectors`
+
+```bash
+# destroy grafana, prometheus via helmfile if neceassary
+helmfile  \
+--environment "learning" \
+-f helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml \
+destroy
+
+# destroy grafana, prometheus via helmfile if neceassary
+helmfile  \
+--selector key=monitoring  \
+--environment "learning" \
+-f helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml \
+destroy
+
+# destroy grafana via helmfile if neceassary
+helmfile  \
+--selector app=grafana  \
+--environment "learning" \
+-f helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml \
+destroy
+
+# destroy prometheus via helmfile if neceassary
+helmfile  \
+--selector app=prometheus  \
+--environment "learning" \
+-f helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml \
+destroy
+```
 
