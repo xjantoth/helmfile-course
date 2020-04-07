@@ -1965,6 +1965,10 @@ releases:
     chart: stable/chartmuseum
     version: 2.10.0
     set:
+    - name: service.type
+      value: NodePort
+    - name: service.nodePort
+      value: 30444
     - name: persistence.pv.enabled
       value: false 
     - name: env.open.DISABLE_API
@@ -1981,6 +1985,7 @@ releases:
       value: "devopsinuse"
     - name: env.secret.BASIC_AUTH_PASS
       value: "Start123"
+
 ```
 
 **Compare helm deployment for Chartmuseum** via helm3 binary
@@ -1993,10 +1998,12 @@ chartmuseum \
 --set env.open.DISABLE_API=false \
 --set env.open.CONTEXT_PATH="/chartmuseum" \
 --set ingress.enabled=true \
---set ingress.hosts[0].name="*" \
+--set ingress.hosts[0].name="chartmuseum" \
 --set ingress.hosts[0].path="/chartmuseum" \
 --set env.secret.BASIC_AUTH_USER="devopsinuse" \
 --set env.secret.BASIC_AUTH_PASS="Start123" \
+--set service.type=NodePort \
+--set service.nodePort=30444 \
 stable/chartmuseum 
 ```
 
@@ -2175,7 +2182,7 @@ admin@18.184.212.193
 ```
 
 **Alternatively** you can allow this ports 30888, 30999 in **"Security group"** section in your AWS console
-
+![](img/sg-4.png)
 **Template** helm chart deployments with/without using `--selectors`
 
 ```bash
@@ -2270,3 +2277,61 @@ helmfile  \
 destroy
 ```
 
+### 37. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS
+
+**Template** nginx-ingress deployment
+```bash
+# template nginx-ingress, grafana, prometheus
+helmfile \
+--selector app=grafana \
+--selector app=prometheus \
+--selector app=nginx-ingress \
+--environment learning \
+-f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
+template
+```
+
+**Deploy** nginx-ingress, grafana, prometheus deployment
+```bash
+# template nginx-ingress 
+helmfile \
+--selector app=grafana \
+--selector app=prometheus \
+--selector app=nginx-ingress \
+--environment learning \
+-f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
+sync
+```
+
+**Destroy** nginx-ingress, grafana, prometheus deployment
+```bash
+# template nginx-ingress 
+helmfile \
+--selector app=grafana \
+--selector app=prometheus \
+--selector app=nginx-ingress \
+--environment learning \
+-f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
+destroy
+```
+
+
+**Do not forget** to create **SSH tunnel** to open up NodePort values
+```bash
+# Create SSH tunnel to avoid opening
+# of an extra nodePorts: 
+#     - 30777 (Nginx ingress controller)
+#     - 30888 (Grafana)
+#     - 30999 (Prometheus)
+
+ssh \
+-L30777:127.0.0.1:30777 \
+-L30888:127.0.0.1:30888 \
+-L30999:127.0.0.1:30999 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@18.184.212.193
+```
+
+**Alternatively** you can allow this ports 30777, 30888, 30999 in “Security group” section in your AWS console
+
+![](img/sg-4.png)

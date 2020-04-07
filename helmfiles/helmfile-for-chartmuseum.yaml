@@ -28,6 +28,10 @@ releases:
     chart: stable/chartmuseum
     version: 2.10.0
     set:
+    - name: service.type
+      value: NodePort
+    - name: service.nodePort
+      value: 30444
     - name: persistence.pv.enabled
       value: false 
     - name: env.open.DISABLE_API
@@ -37,7 +41,7 @@ releases:
     - name: ingress.enabled
       value: true
     - name: ingress.hosts[0].name
-      value: \*
+      value: "chartmuseum"
     - name: ingress.hosts[0].path
       value: "/chartmuseum"
     - name: env.secret.BASIC_AUTH_USER

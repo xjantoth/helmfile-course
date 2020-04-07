@@ -1,0 +1,108 @@
+repositories:
+# To use official "stable" charts 
+# a.k.a https://github.com/helm/charts/tree/master/stable
+- name: stable
+  url: https://kubernetes-charts.storage.googleapis.com
+
+# This is helm chart repository made of Chartmuseum 
+# which is running as regular deployment within our cluster
+#- name: k8s
+#  url: http://1.2.3.4:30444/chartmuseum
+#  username: devopsinuse
+#  password: Start123
+
+# Export your environment e.g "learning", "dev", ..., "prod"
+# export HELMFILE_ENVIRONMENT="learning"
+environments:
+  {{ requiredEnv "HELMFILE_ENVIRONMENT" }}:
+    values:
+      - values.yaml
+
+releases:
+  # (Helm v3) Upgrade your deployment with basic auth
+  - name: grafana
+    labels:
+      key: monitoring
+      app: grafana
+    
+    #chart: k8s/grafana
+    chart: stable/grafana
+    version: 5.0.11
+    set:
+    - name: service.type
+      value: NodePort
+    - name: service.nodePort
+      value: 30888
+   
+    # Change context path for grafana to  /grafana
+    - name: "grafana\\.ini.server.root_url"
+      value: "%(protocol)s://%(domain)s/grafana"
+
+    # Ingress related settings  
+    - name: ingress.enabled
+      value: true
+    - name: ingress.hosts[0]
+      value: "1.2.3.4"
+    - name: "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target"
+      value: "\\/$1"
+    - name: ingress.path
+      value: "/grafana/?(.*)"
+
+  - name: prometheus
+    labels:
+      key: monitoring
+      app: prometheus
+    
+    # chart: k8s/prometheus
+    chart: stable/prometheus
+    version: 11.0.4
+    set:
+    # Modify service type to NodePort
+    - name: server.service.type
+      value: NodePort
+    - name: server.service.nodePort
+      value: 30999
+    
+    # Ingress settings
+    - name: server.ingress.enabled
+      value: true     
+    - name: server.ingress.hosts[0]
+      value: "1.2.3.4"
+    - name: server.ingress.extraPaths[0]
+      value: "/prometheus"
+
+    # Change default / to /prometheus in runtime
+    - name: server.prefixURL
+      value: "/prometheus"
+    - name: server.baseURL
+      value: "http://localhost:9090/prometheus"
+    - name: server.extraArgs.web.route-prefix 
+      value: "/prometheus"      
+ 
+    # Disable extra Prometheus components
+    - name: pushgateway.enabled
+      value: false      
+    - name: kubeStateMetrics.enabled
+      value: false     
+    - name: alertmanager.enabled
+      value: false   
+
+    # Disable Persistent data
+    - name: server.persistentVolume.enabled
+      value: false
+
+
+  # nginx-ingress deployment
+  - name: nginx-ingress
+    labels:
+      key: proxy
+      app: nginx-ingress
+    
+    #chart: k8s/grafana
+    chart: stable/nginx-ingress
+    version: 1.36.0
+    set:
+    - name: controller.service.type
+      value: NodePort
+    - name: controller.service.nodePorts.http
+      value: 30777
