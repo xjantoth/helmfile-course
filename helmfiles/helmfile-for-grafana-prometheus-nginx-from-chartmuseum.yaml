@@ -36,7 +36,10 @@ releases:
    
     # Change context path for grafana to  /grafana
     - name: "grafana\\.ini.server.root_url"
-      value: "%(protocol)s://%(domain)s/grafana/"
+      #value: "%(protocol)s://%(domain)s/grafana/"
+      value: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
+    - name: "grafana\\.ini.server.serve_from_sub_path"
+      value: true
 
     # Ingress related settings  
     #- name: ingress.enabled
