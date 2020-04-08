@@ -1929,7 +1929,9 @@ helmfile  \
 -f helmfiles/helmfile-for-jenkins.yaml \
 sync
 ```
+![](img/jenkins-3.png)
 
+![](img/jenkins-4.png)
 **Destroy** jenkins deployment via `helmfile` from your Kubernetes cluster in AWS
 ```bash
 export HELMFILE_ENVIRONMENT="learning"
@@ -2070,19 +2072,19 @@ total 108
 
 **Push** helm chart to Chartmuseum with authentication
 ```bash
-curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/grafana-5.0.11.tgz" http://1.2.3.4:30444/chartmuseum/api/charts
+curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/grafana-5.0.11.tgz" http://127.0.0.1:30444/chartmuseum/api/charts
 {"saved":true}
-curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/prometheus-11.0.4.tgz" http://1.2.3.4:30444/chartmuseum/api/charts
+curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/prometheus-11.0.4.tgz" http://127.0.0.1:30444/chartmuseum/api/charts
 {"saved":true}
 ```
 **Add Chartmuseum** to the list of available helm chart repsitories
 ```bash                                                                                     
-helm3 repo add k8s http://1.2.3.4:30444/chartmuseum --username devopsinuse --password Start123
+helm3 repo add k8s http://127.0.0.1:30444/chartmuseum --username devopsinuse --password Start123
 helm3 repo update
 helm3 search repo k8s/
 
 # List all the helm chart present in Chartmuseum via API
-curl -u devopsinuse -XGET http://1.2.3.4:30444/chartmuseum/api/charts
+curl -u devopsinuse -XGET http://127.0.0.1:30444/chartmuseum/api/charts
 ```
 
 **Delete** (Helm v3) Chartmuseum deployment
@@ -2270,6 +2272,12 @@ helmfile  \
 sync
 ```
 
+![](img/prometheus-via-np-1.png)
+
+![](img/add-datasource-to-gp.png)
+
+![](img/grafana-via-np-1.png)
+
 **Destroy** helm chart deployments with/without using `--selectors`
 
 ```bash
@@ -2427,11 +2435,33 @@ helmfile \
 --environment learning \
 -f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
 template
+
+# template grafana
+helmfile \
+--selector app=grafana \
+--environment learning \
+-f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
+template
+
+# template prometheus
+helmfile \
+--selector app=prometheus \
+--environment learning \
+-f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
+template
+
+
+# template nginx-ingress
+helmfile \
+--selector app=nginx-ingress \
+--environment learning \
+-f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
+template
 ```
 
 **Deploy** nginx-ingress, grafana, prometheus deployment
 ```bash
-# template nginx-ingress 
+# sync nginx-ingress, grafana, prometheus
 helmfile \
 --selector app=grafana \
 --selector app=prometheus \
@@ -2439,7 +2469,32 @@ helmfile \
 --environment learning \
 -f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
 sync
+
+# sync grafana
+helmfile \
+--selector app=grafana \
+--environment learning \
+-f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
+sync
+
+# sync prometheus
+helmfile \
+--selector app=prometheus \
+--environment learning \
+-f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
+sync
+
+# sync nginx-ingress
+helmfile \
+--selector app=nginx-ingress \
+--environment learning \
+-f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
+sync
 ```
+
+![](img/nginx-to-grafana-1.png)
+
+![](img/nginx-to-prometheus-1.png)
 
 **Destroy** nginx-ingress, grafana, prometheus deployment
 ```bash
