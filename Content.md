@@ -2136,18 +2136,25 @@ releases:
    
     # Change context path for grafana to  /grafana
     - name: "grafana\\.ini.server.root_url"
-      value: "%(protocol)s://%(domain)s/grafana"
+      #value: "%(protocol)s://%(domain)s/grafana/"
+      value: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
+    - name: "grafana\\.ini.server.serve_from_sub_path"
+      value: true
 
     # Ingress related settings  
     - name: ingress.enabled
       value: true
     - name: ingress.hosts[0]
-      value: "1.2.3.4"
+      value: "devopsinuse"
     - name: "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target"
       value: "\\/$1"
     - name: ingress.path
       value: "/grafana/?(.*)"
-
+ 
+  # ./prometheus --config.file=prometheus.yml \
+  # --web.external-url http://localhost:19090/prometheus/ \
+  # --web.route-prefix=/prometheus
+  
   - name: prometheus
     labels:
       key: monitoring
@@ -2167,18 +2174,14 @@ releases:
     - name: server.ingress.enabled
       value: true     
     - name: server.ingress.hosts[0]
-      value: "1.2.3.4"
-    - name: server.ingress.extraPaths[0]
-      value: "/prometheus"
+      value: "devopsinuse/prometheus"
+    # - name: server.ingress.extraPaths
+    # value: "/prometheus"
 
     # Change default / to /prometheus in runtime
-    - name: server.prefixURL
-      value: "/prometheus"
     - name: server.baseURL
       value: "http://localhost:9090/prometheus"
-    - name: server.extraArgs.web.route-prefix 
-      value: "/prometheus"      
- 
+    
     # Disable extra Prometheus components
     - name: pushgateway.enabled
       value: false      
@@ -2190,6 +2193,29 @@ releases:
     # Disable Persistent data
     - name: server.persistentVolume.enabled
       value: false
+    - name: server.prefixURL
+      value: "/prometheus"     
+    values:   
+      - server:
+          extraArgs:
+            "web.route-prefix": "/prometheus"
+
+            #  # nginx-ingress deployment
+            #  - name: nginx-ingress
+            #    labels:
+            #      key: proxy
+            #      app: nginx-ingress
+            #    
+            #    #chart: k8s/grafana
+            #    chart: stable/nginx-ingress
+            #    version: 1.36.0
+            #    set:
+            #    - name: controller.service.type
+            #      value: NodePort
+            #    - name: controller.service.nodePorts.http
+            #      value: 30777
+
+
 ```
 
 **Do not forget** to create **SSH tunnel** to open up NodePort values
@@ -2352,18 +2378,25 @@ releases:
    
     # Change context path for grafana to  /grafana
     - name: "grafana\\.ini.server.root_url"
-      value: "%(protocol)s://%(domain)s/grafana"
+      #value: "%(protocol)s://%(domain)s/grafana/"
+      value: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
+    - name: "grafana\\.ini.server.serve_from_sub_path"
+      value: true
 
     # Ingress related settings  
     - name: ingress.enabled
       value: true
     - name: ingress.hosts[0]
-      value: "grafana"
+      value: "devopsinuse"
     - name: "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target"
       value: "\\/$1"
     - name: ingress.path
       value: "/grafana/?(.*)"
-
+ 
+  # ./prometheus --config.file=prometheus.yml \
+  # --web.external-url http://localhost:19090/prometheus/ \
+  # --web.route-prefix=/prometheus
+  
   - name: prometheus
     labels:
       key: monitoring
@@ -2383,18 +2416,14 @@ releases:
     - name: server.ingress.enabled
       value: true     
     - name: server.ingress.hosts[0]
-      value: "prometheus"
-    - name: server.ingress.extraPaths[0]
-      value: "/prometheus"
+      value: "devopsinuse/prometheus"
+    # - name: server.ingress.extraPaths
+    # value: "/prometheus"
 
     # Change default / to /prometheus in runtime
-    - name: server.prefixURL
-      value: "/prometheus"
     - name: server.baseURL
       value: "http://localhost:9090/prometheus"
-    - name: server.extraArgs.web.route-prefix 
-      value: "/prometheus"      
- 
+    
     # Disable extra Prometheus components
     - name: pushgateway.enabled
       value: false      
@@ -2406,7 +2435,12 @@ releases:
     # Disable Persistent data
     - name: server.persistentVolume.enabled
       value: false
-
+    - name: server.prefixURL
+      value: "/prometheus"     
+    values:   
+      - server:
+          extraArgs:
+            "web.route-prefix": "/prometheus"
 
   # nginx-ingress deployment
   - name: nginx-ingress
@@ -2422,6 +2456,7 @@ releases:
       value: NodePort
     - name: controller.service.nodePorts.http
       value: 30777
+
 
 ```
 
