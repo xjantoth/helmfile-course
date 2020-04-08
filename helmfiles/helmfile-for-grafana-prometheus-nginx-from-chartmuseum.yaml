@@ -42,14 +42,14 @@ releases:
       value: true
 
     # Ingress related settings  
-    #- name: ingress.enabled
-    #  value: true
-    #- name: ingress.hosts[0]
-    #  value: "grafana"
-    # - name: "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target"
-    #  value: "\\/$1"
-    #- name: ingress.path
-    #  value: "/grafana/?(.*)"
+    - name: ingress.enabled
+      value: true
+    - name: ingress.hosts[0]
+      value: "devopsinuse"
+    - name: "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target"
+      value: "\\/$1"
+    - name: ingress.path
+      value: "/grafana/?(.*)"
  
   # ./prometheus --config.file=prometheus.yml \
   # --web.external-url http://localhost:19090/prometheus/ \
@@ -74,13 +74,11 @@ releases:
     - name: server.ingress.enabled
       value: true     
     - name: server.ingress.hosts[0]
-      value: "prometheus"
-    #- name: server.ingress.extraPaths[0]
-    #value: "prometheus"
+      value: "devopsinuse/prometheus"
+    # - name: server.ingress.extraPaths
+    # value: "/prometheus"
 
     # Change default / to /prometheus in runtime
-    #- name: server.prefixURL
-    #  value: "/prometheus"
     - name: server.baseURL
       value: "http://localhost:9090/prometheus"
     
@@ -116,3 +114,4 @@ releases:
       value: NodePort
     - name: controller.service.nodePorts.http
       value: 30777
+
