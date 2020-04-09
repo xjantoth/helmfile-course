@@ -1552,6 +1552,11 @@ releases:
       value: NodePort
     - name: service.nodePortValue
       value: 31412
+   # Example helm chart (Nginx Web Server)
+   # helm3 install example helm-charts/example \
+   # --set service.type=NodePort \
+   # --set service.nodePortValue=31412
+
   
   # "Gogs" helm chart release specification  
   - name: test
@@ -1566,21 +1571,13 @@ releases:
       value: 30222
     - name: service.sshNodePort
       value: 30111
+  
+    # Gogs helm chart via helm v3
+    # helm3 install test \
+    # --set service.httpNodePort=30222 \
+    # --set service.sshNodePort=30111 .
 ```
 
-**Compare** it with an original `helm3` command used to deploy "example"  helm chart to your Kubernetes cluster in AWS
-
-```bash
-# Example helm chart (Nginx Web Server)
-helm3 install example helm-charts/example \
---set service.type=NodePort \
---set service.nodePortValue=31412
-
-# Gogs helm chart
-helm3 install test \
---set service.httpNodePort=30222 \
---set service.sshNodePort=30111 .
-```
 <!-- - [32. Deploy example and gogs helm chart to your Kubernetes cluster](#32-deploy-example-and-gogs-helm-chart-to-your-kubernetes-cluster)-->
 ### 32. Deploy example and gogs helm chart to your Kubernetes cluster
 **Do not forget** to create SSH tunnel to open up **NodePort values**
@@ -1680,7 +1677,7 @@ helmfile \
 ```bash
 helm3 ls -A
 ```
-**Destroy **"gogs"** and "example" helm charts via `helmfile` from your Kubernetes cluster in AWS
+**Destroy "gogs" and "example"** helm charts via `helmfile` from your Kubernetes cluster in AWS
 
 ```bash
 export HELMFILE_ENVIRONMENT="learning"
