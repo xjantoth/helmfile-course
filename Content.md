@@ -1597,7 +1597,7 @@ ssh \
 -L30111:127.0.0.1:30111 \
 -L30222:127.0.0.1:30222 \
 -i ~/.ssh/udemy_devopsinuse \
-admin@18.184.212.193
+admin@35.158.122.228
 ```
 
 **Alternatively** you can allow this port 31412 in **"Security group"** section in your AWS console
@@ -1781,7 +1781,7 @@ helm3 install mysql stable/mysql \
 ssh \
 -L30333:127.0.0.1:30333 \
 -i ~/.ssh/udemy_devopsinuse \
-admin@18.184.212.193
+admin@35.158.122.228
 ```
 **You can allow** this port 30333 in **“Security group”** section in your AWS console
 ![](img/sg-3.png)
@@ -1917,7 +1917,7 @@ template
 ssh \
 -L30555:127.0.0.1:30555 \
 -i ~/.ssh/udemy_devopsinuse \
-admin@18.184.212.193
+admin@35.158.122.228
 ```
 
 **Alternatively** allow NodePort in **"Security group"** section in AWS console
@@ -2031,7 +2031,7 @@ stable/chartmuseum
 ssh \
 -L30444:127.0.0.1:30444 \
 -i ~/.ssh/udemy_devopsinuse \
-admin@18.184.212.193
+admin@35.158.122.228
 ```
 **Alternatively** allow NodePort in **"Security group"** section in AWS console
 ![](img/sg-4.png)
@@ -2233,7 +2233,7 @@ ssh \
 -L30888:127.0.0.1:30888 \
 -L30999:127.0.0.1:30999 \
 -i ~/.ssh/udemy_devopsinuse \
-admin@18.184.212.193
+admin@35.158.122.228
 ```
 
 **Alternatively** you can allow this ports 30888, 30999 in **"Security group"** section in your AWS console
@@ -2560,7 +2560,7 @@ ssh \
 -L30888:127.0.0.1:30888 \
 -L30999:127.0.0.1:30999 \
 -i ~/.ssh/udemy_devopsinuse \
-admin@18.184.212.193
+admin@35.158.122.228
 ```
 
 **Alternatively** you can allow this ports 30777, 30888, 30999 in “Security group” section in your AWS console
