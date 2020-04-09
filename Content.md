@@ -35,16 +35,15 @@
   - [30. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via dbeaver or your favourite GUI program](#30-connect-to-your-mysql-deployment-running-in-your-kubernetes-cluster-in-aws-via-dbeaver-or-your-favourite-gui-program)
 
 * **Section 4: Helmfile**
-  - [31. Deploy example and gogs helm charts via helmfile binary from a local filesystem to your Kubernetes cluster in AWS](#31-deploy-example-and-gogs-helm-charts-via-helmfile-binary-from-a-local-filesystem-to-your-kubernetes-cluster-in-aws)
-
-  - [32. Deploy MySQL helm chart from stable helm chart repository to your Kubernetes cluster running in AWS](#32-deploy-mysql-helm-chart-from-stable-helm-chart-repository-to-your-kubernetes-cluster-running-in-aws)
-  - [33. Create helm chart repository at your Github account](#33-create-helm-chart-repository-at-your-github-account)
-  - [34. Deploy Jenkins via helmfile from your own Github helm chart repository](#34-deploy-jenkins-via-helmfile-from-your-own-github-helm-chart-repository)
-  - [35. Deploy Chartmuseum as a helm chart repository running as another deployment within your Kubernetes cluster in AWS](#35-deploy-chartmuseum-as-a-helm-chart-repository-running-as-another-deployment-within-your-kubernetes-cluster-in-aws)
-  - [36. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS](#36-deploy-grafana-and-prometheus-from-chartmuseum-helm-chart-repository-via-helmfile-to-your-kubernetes-cluster-in-aws)
-  - [37. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#37-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)
-
-
+  - [31. Understand helmfile specification for example and gogs helm charts via helmfile binary](#31-understand-helmfile-specification-for-example-and-gogs-helm-charts-via-helmfile-binary)
+  - [32. Deploy example and gogs helm chart to your Kubernetes cluster](#32-deploy-example-and-gogs-helm-chart-to-your-kubernetes-cluster)
+  - [33. Explore helmfile specification for gogs and example helm charts via helmfile template](#33-explore-helmfile-specification-for-gogs-and-example-helm-charts-via-helmfile-template)
+  - [34. Deploy MySQL helm chart from stable helm chart repository to your Kubernetes cluster running in AWS](#34-deploy-mysql-helm-chart-from-stable-helm-chart-repository-to-your-kubernetes-cluster-running-in-aws)
+  - [35. Create helm chart repository at your Github account](#35-create-helm-chart-repository-at-your-github-account)
+  - [36. Deploy Jenkins via helmfile from your own Github helm chart repository](#36-deploy-jenkins-via-helmfile-from-your-own-github-helm-chart-repository)
+  - [37. Deploy Chartmuseum as a helm chart repository running as another deployment within your Kubernetes cluster in AWS](#37-deploy-chartmuseum-as-a-helm-chart-repository-running-as-another-deployment-within-your-kubernetes-cluster-in-aws)
+  - [38. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS](#38-deploy-grafana-and-prometheus-from-chartmuseum-helm-chart-repository-via-helmfile-to-your-kubernetes-cluster-in-aws)
+  - [39. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#39-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)
 
 
 
@@ -1510,10 +1509,10 @@ helm3 delete mysql
 
 <!-- Section Helmfile -->
 
-<!-- - [31. Deploy example and gogs helm charts via helmfile binary from a local filesystem to your Kubernetes cluster in AWS](#31-deploy-example-and-gogs-helm-charts-via-helmfile-binary-from-a-local-filesystem-to-your-kubernetes-cluster-in-aws)-->
-### 31. Deploy example and gogs helm charts via helmfile binary from a local filesystem to your Kubernetes cluster in AWS
+<!-- - [31. Understand helmfile specification for example and gogs helm charts via helmfile binary](#31-understand-helmfile-specification-for-example-and-gogs-helm-charts-via-helmfile-binary)-->
+### 31. Understand helmfile specification for example and gogs helm charts via helmfile binary
 
-**Install helmfile** if you have not done so
+**Install helmfile binary** if you have not done so
 
 ```bash
 sudo curl -L --output /usr/bin/helmfile https://github.com/roboll/helmfile/releases/download/v0.104.0/helmfile_linux_amd64
@@ -1582,7 +1581,8 @@ helm3 install test \
 --set service.httpNodePort=30222 \
 --set service.sshNodePort=30111 .
 ```
-
+<!-- - [32. Deploy example and gogs helm chart to your Kubernetes cluster](#32-deploy-example-and-gogs-helm-chart-to-your-kubernetes-cluster)-->
+### 32. Deploy example and gogs helm chart to your Kubernetes cluster
 **Do not forget** to create SSH tunnel to open up **NodePort values**
 
 ```bash
@@ -1603,51 +1603,6 @@ admin@35.158.122.228
 **Alternatively** you can allow this port 31412 in **"Security group"** section in your AWS console
 
 ![](img/sg-2.png)
-
-**Explore helmfile** `template command` for **"example"** helm chart deployment
-
-```bash
-# template "example" helm chart via helmfile
-
-export HELMFILE_ENVIRONMENT="learning"
-# template without usig --selector flag
-helmfile \
---environment learning \
---file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
-
-# template "example" helm chart via helmfile using  --selector flag
-helmfile \
---environment learning \
---selector key=example \
---file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
-
-# template "example" helm chart via helmfile using  --selector flag 
-helmfile \
---environment learning \
---selector app=nginx \
---file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
-
-# template "Gogs" helm chart via helmfile using  --selector flag
-helmfile \
---environment learning \
---selector key=gogs \
---file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
-
-# template "Gogs" helm chart via helmfile using  --selector flag
-helmfile \
---environment learning \
---selector app=gogs \
---file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
-
-
-```
-
-**Please check current releases** deployed in your Kubernetes cluster in AWS
-
-```bash
-helm3 ls -A
-```
-
 Deploy **"example"**  and **"gogs"** helm charts via `helmfile` to your Kubernetes cluster in AWS
 
 ```bash
@@ -1682,7 +1637,50 @@ helmfile \
 --file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml sync
 ```
 
-Destroy **"example"** and **"gogs"** helm charts via `helmfile` from your Kubernetes cluster in AWS
+<!-- - [33. Explore helmfile specification for gogs and example helm charts via helmfile template](#33-explore-helmfile-specification-for-gogs-and-example-helm-charts-via-helmfile-template)-->
+### 33. Explore helmfile specification for gogs and example helm charts via helmfile template
+**Explore helmfile** `template command` for **"example"** helm chart deployment
+
+```bash
+# template "example" helm chart via helmfile
+
+export HELMFILE_ENVIRONMENT="learning"
+# template without usig --selector flag
+helmfile \
+--environment learning \
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
+
+# template "example" helm chart via helmfile using  --selector flag
+helmfile \
+--environment learning \
+--selector key=example \
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
+
+# template "example" helm chart via helmfile using  --selector flag 
+helmfile \
+--environment learning \
+--selector app=nginx \
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
+
+# template "Gogs" helm chart via helmfile using  --selector flag
+helmfile \
+--environment learning \
+--selector key=gogs \
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
+
+# template "Gogs" helm chart via helmfile using  --selector flag
+helmfile \
+--environment learning \
+--selector app=gogs \
+--file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml template | less
+```
+
+**Please check current releases** deployed in your Kubernetes cluster in AWS
+
+```bash
+helm3 ls -A
+```
+**Destroy **"gogs"** and "example" helm charts via `helmfile` from your Kubernetes cluster in AWS
 
 ```bash
 export HELMFILE_ENVIRONMENT="learning"
@@ -1714,13 +1712,11 @@ helmfile \
 --environment learning \
 --selector app=gogs \
 --file helmfiles/helmfile-for-example-and-gogs-helm-charts.yaml destroy
-
-
 ```
 
 
-<!-- - [32. Deploy MySQL helm chart from stable helm chart repository to your Kubernetes cluster running in AWS](#32-deploy-mysql-helm-chart-from-stable-helm-chart-repository-to-your-kubernetes-cluster-running-in-aws)-->
-### 32. Deploy MySQL helm chart from stable helm chart repository to your Kubernetes cluster running in AWS
+<!-- - [34. Deploy MySQL helm chart from stable helm chart repository to your Kubernetes cluster running in AWS](#34-deploy-mysql-helm-chart-from-stable-helm-chart-repository-to-your-kubernetes-cluster-running-in-aws)-->
+### 34. Deploy MySQL helm chart from stable helm chart repository to your Kubernetes cluster running in AWS
 
 Explore `helmfiles/helmfile-for-mysql-helm-chart.yaml` helmfile for MySQL deployment to Kubernetes
 
@@ -1758,7 +1754,6 @@ releases:
       value: true
     - name: persistence.size
       value: 1Gi
-
 ```
 
 **Compare** it with an original `helm3` command used to deploy **“mysql”** helm chart to your Kubernetes cluster in AWS
@@ -1787,8 +1782,8 @@ admin@35.158.122.228
 ![](img/sg-3.png)
 
 
-<!-- - [33. Create helm chart repository at your Github account](#33-create-helm-chart-repository-at-your-github-account)-->
-### 33. Create helm chart repository at your Github account
+<!-- - [35. Create helm chart repository at your Github account](#35-create-helm-chart-repository-at-your-github-account)-->
+### 35. Create helm chart repository at your Github account
 
 **Create** `helm v3` helm chart repository at your Github repository
 ```bash
@@ -1847,8 +1842,8 @@ NAME              	CHART VERSION	APP VERSION	DESCRIPTION
 hc-v3-repo/jenkins	1.11.3       	lts        	Open source continuous integration server. It s...
 ```
 
-<!-- - [34. Deploy Jenkins via helmfile from your own Github helm chart repository](#34-deploy-jenkins-via-helmfile-from-your-own-github-helm-chart-repository)-->
-### 34. Deploy Jenkins via helmfile from your own Github helm chart repository
+<!-- - [36. Deploy Jenkins via helmfile from your own Github helm chart repository](#36-deploy-jenkins-via-helmfile-from-your-own-github-helm-chart-repository)-->
+### 36. Deploy Jenkins via helmfile from your own Github helm chart repository
 
 ![](img/jenkins-1.png)
 
@@ -1945,8 +1940,8 @@ helmfile  \
 destroy
 ```
 
-<!-- - [35. Deploy Chartmuseum as a helm chart repository running as another deployment within your Kubernetes cluster in AWS](#35-deploy-chartmuseum-as-a-helm-chart-repository-running-as-another-deployment-within-your-kubernetes-cluster-in-aws)-->
-### 35. Deploy Chartmuseum as a helm chart repository running as another deployment within your Kubernetes cluster in AWS
+<!-- - [37. Deploy Chartmuseum as a helm chart repository running as another deployment within your Kubernetes cluster in AWS](#37-deploy-chartmuseum-as-a-helm-chart-repository-running-as-another-deployment-within-your-kubernetes-cluster-in-aws)-->
+### 37. Deploy Chartmuseum as a helm chart repository running as another deployment within your Kubernetes cluster in AWS
 
 file: `helmfiles/helmfile-for-chartmuseum.yaml`
 ```yaml
@@ -1959,7 +1954,7 @@ repositories:
 # This is helm chart repository made of Chartmuseum 
 # which is running as regular deployment within our cluster
 #- name: k8s
-#  url: http://1.2.3.4:30444/chartmuseum
+#  url: http://127.0.0.1:30444/chartmuseum
 #  username: devopsinuse
 #  password: Start123
 
@@ -2000,7 +1995,6 @@ releases:
       value: "devopsinuse"
     - name: env.secret.BASIC_AUTH_PASS
       value: "Start123"
-
 ```
 
 **Compare helm deployment for Chartmuseum** via helm3 binary
@@ -2095,8 +2089,8 @@ curl -u devopsinuse -XGET http://127.0.0.1:30444/chartmuseum/api/charts
 helm3 delete chartmuseum 
 ```
 
-<!-- - [36. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS](#36-deploy-grafana-and-prometheus-from-chartmuseum-helm-chart-repository-via-helmfile-to-your-kubernetes-cluster-in-aws)-->
-### 36. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS
+<!-- - [38. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS](#38-deploy-grafana-and-prometheus-from-chartmuseum-helm-chart-repository-via-helmfile-to-your-kubernetes-cluster-in-aws)-->
+### 38. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS
 
 file: `helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml`
 
@@ -2217,8 +2211,6 @@ releases:
             #      value: NodePort
             #    - name: controller.service.nodePorts.http
             #      value: 30777
-
-
 ```
 
 **Do not forget** to create **SSH tunnel** to open up NodePort values
@@ -2338,8 +2330,8 @@ helmfile  \
 destroy
 ```
 
-<!-- - [37. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#37-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)-->
-### 37. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS
+<!-- - [39. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#39-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)-->
+### 39. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS
 
 file: `helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml`
 ```yaml
