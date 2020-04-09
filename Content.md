@@ -33,7 +33,10 @@
   - [28. MySQL helm chart deployment with Persistent Volume](#28-mysql-helm-chart-deployment-with-persistent-volume)
   - [29. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via an extra ubuntu pod](#29-connect-to-your-mysql-deployment-running-in-your-kubernetes-cluster-in-aws-via-an-extra-ubuntu-pod)
   - [30. Connect to your MySQL deployment running in your Kubernetes cluster in AWS via dbeaver or your favourite GUI program](#30-connect-to-your-mysql-deployment-running-in-your-kubernetes-cluster-in-aws-via-dbeaver-or-your-favourite-gui-program)
+
+* **Section 4: Helmfile**
   - [31. Deploy example and gogs helm charts via helmfile binary from a local filesystem to your Kubernetes cluster in AWS](#31-deploy-example-and-gogs-helm-charts-via-helmfile-binary-from-a-local-filesystem-to-your-kubernetes-cluster-in-aws)
+
   - [32. Deploy MySQL helm chart from stable helm chart repository to your Kubernetes cluster running in AWS](#32-deploy-mysql-helm-chart-from-stable-helm-chart-repository-to-your-kubernetes-cluster-running-in-aws)
   - [33. Create helm chart repository at your Github account](#33-create-helm-chart-repository-at-your-github-account)
   - [34. Deploy Jenkins via helmfile from your own Github helm chart repository](#34-deploy-jenkins-via-helmfile-from-your-own-github-helm-chart-repository)
