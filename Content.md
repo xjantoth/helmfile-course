@@ -2264,10 +2264,12 @@ helmfile \
 ```bash
 # Create SSH tunnel to avoid opening
 # of an extra nodePorts: 
+#     - 30444 (Chartmuseum k8s helm chart repository)
 #     - 30888 (Grafana)
 #     - 30999 (Prometheus)
 
 ssh \
+-L30444:127.0.0.1:30444 \
 -L30888:127.0.0.1:30888 \
 -L30999:127.0.0.1:30999 \
 -i ~/.ssh/udemy_devopsinuse \
