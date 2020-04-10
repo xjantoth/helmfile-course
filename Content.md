@@ -2589,6 +2589,18 @@ sync
 kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 ```
 
+```bash
+ cat /etc/hosts
+# Static table lookup for hostnames.
+# See hosts(5) for details.
+#
+#
+
+...
+127.0.0.1 devopsinuse
+...
+```
+
 ![](img/nginx-to-grafana-1.png)
 
 ![](img/nginx-to-prometheus-1.png)
