@@ -42,6 +42,9 @@
   - [35. Create helm chart repository at your Github account](#35-create-helm-chart-repository-at-your-github-account)
   - [36. Deploy Jenkins via helmfile from your own Github helm chart repository](#36-deploy-jenkins-via-helmfile-from-your-own-github-helm-chart-repository)
   - [37. Deploy Chartmuseum as a helm chart repository running as another deployment within your Kubernetes cluster in AWS](#37-deploy-chartmuseum-as-a-helm-chart-repository-running-as-another-deployment-within-your-kubernetes-cluster-in-aws)
+  - [38. Explore Grafana and Prometheus deployments and helm charts](#38-explore-grafana-and-prometheus-deployments-and-helm-charts)
+  - [39. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS](#39-deploy-grafana-and-prometheus-from-chartmuseum-helm-chart-repository-via-helmfile-to-your-kubernetes-cluster-in-aws)
+  - [40. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#40-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)
 
 
 
@@ -2337,6 +2340,7 @@ helmfile  \
 destroy
 ```
 
+<!-- - [40. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#40-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)-->
 ### 40. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS
 
 file: `helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml`
