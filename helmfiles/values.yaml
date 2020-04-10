@@ -1,0 +1,12 @@
+grafana:
+  # Ingress related settings for Grafana 
+  ingress.enabled: true
+  ingress.hosts[0]: "devopsinuse"
+  "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target": "\\/$1"
+  ingress.path: "/grafana/?(.*)"
+
+prometheus:
+  # Ingress settings for Prometheus
+  server.ingress.enabled: true         
+  server.ingress.hosts[0]: "devopsinuse/prometheus"
+

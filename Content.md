@@ -2084,7 +2084,7 @@ ls docs/hc-v3-repo/
 total 108
 -rw-r--r-- 1  1183 Apr index.yaml
 -rw-r--r-- 1 46226 Apr jenkins-1.11.3.tgz
--rw-r--r-- 1 32899 Apr prometheus-11.0.4.tgz
+-rw-r--r-- 1 32899 Apr prometheus-11.0.6.tgz
 -rw-r--r-- 1 19523 Apr grafana-5.0.11.tgz
 ```
 
@@ -2092,7 +2092,7 @@ total 108
 ```bash
 curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/grafana-5.0.11.tgz" http://127.0.0.1:30444/chartmuseum/api/charts
 {"saved":true}
-curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/prometheus-11.0.4.tgz" http://127.0.0.1:30444/chartmuseum/api/charts
+curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/prometheus-11.0.6.tgz" http://127.0.0.1:30444/chartmuseum/api/charts
 {"saved":true}
 ```
 **Add Chartmuseum** to the list of available helm chart repsitories
@@ -2353,6 +2353,33 @@ destroy
 <!-- - [40. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#40-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)-->
 ### 40. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS
 
+Make sure you have Grafana and Prometheus helm charts in Chartmuseum
+```bash
+curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/grafana-5.0.11.tgz" http://127.0.0.1:30444/chartmuseum/api/charts
+{"saved":true}
+curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/prometheus-11.0.6.tgz" http://127.0.0.1:30444/chartmuseum/api/charts
+{"saved":true}
+```
+
+**Create SSH tunnel** to open up NodePort values for Grafana and Prometheus deployment via helmfile
+```bash
+export HELMFILE_ENVIRONMENT="learning"
+
+# Create SSH tunnel to avoid opening
+# of an extra nodePorts: 
+#     - 30444 (Chartmuseum k8s helm chart repository)
+#     - 30777 (Nginx Ingress Controller)
+
+ssh \
+-L30444:127.0.0.1:30444 \
+-L30777:127.0.0.1:30777 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@52.58.189.78
+```
+**Alternatively** you can allow this ports 30777, 30888, 30999 in “Security group” section in your AWS console
+
+![](img/sg-4.png)
+
 file: `helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml`
 ```yaml
 repositories:
@@ -2363,10 +2390,10 @@ repositories:
 
 # This is helm chart repository made of Chartmuseum 
 # which is running as regular deployment within our cluster
-#- name: k8s
-#  url: http://1.2.3.4:30444/chartmuseum
-#  username: devopsinuse
-#  password: Start123
+- name: k8s
+  url: http://127.0.0.1:30444/chartmuseum
+  username: devopsinuse
+  password: Start123
 
 # Export your environment e.g "learning", "dev", ..., "prod"
 # export HELMFILE_ENVIRONMENT="learning"
@@ -2383,30 +2410,29 @@ releases:
       app: grafana
     
     #chart: k8s/grafana
-    chart: stable/grafana
+    chart: k8s/grafana
     version: 5.0.11
     set:
-    - name: service.type
-      value: NodePort
-    - name: service.nodePort
-      value: 30888
+    #- name: service.type
+    #  value: NodePort
+    #- name: service.nodePort
+    #  value: 30888
    
     # Change context path for grafana to  /grafana
     - name: "grafana\\.ini.server.root_url"
-      #value: "%(protocol)s://%(domain)s/grafana/"
       value: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
     - name: "grafana\\.ini.server.serve_from_sub_path"
       value: true
 
-    # Ingress related settings  
-    - name: ingress.enabled
-      value: true
+    # Ingress related settings for Grafana 
+    - name: ingress.enabled 
+      value: {{ index .Environment.Values "grafana" "ingress.enabled" }}
     - name: ingress.hosts[0]
-      value: "devopsinuse"
+      value: {{ index .Environment.Values "grafana" "ingress.hosts[0]" }}
     - name: "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target"
-      value: "\\/$1"
+      value: {{ index .Environment.Values "grafana" "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target" }}
     - name: ingress.path
-      value: "/grafana/?(.*)"
+      value: {{ index .Environment.Values "grafana" "ingress.path" }}
  
   # ./prometheus --config.file=prometheus.yml \
   # --web.external-url http://localhost:19090/prometheus/ \
@@ -2417,28 +2443,19 @@ releases:
       key: monitoring
       app: prometheus
     
-    # chart: k8s/prometheus
-    chart: stable/prometheus
-    version: 11.0.4
+    chart: k8s/prometheus
+    version: 11.0.6
     set:
     # Modify service type to NodePort
-    - name: server.service.type
-      value: NodePort
-    - name: server.service.nodePort
-      value: 30999
+    #- name: server.service.type
+    #  value: NodePort
+    #- name: server.service.nodePort
+    #  value: 30999
     
-    # Ingress settings
-    - name: server.ingress.enabled
-      value: true     
-    - name: server.ingress.hosts[0]
-      value: "devopsinuse/prometheus"
-    # - name: server.ingress.extraPaths
-    # value: "/prometheus"
+    # Disable Persistent data
+    - name: server.persistentVolume.enabled
+      value: false
 
-    # Change default / to /prometheus in runtime
-    - name: server.baseURL
-      value: "http://localhost:9090/prometheus"
-    
     # Disable extra Prometheus components
     - name: pushgateway.enabled
       value: false      
@@ -2447,9 +2464,16 @@ releases:
     - name: alertmanager.enabled
       value: false   
 
-    # Disable Persistent data
-    - name: server.persistentVolume.enabled
-      value: false
+
+    # Ingress settings for Prometheus
+    - name: server.ingress.enabled
+      value: {{ index .Environment.Values "prometheus" "server.ingress.enabled" }}
+    - name: server.ingress.hosts[0]
+      value: {{ index .Environment.Values "prometheus" "server.ingress.hosts[0]" }}
+
+    # Change default / to /prometheus in runtime
+    - name: server.baseURL
+      value: "http://localhost:9090/prometheus"
     - name: server.prefixURL
       value: "/prometheus"     
     values:   
@@ -2472,11 +2496,27 @@ releases:
     - name: controller.service.nodePorts.http
       value: 30777
 
+```
 
+file: `helmfiles/values.yaml`
+```bash
+grafana:
+  # Ingress related settings for Grafana 
+  ingress.enabled: true
+  ingress.hosts[0]: "devopsinuse"
+  "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target": "\\/$1"
+  ingress.path: "/grafana/?(.*)"
+
+prometheus:
+  # Ingress settings for Prometheus
+  server.ingress.enabled: true         
+  server.ingress.hosts[0]: "devopsinuse/prometheus"
 ```
 
 **Template** nginx-ingress deployment
 ```bash
+export HELMFILE_ENVIRONMENT="learning"
+
 # template nginx-ingress, grafana, prometheus
 helmfile \
 --selector app=grafana \
@@ -2534,12 +2574,19 @@ helmfile \
 -f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
 sync
 
+
 # sync nginx-ingress
 helmfile \
 --selector app=nginx-ingress \
 --environment learning \
 -f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
 sync
+```
+
+**Retrive** Grafana admin password
+
+```bash
+kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 ```
 
 ![](img/nginx-to-grafana-1.png)
@@ -2558,23 +2605,3 @@ helmfile \
 destroy
 ```
 
-
-**Do not forget** to create **SSH tunnel** to open up NodePort values
-```bash
-# Create SSH tunnel to avoid opening
-# of an extra nodePorts: 
-#     - 30777 (Nginx ingress controller)
-#     - 30888 (Grafana)
-#     - 30999 (Prometheus)
-
-ssh \
--L30777:127.0.0.1:30777 \
--L30888:127.0.0.1:30888 \
--L30999:127.0.0.1:30999 \
--i ~/.ssh/udemy_devopsinuse \
-admin@35.158.122.228
-```
-
-**Alternatively** you can allow this ports 30777, 30888, 30999 in “Security group” section in your AWS console
-
-![](img/sg-4.png)
