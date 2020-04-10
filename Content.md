@@ -1810,6 +1810,8 @@ git clone https://github.com/xjantoth/helmfile-course.git
 cd helmfile-course
 mkdir -p docs/hc-v3-repo
 
+helm3 repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm3 repo update
 helm3 search repo stable/jenkins -l | head -n 2  
 NAME          	CHART VERSION	APP VERSION	DESCRIPTION                                       
 stable/jenkins	1.11.3       	lts        	Open source continuous integration server. It s...
