@@ -1578,8 +1578,8 @@ releases:
     # --set service.sshNodePort=30111 .
 ```
 
-<!-- - [32. Deploy example and gogs helm chart to your Kubernetes cluster](#32-deploy-example-and-gogs-helm-chart-to-your-kubernetes-cluster)-->
-### 32. Deploy example and gogs helm chart to your Kubernetes cluster
+<!-- - [32. Deploy example and gogs helm charts via helmfile to your Kubernetes cluster](#32-deploy-example-and-gogs-helm-charts-via-helmfile-to-your-kubernetes-cluster)-->
+### 32. Deploy example and gogs helm charts via helmfile to your Kubernetes cluster
 **Do not forget** to create SSH tunnel to open up **NodePort values**
 
 ```bash
