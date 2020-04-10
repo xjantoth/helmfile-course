@@ -42,7 +42,7 @@
   - [35. Create helm chart repository at your Github account](#35-create-helm-chart-repository-at-your-github-account)
   - [36. Deploy Jenkins via helmfile from your own Github helm chart repository](#36-deploy-jenkins-via-helmfile-from-your-own-github-helm-chart-repository)
   - [37. Deploy Chartmuseum as a helm chart repository running as another deployment within your Kubernetes cluster in AWS](#37-deploy-chartmuseum-as-a-helm-chart-repository-running-as-another-deployment-within-your-kubernetes-cluster-in-aws)
-  - [38. Grafana and Prometheus helm charts from Chartmuseum helm chart repository ](#38-grafana-and-prometheus-helm-charts-from-chartmuseum-helm-chart-repository)
+  - [38. Grafana and Prometheus helm charts from Chartmuseum helm chart repository](#38-grafana-and-prometheus-helm-charts-from-chartmuseum-helm-chart-repository)
   - [39. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS](#39-deploy-grafana-and-prometheus-from-chartmuseum-helm-chart-repository-via-helmfile-to-your-kubernetes-cluster-in-aws)
   - [40. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#40-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)
 
@@ -2111,8 +2111,8 @@ helm3 delete chartmuseum
 ```
 
 
-<!-- - [38. Grafana and Prometheus helm charts from Chartmuseum helm chart repository ](#38-grafana-and-prometheus-helm-charts-from-chartmuseum-helm-chart-repository-)-->
-### 38. Grafana and Prometheus helm charts from Chartmuseum helm chart repository 
+<!-- - [38. Grafana and Prometheus helm charts from Chartmuseum helm chart repository](#38-grafana-and-prometheus-helm-charts-from-chartmuseum-helm-chart-repository)-->
+### 38. Grafana and Prometheus helm charts from Chartmuseum helm chart repository
 
 file: `helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml`
 
