@@ -2315,6 +2315,8 @@ sync
 
 ![](img/add-datasource-to-gp.png)
 
+![](img/node-exporter-dashboard.png)
+
 ![](img/grafana-via-np-1.png)
 
 **Destroy** helm chart deployments with/without using `--selectors`
