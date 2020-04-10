@@ -36,14 +36,12 @@
 
 * **Section 4: Helmfile**
   - [31. Understand helmfile specification for example and gogs helm charts via helmfile binary](#31-understand-helmfile-specification-for-example-and-gogs-helm-charts-via-helmfile-binary)
-  - [32. Deploy example and gogs helm charts via helmfile to your Kubernetes cluster](#32-deploy-example-and-gogs-helm-charts-via-helmfile-to-your-kubernetes-cluster) 
+  - [32. Deploy example and gogs helm charts via helmfile to your Kubernetes cluster](#32-deploy-example-and-gogs-helm-charts-via-helmfile-to-your-kubernetes-cluster)-
   - [33. Explore helmfile specification for gogs and example helm charts via helmfile template](#33-explore-helmfile-specification-for-gogs-and-example-helm-charts-via-helmfile-template)
   - [34. Deploy MySQL helm chart from stable helm chart repository to your Kubernetes cluster running in AWS](#34-deploy-mysql-helm-chart-from-stable-helm-chart-repository-to-your-kubernetes-cluster-running-in-aws)
   - [35. Create helm chart repository at your Github account](#35-create-helm-chart-repository-at-your-github-account)
   - [36. Deploy Jenkins via helmfile from your own Github helm chart repository](#36-deploy-jenkins-via-helmfile-from-your-own-github-helm-chart-repository)
   - [37. Deploy Chartmuseum as a helm chart repository running as another deployment within your Kubernetes cluster in AWS](#37-deploy-chartmuseum-as-a-helm-chart-repository-running-as-another-deployment-within-your-kubernetes-cluster-in-aws)
-  - [38. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS](#38-deploy-grafana-and-prometheus-from-chartmuseum-helm-chart-repository-via-helmfile-to-your-kubernetes-cluster-in-aws)
-  - [39. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#39-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)
 
 
 
@@ -2109,8 +2107,10 @@ curl -u devopsinuse -XGET http://127.0.0.1:30444/chartmuseum/api/charts
 helm3 delete chartmuseum 
 ```
 
-<!-- - [38. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS](#38-deploy-grafana-and-prometheus-from-chartmuseum-helm-chart-repository-via-helmfile-to-your-kubernetes-cluster-in-aws)-->
-### 38. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS
+
+
+<!-- - [38. Explore Grafana and Prometheus deployments and helm charts](#38-explore-grafana-and-prometheus-deployments-and-helm-charts)-->
+### 38. Explore Grafana and Prometheus deployments and helm charts
 
 file: `helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml`
 
@@ -2123,10 +2123,10 @@ repositories:
 
 # This is helm chart repository made of Chartmuseum 
 # which is running as regular deployment within our cluster
-#- name: k8s
-#  url: http://1.2.3.4:30444/chartmuseum
-#  username: devopsinuse
-#  password: Start123
+- name: k8s
+  url: http://127.0.0.1:30444/chartmuseum
+  username: devopsinuse
+  password: Start123
 
 # Export your environment e.g "learning", "dev", ..., "prod"
 # export HELMFILE_ENVIRONMENT="learning"
@@ -2143,7 +2143,7 @@ releases:
       app: grafana
     
     #chart: k8s/grafana
-    chart: stable/grafana
+    chart: k8s/grafana
     version: 5.0.11
     set:
     - name: service.type
@@ -2153,20 +2153,19 @@ releases:
    
     # Change context path for grafana to  /grafana
     - name: "grafana\\.ini.server.root_url"
-      #value: "%(protocol)s://%(domain)s/grafana/"
       value: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
     - name: "grafana\\.ini.server.serve_from_sub_path"
       value: true
 
     # Ingress related settings  
-    - name: ingress.enabled
-      value: true
-    - name: ingress.hosts[0]
-      value: "devopsinuse"
-    - name: "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target"
-      value: "\\/$1"
-    - name: ingress.path
-      value: "/grafana/?(.*)"
+    #- name: ingress.enabled
+    #  value: true
+    #- name: ingress.hosts[0]
+    #  value: "devopsinuse"
+    #- name: "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target"
+    #  value: "\\/$1"
+    #- name: ingress.path
+    #  value: "/grafana/?(.*)"
  
   # ./prometheus --config.file=prometheus.yml \
   # --web.external-url http://localhost:19090/prometheus/ \
@@ -2178,27 +2177,18 @@ releases:
       app: prometheus
     
     # chart: k8s/prometheus
-    chart: stable/prometheus
-    version: 11.0.4
+    chart: k8s/prometheus
+    version: 11.0.6
     set:
     # Modify service type to NodePort
     - name: server.service.type
       value: NodePort
     - name: server.service.nodePort
       value: 30999
-    
-    # Ingress settings
-    - name: server.ingress.enabled
-      value: true     
-    - name: server.ingress.hosts[0]
-      value: "devopsinuse/prometheus"
-    # - name: server.ingress.extraPaths
-    # value: "/prometheus"
+    # Disable Persistent data
+    - name: server.persistentVolume.enabled
+      value: false
 
-    # Change default / to /prometheus in runtime
-    - name: server.baseURL
-      value: "http://localhost:9090/prometheus"
-    
     # Disable extra Prometheus components
     - name: pushgateway.enabled
       value: false      
@@ -2207,9 +2197,9 @@ releases:
     - name: alertmanager.enabled
       value: false   
 
-    # Disable Persistent data
-    - name: server.persistentVolume.enabled
-      value: false
+    # Change default / to /prometheus in runtime
+    - name: server.baseURL
+      value: "http://localhost:9090/prometheus"
     - name: server.prefixURL
       value: "/prometheus"     
     values:   
@@ -2217,39 +2207,15 @@ releases:
           extraArgs:
             "web.route-prefix": "/prometheus"
 
-            #  # nginx-ingress deployment
-            #  - name: nginx-ingress
-            #    labels:
-            #      key: proxy
-            #      app: nginx-ingress
-            #    
-            #    #chart: k8s/grafana
-            #    chart: stable/nginx-ingress
-            #    version: 1.36.0
-            #    set:
-            #    - name: controller.service.type
-            #      value: NodePort
-            #    - name: controller.service.nodePorts.http
-            #      value: 30777
+
+    # Ingress settings
+    #- name: server.ingress.enabled
+    #  value: true     
+    #- name: server.ingress.hosts[0]
+    #  value: "devopsinuse/prometheus"
+
 ```
 
-**Do not forget** to create **SSH tunnel** to open up NodePort values
-
-```bash
-# Create SSH tunnel to avoid opening
-# of an extra nodePorts: 
-#     - 30888 (Grafana)
-#     - 30999 (Prometheus)
-
-ssh \
--L30888:127.0.0.1:30888 \
--L30999:127.0.0.1:30999 \
--i ~/.ssh/udemy_devopsinuse \
-admin@35.158.122.228
-```
-
-**Alternatively** you can allow this ports 30888, 30999 in **"Security group"** section in your AWS console
-![](img/sg-4.png)
 **Template** helm chart deployments with/without using `--selectors`
 
 ```bash
@@ -2280,6 +2246,27 @@ helmfile \
 --file helmfiles/helmfile-for-grafana-prometheus-from-chartmuseum.yaml \
  template
 ```
+
+<!-- - [39. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS](#39-deploy-grafana-and-prometheus-from-chartmuseum-helm-chart-repository-via-helmfile-to-your-kubernetes-cluster-in-aws)-->
+### 39. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS
+
+**Create SSH tunnel** to open up NodePort values for Grafana and Prometheus deployment via helmfile
+
+```bash
+# Create SSH tunnel to avoid opening
+# of an extra nodePorts: 
+#     - 30888 (Grafana)
+#     - 30999 (Prometheus)
+
+ssh \
+-L30888:127.0.0.1:30888 \
+-L30999:127.0.0.1:30999 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@35.158.122.228
+```
+
+**Alternatively** you can allow this ports 30888, 30999 in **"Security group"** section in your AWS console
+![](img/sg-4.png)
 
 **Deploy** helm chart deployments with/without using `--selectors`
 ```bash
@@ -2350,8 +2337,7 @@ helmfile  \
 destroy
 ```
 
-<!-- - [39. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#39-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)-->
-### 39. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS
+### 40. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS
 
 file: `helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml`
 ```yaml
