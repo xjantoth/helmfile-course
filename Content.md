@@ -37,7 +37,7 @@
 * **Section 4: Helmfile**
   - [31. Understand helmfile specification for example and gogs helm charts via helmfile binary](#31-understand-helmfile-specification-for-example-and-gogs-helm-charts-via-helmfile-binary)
   - [32. Deploy example and gogs helm charts via helmfile to your Kubernetes cluster](#32-deploy-example-and-gogs-helm-charts-via-helmfile-to-your-kubernetes-cluster) 
- - [33. Explore helmfile specification for gogs and example helm charts via helmfile template](#33-explore-helmfile-specification-for-gogs-and-example-helm-charts-via-helmfile-template)
+  - [33. Explore helmfile specification for gogs and example helm charts via helmfile template](#33-explore-helmfile-specification-for-gogs-and-example-helm-charts-via-helmfile-template)
   - [34. Deploy MySQL helm chart from stable helm chart repository to your Kubernetes cluster running in AWS](#34-deploy-mysql-helm-chart-from-stable-helm-chart-repository-to-your-kubernetes-cluster-running-in-aws)
   - [35. Create helm chart repository at your Github account](#35-create-helm-chart-repository-at-your-github-account)
   - [36. Deploy Jenkins via helmfile from your own Github helm chart repository](#36-deploy-jenkins-via-helmfile-from-your-own-github-helm-chart-repository)
