@@ -2595,7 +2595,7 @@ kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-passwor
 
 **Destroy** nginx-ingress, grafana, prometheus deployment
 ```bash
-# template nginx-ingress 
+# destroy nginx-ingress 
 helmfile \
 --selector app=grafana \
 --selector app=prometheus \
@@ -2604,4 +2604,169 @@ helmfile \
 -f  helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml \
 destroy
 ```
+
+### 41. How to use Nginx Ingress Controller with our deployment
+
+file: `helmfiles/helmfile-for-grafana-prometheus-nginx-loadbalancer-from-chartmuseum.yaml`
+
+```bash 
+repositories:
+# To use official "stable" charts 
+# a.k.a https://github.com/helm/charts/tree/master/stable
+- name: stable
+  url: https://kubernetes-charts.storage.googleapis.com
+
+# This is helm chart repository made of Chartmuseum 
+# which is running as regular deployment within our cluster
+- name: k8s
+  url: http://127.0.0.1:30444/chartmuseum
+  username: devopsinuse
+  password: Start123
+
+# Export your environment e.g "learning", "dev", ..., "prod"
+# export HELMFILE_ENVIRONMENT="learning"
+environments:
+  {{ requiredEnv "HELMFILE_ENVIRONMENT" }}:
+    values:
+      - values.yaml
+
+releases:
+  # (Helm v3) Upgrade your deployment with basic auth
+  - name: grafana
+    labels:
+      key: monitoring
+      app: grafana
+    
+    #chart: k8s/grafana
+    chart: k8s/grafana
+    version: 5.0.11
+    set:
+    #- name: service.type
+    #  value: NodePort
+    #- name: service.nodePort
+    #  value: 30888
+   
+    # Change context path for grafana to  /grafana
+    - name: "grafana\\.ini.server.root_url"
+      value: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
+    - name: "grafana\\.ini.server.serve_from_sub_path"
+      value: true
+
+    # Ingress related settings for Grafana 
+    - name: ingress.enabled 
+      value: {{ index .Environment.Values "grafana" "ingress.enabled" }}
+    - name: ingress.hosts[0]
+      value: {{ index .Environment.Values "grafana" "ingress.hosts[0]" }}
+    - name: ingress.hosts[1]
+      value: {{ index .Environment.Values "grafana" "ingress.hosts[1]" }}
+    - name: "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target"
+      value: {{ index .Environment.Values "grafana" "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target" }}
+    - name: ingress.path
+      value: {{ index .Environment.Values "grafana" "ingress.path" }}
+ 
+  # ./prometheus --config.file=prometheus.yml \
+  # --web.external-url http://localhost:19090/prometheus/ \
+  # --web.route-prefix=/prometheus
+  
+  - name: prometheus
+    labels:
+      key: monitoring
+      app: prometheus
+    
+    chart: k8s/prometheus
+    version: 11.0.6
+    set:
+    # Modify service type to NodePort
+    #- name: server.service.type
+    #  value: NodePort
+    #- name: server.service.nodePort
+    #  value: 30999
+    
+    # Disable Persistent data
+    - name: server.persistentVolume.enabled
+      value: false
+
+    # Disable extra Prometheus components
+    - name: pushgateway.enabled
+      value: false      
+    - name: kubeStateMetrics.enabled
+      value: false     
+    - name: alertmanager.enabled
+      value: false   
+
+
+    # Ingress settings for Prometheus
+    - name: server.ingress.enabled
+      value: {{ index .Environment.Values "prometheus" "server.ingress.enabled" }}
+    - name: server.ingress.hosts[0]
+      value: {{ index .Environment.Values "prometheus" "server.ingress.hosts[0]" }}
+    - name: server.ingress.hosts[1]
+      value: {{ index .Environment.Values "prometheus" "server.ingress.hosts[1]" }}
+
+    # Change default / to /prometheus in runtime
+    - name: server.baseURL
+      value: "http://localhost:9090/prometheus"
+    - name: server.prefixURL
+      value: "/prometheus"     
+    values:   
+      - server:
+          extraArgs:
+            "web.route-prefix": "/prometheus"
+
+  # nginx-ingress deployment
+  - name: nginx-ingress
+    labels:
+      key: proxy
+      app: nginx-ingress
+    
+    #chart: k8s/grafana
+    chart: stable/nginx-ingress
+    version: 1.36.0
+    set:
+    - name: controller.service.type
+      value: LoadBalancer
+    #- name: controller.service.nodePorts.http
+    #  value: 30777
+
+```
+
+
+file: `helmfiles/values.yaml`
+```bash
+grafana:
+  # Ingress related settings for Grafana 
+  ingress.enabled: true
+  ingress.hosts[0]: "devopsinuse"
+  ingress.hosts[1]: "diu.course.devopsinuse.com"
+  "ingress.annotations.nginx\\.ingress\\.kubernetes\\.io\\/rewrite-target": "\\/$1"
+  ingress.path: "/grafana/?(.*)"
+
+prometheus:
+  # Ingress settings for Prometheus
+  server.ingress.enabled: true         
+  server.ingress.hosts[0]: "devopsinuse/prometheus"
+  server.ingress.hosts[1]: "diu.course.devopsinuse.com/prometheus"
+
+```
+
+```bash
+helmfile \
+--selector app=grafana \
+--selector app=prometheus \
+--selector app=nginx-ingress \
+--environment learning \
+-f helmfiles/helmfile-for-grafana-prometheus-nginx-loadbalancer-from-chartmuseum.yaml \
+template
+```
+
+Create **A-record** `diu.course.devopsinuse.com` in Route53 in AWS
+
+![](img/record-set53.png)
+
+![](img/ng-lb--grafana-1.png)
+
+![](img/ng-lb--prometheus-1.png)
+
+
+
 
