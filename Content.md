@@ -2221,6 +2221,13 @@ releases:
 **Template** helm chart deployments with/without using `--selectors`
 
 ```bash
+export HELMFILE_ENVIRONMENT="learning"
+
+ssh \
+-L30444:127.0.0.1:30444 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@35.158.122.228
+
 # template grafana, prometheus via helmfile 
 helmfile \
 --environment learning \
