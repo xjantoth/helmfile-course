@@ -1,0 +1,33 @@
+apiVersion: v1
+entries:
+  jenkins:
+  - apiVersion: v1
+    appVersion: lts
+    created: "2020-04-10T12:35:21.088647971+02:00"
+    description: Open source continuous integration server. It supports multiple SCM
+      tools including CVS, Subversion and Git. It can execute Apache Ant and Apache
+      Maven-based projects as well as arbitrary scripts.
+    digest: 70c53af15f51a2469474ecbfe8de8ba918d6cffcdc269c42cf43f29e7e65a8dc
+    home: https://jenkins.io/
+    icon: https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png
+    maintainers:
+    - email: lachlan.evenson@microsoft.com
+      name: lachie83
+    - email: viglesias@google.com
+      name: viglesiasce
+    - email: maor.friedman@redhat.com
+      name: maorfr
+    - email: mail@torstenwalter.de
+      name: torstenwalter
+    - email: garridomota@gmail.com
+      name: mogaal
+    name: jenkins
+    sources:
+    - https://github.com/jenkinsci/jenkins
+    - https://github.com/jenkinsci/docker-jnlp-slave
+    - https://github.com/maorfr/kube-tasks
+    - https://github.com/jenkinsci/configuration-as-code-plugin
+    urls:
+    - jenkins-1.11.3.tgz
+    version: 1.11.3
+generated: "2020-04-10T12:35:21.084027457+02:00"
