@@ -23,7 +23,7 @@ releases:
     set:
     - name: service.type
       value: NodePort
-    - name: service.nodePortValue
+    - name: service.nodePort
       value: 30333
     - name: mysqlRootPassword
       value: Start123
@@ -31,3 +31,4 @@ releases:
       value: true
     - name: persistence.size
       value: 1Gi
+

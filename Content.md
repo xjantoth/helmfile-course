@@ -1743,7 +1743,7 @@ releases:
     set:
     - name: service.type
       value: NodePort
-    - name: service.nodePortValue
+    - name: service.nodePort
       value: 30333
     - name: mysqlRootPassword
       value: Start123
@@ -1751,6 +1751,7 @@ releases:
       value: true
     - name: persistence.size
       value: 1Gi
+
 ```
 
 **Compare** it with an original `helm3` command used to deploy **“mysql”** helm chart to your Kubernetes cluster in AWS
@@ -1763,6 +1764,26 @@ helm3 install mysql stable/mysql \
 --set service.type=NodePort \
 --set service.nodePort=30333 
 ```
+
+Helmfile **template mysql** helm chart deployment
+```bash
+helmfile --environment learning \
+--file helmfiles/helmfile-for-mysql-helm-chart.yaml template
+```
+
+
+Helmfile **deploy mysql** helm chart deployment
+```bash
+helmfile --environment learning \
+--file helmfiles/helmfile-for-mysql-helm-chart.yaml sync
+```
+
+Helmfile **destroy mysql** helm chart deployment
+```bash
+helmfile --environment learning \
+--file helmfiles/helmfile-for-mysql-helm-chart.yaml destroy
+```
+
 **Establish** SSH tunnel to open up NodePort value for MySQL
 
 ```bash
