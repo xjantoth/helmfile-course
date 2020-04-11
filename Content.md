@@ -44,7 +44,10 @@
   - [37. Deploy Chartmuseum as a helm chart repository running as another deployment within your Kubernetes cluster in AWS](#37-deploy-chartmuseum-as-a-helm-chart-repository-running-as-another-deployment-within-your-kubernetes-cluster-in-aws)
   - [38. Grafana and Prometheus helm charts from Chartmuseum helm chart repository](#38-grafana-and-prometheus-helm-charts-from-chartmuseum-helm-chart-repository)
   - [39. Deploy Grafana and Prometheus from Chartmuseum helm chart repository via helmfile to your Kubernetes cluster in AWS](#39-deploy-grafana-and-prometheus-from-chartmuseum-helm-chart-repository-via-helmfile-to-your-kubernetes-cluster-in-aws)
-  - [40. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#40-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)
+  - [40. Explore deployment of Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#40-explore-deployment-of-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)
+  - [41. Deploy Nginx Ingress Controller and remove NodePorts for Grafana and Prometheus](#41-deploy-nginx-ingress-controller-and-remove-nodeports-for-grafana-and-prometheus)
+  - [42. Explore Nginx Ingress Controller as LoadBalancer](#42-explore-nginx-ingress-controller-as-loadbalancer)
+  - [43. Deploy Nginx Ingress Controller as LoadBalancer type of service](#43-deploy-nginx-ingress-controller-as-loadbalancer-type-of-service)
 
 
 
