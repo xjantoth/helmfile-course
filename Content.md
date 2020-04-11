@@ -2273,7 +2273,7 @@ ssh \
 -L30888:127.0.0.1:30888 \
 -L30999:127.0.0.1:30999 \
 -i ~/.ssh/udemy_devopsinuse \
-admin@35.158.122.228
+admin@18.197.49.166
 ```
 
 **Alternatively** you can allow this ports 30888, 30999 in **"Security group"** section in your AWS console
@@ -2350,46 +2350,16 @@ helmfile  \
 destroy
 ```
 
-<!-- - [40. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#40-deploy-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)-->
-### 40. Deploy Nginx ingress controller with NodePort to your Kubernetes cluster in AWS
-
-Make sure you have Grafana and Prometheus helm charts in Chartmuseum
-```bash
-curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/grafana-5.0.11.tgz" http://127.0.0.1:30444/chartmuseum/api/charts
-{"saved":true}
-curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/prometheus-11.0.6.tgz" http://127.0.0.1:30444/chartmuseum/api/charts
-{"saved":true}
-```
-
-**Create SSH tunnel** to open up NodePort values for Grafana and Prometheus deployment via helmfile
-```bash
-export HELMFILE_ENVIRONMENT="learning"
-
-# Create SSH tunnel to avoid opening
-# of an extra nodePorts: 
-#     - 30444 (Chartmuseum k8s helm chart repository)
-#     - 30777 (Nginx Ingress Controller)
-
-ssh \
--L30444:127.0.0.1:30444 \
--L30777:127.0.0.1:30777 \
--i ~/.ssh/udemy_devopsinuse \
-admin@52.58.189.78
-```
-**Alternatively** you can allow this ports 30777, 30888, 30999 in “Security group” section in your AWS console
-
-![](img/sg-4.png)
+<!-- - [40. Explore deployment of Nginx ingress controller with NodePort to your Kubernetes cluster in AWS](#40-explore-deployment-of-nginx-ingress-controller-with-nodeport-to-your-kubernetes-cluster-in-aws)-->
+### 40. Explore deployment of Nginx ingress controller with NodePort to your Kubernetes cluster in AWS
 
 file: `helmfiles/helmfile-for-grafana-prometheus-nginx-from-chartmuseum.yaml`
 ```yaml
 repositories:
-# To use official "stable" charts 
-# a.k.a https://github.com/helm/charts/tree/master/stable
 - name: stable
   url: https://kubernetes-charts.storage.googleapis.com
 
-# This is helm chart repository made of Chartmuseum 
-# which is running as regular deployment within our cluster
+# This is helm chart repository made of Chartmuseum which is running as regular deployment within our cluster
 - name: k8s
   url: http://127.0.0.1:30444/chartmuseum
   username: devopsinuse
@@ -2434,9 +2404,7 @@ releases:
     - name: ingress.path
       value: {{ index .Environment.Values "grafana" "ingress.path" }}
  
-  # ./prometheus --config.file=prometheus.yml \
-  # --web.external-url http://localhost:19090/prometheus/ \
-  # --web.route-prefix=/prometheus
+  # ./prometheus --config.file=prometheus.yml --web.external-url http://localhost:19090/prometheus/  --web.route-prefix=/prometheus
   
   - name: prometheus
     labels:
@@ -2463,7 +2431,6 @@ releases:
       value: false     
     - name: alertmanager.enabled
       value: false   
-
 
     # Ingress settings for Prometheus
     - name: server.ingress.enabled
@@ -2495,7 +2462,6 @@ releases:
       value: NodePort
     - name: controller.service.nodePorts.http
       value: 30777
-
 ```
 
 file: `helmfiles/values.yaml`
@@ -2513,6 +2479,36 @@ prometheus:
   server.ingress.hosts[0]: "devopsinuse/prometheus"
 ```
 
+![](img/ng-scheme-1.png)
+
+<!-- - [41. Deploy Nginx Ingress Controller and remove NodePorts for Grafana and Prometheus](#41-deploy-nginx-ingress-controller-and-remove-nodeports-for-grafana-and-prometheus)-->
+### 41. Deploy Nginx Ingress Controller and remove NodePorts for Grafana and Prometheus
+Make sure you have Grafana and Prometheus helm charts in Chartmuseum
+```bash
+curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/grafana-5.0.11.tgz" http://127.0.0.1:30444/chartmuseum/api/charts
+{"saved":true}
+curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/prometheus-11.0.6.tgz" http://127.0.0.1:30444/chartmuseum/api/charts
+{"saved":true}
+```
+
+**Create SSH tunnel** to open up NodePort values for Grafana and Prometheus deployment via helmfile
+```bash
+export HELMFILE_ENVIRONMENT="learning"
+
+# Create SSH tunnel to avoid opening
+# of an extra nodePorts: 
+#     - 30444 (Chartmuseum k8s helm chart repository)
+#     - 30777 (Nginx Ingress Controller)
+
+ssh \
+-L30444:127.0.0.1:30444 \
+-L30777:127.0.0.1:30777 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@18.197.49.166
+```
+**Alternatively** you can allow this ports 30777, 30888, 30999 in “Security group” section in your AWS console
+
+![](img/sg-4.png)
 **Template** nginx-ingress deployment
 ```bash
 export HELMFILE_ENVIRONMENT="learning"
@@ -2617,7 +2613,8 @@ helmfile \
 destroy
 ```
 
-### 41. How to use Nginx Ingress Controller with our deployment
+<!-- - [42. Explore Nginx Ingress Controller as LoadBalancer](#42-explore-nginx-ingress-controller-as-loadbalancer)-->
+### 42. Explore Nginx Ingress Controller as LoadBalancer
 
 file: `helmfiles/helmfile-for-grafana-prometheus-nginx-loadbalancer-from-chartmuseum.yaml`
 
@@ -2761,6 +2758,28 @@ prometheus:
 
 ```
 
+<!-- - [43. Deploy Nginx Ingress Controller as LoadBalancer type of service](#43-deploy-nginx-ingress-controller-as-loadbalancer-type-of-service)-->
+### 43. Deploy Nginx Ingress Controller as LoadBalancer type of service
+
+**Create SSH tunnel** to open up NodePort values for Grafana and Prometheus deployment via helmfile
+```bash
+export HELMFILE_ENVIRONMENT="learning"
+
+# Create SSH tunnel to avoid opening
+# of an extra nodePorts: 
+#     - 30444 (Chartmuseum k8s helm chart repository)
+#     - 30777 (Nginx Ingress Controller)
+
+ssh \
+-L30444:127.0.0.1:30444 \
+-L30777:127.0.0.1:30777 \
+-i ~/.ssh/udemy_devopsinuse \
+admin@18.197.49.166
+```
+**Alternatively** you can allow this ports 30777, 30888, 30999 in “Security group” section in your AWS console
+
+![](img/sg-4.png)
+
 ```bash
 helmfile \
 --selector app=grafana \
@@ -2770,6 +2789,28 @@ helmfile \
 -f helmfiles/helmfile-for-grafana-prometheus-nginx-loadbalancer-from-chartmuseum.yaml \
 template
 ```
+
+```bash
+helmfile \
+--selector app=grafana \
+--selector app=prometheus \
+--selector app=nginx-ingress \
+--environment learning \
+-f helmfiles/helmfile-for-grafana-prometheus-nginx-loadbalancer-from-chartmuseum.yaml \
+sync
+```
+
+```bash
+helmfile \
+--selector app=grafana \
+--selector app=prometheus \
+--selector app=nginx-ingress \
+--environment learning \
+-f helmfiles/helmfile-for-grafana-prometheus-nginx-loadbalancer-from-chartmuseum.yaml \
+destroy
+```
+
+
 
 Create **A-record** `diu.course.devopsinuse.com` in Route53 in AWS
 
