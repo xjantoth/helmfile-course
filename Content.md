@@ -2637,7 +2637,7 @@ destroy
 
 file: `helmfiles/helmfile-for-grafana-prometheus-nginx-loadbalancer-from-chartmuseum.yaml`
 
-```bash 
+```yaml
 repositories:
 # To use official "stable" charts 
 # a.k.a https://github.com/helm/charts/tree/master/stable
@@ -2799,6 +2799,7 @@ admin@18.197.49.166
 
 ![](img/sg-4.png)
 
+**Template** grafana, prometheus and nginx-ingress controller deployments
 ```bash
 helmfile \
 --selector app=grafana \
@@ -2809,6 +2810,7 @@ helmfile \
 template
 ```
 
+**Deploy** Nginx Ingress Controller as LoadBalancer type of service 
 ```bash
 helmfile \
 --selector app=grafana \
@@ -2819,6 +2821,8 @@ helmfile \
 sync
 ```
 
+
+**Destroy your deployment** for grafana, prometheus and nginx ingres controller 
 ```bash
 helmfile \
 --selector app=grafana \
