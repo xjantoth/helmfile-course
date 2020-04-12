@@ -2821,6 +2821,13 @@ helmfile \
 sync
 ```
 
+Retrive **Grafana** Password
+```bash
+kubectl get secret \
+--namespace default grafana \
+-o jsonpath="{.data.admin-password}" \
+| base64 --decode ; echo
+```
 
 **Destroy your deployment** for grafana, prometheus and nginx ingres controller 
 ```bash
