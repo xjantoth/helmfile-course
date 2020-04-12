@@ -2492,6 +2492,9 @@ curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/grafana-5.0.11.tgz" h
 {"saved":true}
 curl -u devopsinuse -XPOST --data-binary "@docs/hc-v3-repo/prometheus-11.0.6.tgz" http://127.0.0.1:30444/chartmuseum/api/charts
 {"saved":true}
+
+helm3 repo update
+helm3 search repo k8s/
 ```
 
 **Create SSH tunnel** to open up NodePort values for Grafana and Prometheus deployment via helmfile
