@@ -2780,25 +2780,6 @@ prometheus:
 <!-- - [43. Deploy Nginx Ingress Controller as LoadBalancer type of service](#43-deploy-nginx-ingress-controller-as-loadbalancer-type-of-service)-->
 ### 43. Deploy Nginx Ingress Controller as LoadBalancer type of service
 
-**Create SSH tunnel** to open up NodePort values for Grafana and Prometheus deployment via helmfile
-```bash
-export HELMFILE_ENVIRONMENT="learning"
-
-# Create SSH tunnel to avoid opening
-# of an extra nodePorts: 
-#     - 30444 (Chartmuseum k8s helm chart repository)
-#     - 30777 (Nginx Ingress Controller)
-
-ssh \
--L30444:127.0.0.1:30444 \
--L30777:127.0.0.1:30777 \
--i ~/.ssh/udemy_devopsinuse \
-admin@18.197.49.166
-```
-**Alternatively** you can allow this ports 30777, 30444 in “Security group” section in your AWS console
-
-![](img/sg-4.png)
-
 **Template** grafana, prometheus and nginx-ingress controller deployments
 ```bash
 helmfile \
