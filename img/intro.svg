@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:export-filename="/home/jantoth/bitmap.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   inkscape:version="0.92.4 5da689c313, 2019-01-14"
+   sodipodi:docname="intro.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="356.66228"
+     inkscape:cy="747.68173"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#2e50be;stroke-width:0.44674185;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.89348369, 0.44674184, 0.22337091, 0.44674184;stroke-dashoffset:4;stroke-opacity:1"
+       id="rect815"
+       width="97.506645"
+       height="84.677696"
+       x="2.9633358"
+       y="19.597601" />
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#2e50be;stroke-width:0.45576489;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.91152978, 0.45576488, 0.22788244, 0.45576488;stroke-dashoffset:4;stroke-opacity:1"
+       id="rect815-3"
+       width="101.34975"
+       height="84.790848"
+       x="106.2007"
+       y="19.735744" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="3.0238087"
+       y="27.125"
+       id="text834"><tspan
+         sodipodi:role="line"
+         id="tspan832"
+         x="3.0238087"
+         y="27.125"
+         style="font-size:5.99722242px;stroke-width:0.26458332">1.How to start Kubernetes in AWS</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="107.04449"
+       y="26.936012"
+       id="text834-6"><tspan
+         sodipodi:role="line"
+         id="tspan832-7"
+         x="107.04449"
+         y="26.936012"
+         style="font-size:5.64444447px;stroke-width:0.26458332">2. Deal with deployments by *.yaml</tspan></text>
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#2e50be;stroke-width:0.44674185;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.8934837, 0.44674184, 0.22337091, 0.44674184;stroke-dashoffset:4;stroke-opacity:1"
+       id="rect815-1"
+       width="97.506645"
+       height="84.677696"
+       x="2.5925827"
+       y="110.33533" />
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#2e50be;stroke-width:0.45576492;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.91152979, 0.45576488, 0.22788244, 0.45576488;stroke-dashoffset:4;stroke-opacity:1"
+       id="rect815-3-2"
+       width="101.34975"
+       height="84.790848"
+       x="105.82995"
+       y="110.47348" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="2.6530533"
+       y="117.86273"
+       id="text834-7"><tspan
+         sodipodi:role="line"
+         id="tspan832-0"
+         x="2.6530533"
+         y="117.86273"
+         style="font-size:5.99722242px;stroke-width:0.26458332">3.How to use Helm v3</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="106.67374"
+       y="117.67374"
+       id="text834-6-9"><tspan
+         sodipodi:role="line"
+         id="tspan832-7-3"
+         x="106.67374"
+         y="117.67374"
+         style="font-size:5.64444447px;stroke-width:0.26458332">4. How to use helmfile </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:2.82222223px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="8.1264887"
+       y="38.275295"
+       id="text916"><tspan
+         sodipodi:role="line"
+         id="tspan914"
+         x="8.1264887"
+         y="40.843166"
+         style="stroke-width:0.26458332" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="3.8258431"
+       y="40.701252"
+       id="text834-60"><tspan
+         sodipodi:role="line"
+         id="tspan832-6"
+         x="3.8258431"
+         y="40.701252"
+         style="font-size:4.93888903px;stroke-width:0.26458332">- install binaries (terraform, kops, ...)</tspan><tspan
+         sodipodi:role="line"
+         x="3.8258431"
+         y="49.520695"
+         style="font-size:4.93888903px;stroke-width:0.26458332"
+         id="tspan936">- create S3, Hosted Zone, SSH key pair</tspan><tspan
+         sodipodi:role="line"
+         x="3.8258431"
+         y="58.340141"
+         style="font-size:4.93888903px;stroke-width:0.26458332"
+         id="tspan938">- start Kubernetes cluster in AWS </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="109.82713"
+       y="41.714626"
+       id="text834-60-2"><tspan
+         sodipodi:role="line"
+         id="tspan832-6-6"
+         x="109.82713"
+         y="41.714626"
+         style="font-size:4.93888903px;stroke-width:0.26458332">- install binaries (terraform, kops, ...)</tspan><tspan
+         sodipodi:role="line"
+         x="109.82713"
+         y="50.534069"
+         style="font-size:4.93888903px;stroke-width:0.26458332"
+         id="tspan936-1">- create S3, Hosted Zone, SSH key pair</tspan><tspan
+         sodipodi:role="line"
+         x="109.82713"
+         y="59.353516"
+         style="font-size:4.93888903px;stroke-width:0.26458332"
+         id="tspan938-8">- start Kubernetes cluster in AWS </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="4.3717718"
+       y="129.02713"
+       id="text834-60-7"><tspan
+         sodipodi:role="line"
+         id="tspan832-6-9"
+         x="4.3717718"
+         y="129.02713"
+         style="font-size:4.93888903px;stroke-width:0.26458332">- install binaries (terraform, kops, ...)</tspan><tspan
+         sodipodi:role="line"
+         x="4.3717718"
+         y="137.84657"
+         style="font-size:4.93888903px;stroke-width:0.26458332"
+         id="tspan936-2">- create S3, Hosted Zone, SSH key pair</tspan><tspan
+         sodipodi:role="line"
+         x="4.3717718"
+         y="146.66602"
+         style="font-size:4.93888903px;stroke-width:0.26458332"
+         id="tspan938-0">- start Kubernetes cluster in AWS </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="109.82713"
+       y="131.29498"
+       id="text834-60-23"><tspan
+         sodipodi:role="line"
+         id="tspan832-6-7"
+         x="109.82713"
+         y="131.29498"
+         style="font-size:4.93888903px;stroke-width:0.26458332">- install binaries (terraform, kops, ...)</tspan><tspan
+         sodipodi:role="line"
+         x="109.82713"
+         y="140.11443"
+         style="font-size:4.93888903px;stroke-width:0.26458332"
+         id="tspan936-5">- create S3, Hosted Zone, SSH key pair</tspan><tspan
+         sodipodi:role="line"
+         x="109.82713"
+         y="148.93387"
+         style="font-size:4.93888903px;stroke-width:0.26458332"
+         id="tspan938-9">- start Kubernetes cluster in AWS </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="2.880903"
+       y="9.8961897"
+       id="text834-2"><tspan
+         sodipodi:role="line"
+         id="tspan832-2"
+         x="2.880903"
+         y="9.8961897"
+         style="font-size:5.99722242px;stroke-width:0.26458332">Introduction</tspan></text>
+  </g>
+</svg>

@@ -14,7 +14,7 @@
    - [13. Materials: How to start Kubernetes cluster](#13-materials-how-to-start-kubernetes-cluster)
    - [14. How to lunch kubernetes cluster on AWS by using kops and terraform](#14-how-to-lunch-kubernetes-cluster-on-aws-by-using-kops-and-terraform)
 
-* **Section 2: Jupyter Notebooks**
+* **Section 2: How to deal with Kubernetes deployments**
    - [15. Materials: How to run Jupyter Notebooks locally as Docker image](#15-materials-how-to-run-jupyter-notebooks-locally-as-docker-image)
    - [16. How to Jupyter Notebook in Docker on local](#16-how-to-jupyter-notebook-in-docker-on-local)
    - [17. Materials: How to deploy Juypyter Notebooks to Kubernetes via YAML file](#17-materials-how-to-deploy-juypyter-notebooks-to-kubernetes-via-yaml-file)
@@ -52,6 +52,8 @@
 
 
 ### 1. Welcome to course
+
+![](img/intro-1.png)
 
 Please setup **budget** within your Free AWS account to be notified if from some reason AWS is going to charge some fees.
 
