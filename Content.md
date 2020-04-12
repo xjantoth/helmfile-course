@@ -2603,6 +2603,19 @@ kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-passwor
 ...
 ```
 
+Take a look to Nginx Ingress controller from a running pod 
+```bash
+kubectl get pods  | grep nginx
+nginx-ingress-controller-794878944b-cvp7d        1/1     Running   0          14m
+nginx-ingress-default-backend-5b967cf596-qm595   1/1     Running   0          14m
+
+
+kubectl exec -it \
+nginx-ingress-controller-794878944b-cvp7d \
+-- cat /etc/nginx/nginx.conf > nginx-ingress-cong-from-running-pod.conf
+
+```
+
 ![](img/nginx-to-grafana-1.png)
 
 ![](img/nginx-to-prometheus-1.png)
