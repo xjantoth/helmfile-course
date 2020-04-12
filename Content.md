@@ -2512,7 +2512,7 @@ ssh \
 -i ~/.ssh/udemy_devopsinuse \
 admin@18.197.49.166
 ```
-**Alternatively** you can allow this ports 30777, 30888, 30999 in “Security group” section in your AWS console
+**Alternatively** you can allow this ports 30777, 30444 in “Security group” section in your AWS console
 
 ![](img/sg-4.png)
 **Template** nginx-ingress deployment
@@ -2795,7 +2795,7 @@ ssh \
 -i ~/.ssh/udemy_devopsinuse \
 admin@18.197.49.166
 ```
-**Alternatively** you can allow this ports 30777, 30888, 30999 in “Security group” section in your AWS console
+**Alternatively** you can allow this ports 30777, 30444 in “Security group” section in your AWS console
 
 ![](img/sg-4.png)
 
