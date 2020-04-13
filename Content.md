@@ -50,7 +50,7 @@
   - [43. Deploy Nginx Ingress Controller as LoadBalancer type of service](#43-deploy-nginx-ingress-controller-as-loadbalancer-type-of-service)
 
 
-
+![](img/devopsinuse.png)
 ### 1. Welcome to course
 
 ![](img/intro-1.png)
