@@ -68,7 +68,6 @@
   - **Quiz** at the end of section
   <br/><br/>
  
-![](img/devopsinuse.png)
    
 - Section 3. **Introduction to Helm Charts**
   - install **helm v3** and **helmfile** binaries
