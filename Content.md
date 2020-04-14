@@ -56,7 +56,7 @@
 
 - Section 1. **How to bring up Kubernetes cluster in AWS**  
   - **create** AWS resources like: S3 bucket, Hosted Zone
-  - install important **binaries** (kops, terrafrom, awscli, kubectl, ...)
+  - install important **binaries** (kops, terraform, awscli, kubectl, ...)
   - **start** Kubernetes cluster in AWS 
   - **Quiz** at the end of section
   <br/><br/>
