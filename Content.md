@@ -53,7 +53,45 @@
 ![](img/devopsinuse.png)
 ### 1. Welcome to course
 
-![](img/intro-1.png)
+- Section 1. **How to bring up Kubernetes cluster in AWS**  
+  - **create** AWS resources like: S3 bucket, Hosted Zone
+  - install important **binaries** (kops, terrafrom, awscli, kubectl, ...)
+  - **start** Kubernetes cluster in AWS 
+  - **Quiz** at the end of section
+  <br/><br/>
+
+- Section 2. **How to deal with Kubernetes deployments**
+  - **run docker** container (Jupyter Notebooks) locally at your PC/MAC
+  - **compose** deployment and service specification for Jupyter Notebooks
+  - **execute deployment YAML** specification against Kubenretes cluster
+  - **explore** Jupyter Notebooks deployment in Kubernetes cluster 
+  - **Quiz** at the end of section
+  <br/><br/>
+    
+- Section 3. **Introduction to Helm Charts**
+  - install **helm v3** and **helmfile** binaries
+  - **create** your own "example" helm chart
+  - deploy helm chart from **local filesystem**
+  - deploy MySQL helm chart from a **stable** helm chart reository
+  - how to create **helm chart repository** from your Github repo
+  - deploy Jenkins from Github **helm chart repository**
+  - **Quiz** at the end of section
+  <br/><br/>
+
+- Section 4. **Helmfile** 
+  - **write helmfile** specification for "example" and "gogs" helm charts
+  - **deploy** "example" and "gogs" to your Kubernetes cluster in AWS
+  - MySQL helm chart
+  - **Chartmuseum** (helm chart repository) to your Kubernetes cluster
+  - Grafana and Prometheus from Chartmuseum **helm chart repository**
+  - **Nginx Ingress Controller** to your Kubenretes ecosystem
+  - use **an extra values.yaml** file together with `helmfile` specification
+  - setup **Nginx Ingress Controller** as LoadBalancer type of K8s service
+  - **Quiz** at the end of section
+
+
+
+<!-- [](img/intro-1.png) -->
 
 Please setup **budget** within your Free AWS account to be notified if from some reason AWS is going to charge some fees.
 
