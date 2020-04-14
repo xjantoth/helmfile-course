@@ -52,6 +52,7 @@
 
 ![](img/devopsinuse.png)
 ### 1. Welcome to course
+#### Learn DevOps Helm/Helmfile Kubernetes deployment in AWS
 
 - Section 1. **How to bring up Kubernetes cluster in AWS**  
   - **create** AWS resources like: S3 bucket, Hosted Zone
@@ -90,12 +91,18 @@
   - setup **Nginx Ingress Controller** as LoadBalancer type of K8s service
   - **Quiz** at the end of section
 
+**Important notes**:
+* please **run** `terraform destroy` whenever you not using your resources in AWS
+* all **materials** can be found at my Github project
+  - `https://github.com/xjantoth/helmfile-course`
 
+* **feel free** to post any question into Q&A section
+* all videos are recorded in **Full HD** however Udemy's player use *HD*
+* I'm greatful for your *reviews* :)
+* please setup **budget** within your Free AWS account to be notified if from some reason AWS is going to charge some fees.
 
-<!-- [](img/intro-1.png) -->
-
-Please setup **budget** within your Free AWS account to be notified if from some reason AWS is going to charge some fees.
-
+<br/><br/>
+##### How to setup Budget in AWS
 * You can setup Budget in AWS console e.g. `if costs > $2` AWS will send you an email
 
 ![](img/budget-2.png)
