@@ -48,7 +48,7 @@
   - [41. Deploy Nginx Ingress Controller and remove NodePorts for Grafana and Prometheus](#41-deploy-nginx-ingress-controller-and-remove-nodeports-for-grafana-and-prometheus)
   - [42. Explore Nginx Ingress Controller as LoadBalancer](#42-explore-nginx-ingress-controller-as-loadbalancer)
   - [43. Deploy Nginx Ingress Controller as LoadBalancer type of service](#43-deploy-nginx-ingress-controller-as-loadbalancer-type-of-service)
-
+<br/><br/>
 
 ![](img/devopsinuse.png)
 ### 1. Welcome to course
@@ -67,7 +67,9 @@
   - **explore** Jupyter Notebooks deployment in Kubernetes cluster 
   - **Quiz** at the end of section
   <br/><br/>
-    
+ 
+![](img/devopsinuse.png)
+   
 - Section 3. **Introduction to Helm Charts**
   - install **helm v3** and **helmfile** binaries
   - **create** your own "example" helm chart
