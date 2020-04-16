@@ -1027,6 +1027,7 @@ spec:
 
 <!-- section helm charts -->
 
+<!-- - [20. Install helm v3 and helmfile binaries](#20-install-helm-v3-and-helmfile-binaries)-->
 ### 20. Install helm v3 and helmfile binaries
 **Install** helm v3
 ```bash
@@ -2897,6 +2898,15 @@ Create **A-record** `diu.course.devopsinuse.com` in Route53 in AWS
 
 ![](img/ng-lb--prometheus-1.png)
 
+![](img/vim-trick.svg)
 
+<!--
+**Check my other work**
+
+[Learn Kubernetes Docker/DevOps and helm charts from scratch](https://www.udemy.com/course/learn-kubernetes-docker-devops-and-helm-charts-from-scratch/?couponCode=DEVTO_APRIL)
+[Learn DevOps Helm/Helmfile Kubernetes deployment](https://www.udemy.com/course/learn-devops-helm-helmfile-kubernetes-deployment/?couponCode=DEVTO_APRIL)
+[Learn Devops Kubernetes deployment by kops and terraform](https://www.udemy.com/course/learn-devops-kubernetes-deployment-by-kops-and-terraform/?referralCode=D3FA7AD01325223ADBDE)
+
+-->
 
 
