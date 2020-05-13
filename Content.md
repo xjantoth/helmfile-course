@@ -1233,7 +1233,7 @@ cd gogs/
 helm3 dependency update
  
 sed -i.bak 's@apiVersion: extensions/v1beta1@apiVersion: apps/v1@' templates/deployment.yaml charts/postgresql/templates/deployment.yaml
-sed -i.bak '/^\s*kind:\s*Deployment/,/^\s*template/s/^\(\s*spec:\s*\)/\1 \n  selector:\n    matchLabels:\n      app: {‌{ template "fullname" . }}/' charts/postgresql/templates/deployment.yaml 
+sed -i.bak '/^\s*kind:\s*Deployment/,/^\s*template/s/^\(\s*spec:\s*\)/\1 \n  selector:\n    matchLabels:\n      app: {{ template "fullname" . }}/' charts/postgresql/templates/deployment.yaml 
 
 # Optional - if you do not want to enable peristent volume
 sed -i.bak 's/^\(\s*enabled:\s\)\(.*\)/\1false/' values.yaml
